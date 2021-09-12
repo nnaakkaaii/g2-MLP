@@ -55,4 +55,4 @@ class SimpleModel(base_model.BaseModel):
 
     def forward(self) -> None:
         self.h = self.modules['module'](self.x)
-        self.y = self.modules['module'](self.h)
+        self.y = self.modules['activation_module'](self.h)

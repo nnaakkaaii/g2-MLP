@@ -4,6 +4,7 @@ import os
 from typing import Any, Dict, List, Union
 
 import torch
+import numpy as np
 
 from .abstract_model import AbstractModel
 from .losses import losses, loss_options
@@ -74,7 +75,7 @@ class BaseModel(AbstractModel, metaclass=abc.ABCMeta):
         # moduleはmodelごとに定義
         if self.is_train:
             self.criterion = losses[opt.loss_name](opt)
-            params = [{k: v.parameters()} for k, v in self.modules.items()]  # lrを個別に設定する場合は継承後のクラスで設定
+            params = [{'params': v.parameters()} for v in self.modules.values()]  # lrを個別に設定する場合は継承後のクラスで設定
             self.optimizer = optimizers[opt.optimizer_name](params, opt)
             self.scheduler = schedulers[opt.scheduler_name](self.optimizer, opt)
 
@@ -129,6 +130,7 @@ class BaseModel(AbstractModel, metaclass=abc.ABCMeta):
         """
         with torch.no_grad():
             self.forward()
+            self._calc_loss_and_metrics()
         return
 
     def train_mode(self) -> None:
@@ -159,7 +161,7 @@ class BaseModel(AbstractModel, metaclass=abc.ABCMeta):
     def _calc_loss_and_metrics(self) -> None:
         self.loss = self.criterion(self.y, self.t)
         y_true = self.t.detach().clone().cpu().numpy()
-        y_pred = self.y.detach().clone().cpu().numpy()
+        y_pred = np.argmax(self.y.detach().clone().cpu().numpy(), axis=1)
         self.metrics = get_metrics(y_true, y_pred)
 
     def get_current_loss_and_metrics(self) -> Dict[str, float]:
