@@ -1,0 +1,7 @@
+torch
+torchvision
+mlflow
+pillow
+sklearn
+pandas
+optuna
