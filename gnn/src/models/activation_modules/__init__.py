@@ -3,8 +3,7 @@ from typing import Callable, Dict
 
 import torch.nn as nn
 
-from . import softmax_module, l2softmax_module, arcface_module, cosface_module
-
+from . import arcface_module, cosface_module, l2softmax_module, softmax_module
 
 activation_modules: Dict[str, Callable[[argparse.Namespace], nn.Module]] = {
     'softmax': softmax_module.create_activation_module,

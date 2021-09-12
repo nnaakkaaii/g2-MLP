@@ -1,7 +1,7 @@
 import argparse
 from typing import Any, Callable, Dict
 
-from . import (cosine_scheduler, linear_scheduler, step_scheduler)
+from . import cosine_scheduler, linear_scheduler, step_scheduler
 
 schedulers: Dict[str, Callable[[Any, argparse.Namespace], Any]] = {
     'cosine': cosine_scheduler.create_scheduler,

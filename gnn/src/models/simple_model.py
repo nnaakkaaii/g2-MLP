@@ -1,12 +1,12 @@
 import argparse
-from typing import Dict, Any
+from typing import Any, Dict
 
 import torch
 
-from .abstract_model import AbstractModel
 from . import base_model
-from .activation_modules import activation_modules, activation_module_options
-from .modules import modules, module_options
+from .abstract_model import AbstractModel
+from .activation_modules import activation_module_options, activation_modules
+from .modules import module_options, modules
 
 
 def create_model(opt: argparse.Namespace) -> AbstractModel:

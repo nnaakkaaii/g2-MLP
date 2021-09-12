@@ -1,7 +1,7 @@
 import argparse
 
+from ..transforms import transform_options, transforms
 from .base_option import BaseOption
-from ..transforms import transforms, transform_options
 
 
 class TrainOption(BaseOption):

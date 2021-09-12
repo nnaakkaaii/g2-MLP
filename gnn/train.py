@@ -1,13 +1,12 @@
 import argparse
 
-from src.datasets import datasets
-from src.transforms import transforms
 from src.dataloaders import dataloaders
-from src.models import models
+from src.datasets import datasets
 from src.loggers import loggers
+from src.models import models
 from src.options.train_option import TrainOption
+from src.transforms import transforms
 from src.utils.fix_seed import fix_seed
-
 
 fix_seed(42)
 

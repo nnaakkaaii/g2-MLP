@@ -1,9 +1,8 @@
 import argparse
 from typing import Any, Callable, Dict
 
-from .base_dataset import BaseDataset
 from . import mnist_dataset
-
+from .base_dataset import BaseDataset
 
 datasets: Dict[str, Callable[[Any, bool, argparse.Namespace], BaseDataset]] = {
     'mnist': mnist_dataset.create_dataset,

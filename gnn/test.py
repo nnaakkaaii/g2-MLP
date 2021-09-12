@@ -1,10 +1,10 @@
 import argparse
 
-from src.datasets import datasets
-from src.transforms import transforms
 from src.dataloaders import dataloaders
+from src.datasets import datasets
 from src.models import models
 from src.options.test_option import TestOption
+from src.transforms import transforms
 
 
 def modify_test_options(opt: argparse.Namespace) -> argparse.Namespace:

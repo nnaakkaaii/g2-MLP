@@ -3,11 +3,11 @@ import argparse
 import os
 from typing import Any, Dict, List, Union
 
-import torch
 import numpy as np
+import torch
 
 from .abstract_model import AbstractModel
-from .losses import losses, loss_options
+from .losses import loss_options, losses
 from .optimizers import optimizer_options, optimizers
 from .schedulers import scheduler_options, schedulers
 from .utils.init_weights import init_weight_options, init_weights

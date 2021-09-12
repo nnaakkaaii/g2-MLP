@@ -3,8 +3,8 @@ import os
 
 import torch
 
-from ..datasets import datasets, dataset_options
 from ..dataloaders import dataloader_options, dataloaders
+from ..datasets import dataset_options, datasets
 from ..loggers import logger_options, loggers
 from ..models import model_options, models
 
