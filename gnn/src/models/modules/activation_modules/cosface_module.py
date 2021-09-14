@@ -23,7 +23,7 @@ class AddMarginProduct(_xface_module.BaseMarginProduct):
         self.__temperature = temperature
         self.__margin = margin
 
-    def forward(self, x: torch.Tensor, t: torch.Tensor, is_train: bool) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
         assert self.weight.size(0) > 0
         cosine = f.linear(f.normalize(x), f.normalize(self.weight)).float()
         if self.training:

@@ -5,3 +5,4 @@ pillow
 sklearn
 pandas
 optuna
+scipy

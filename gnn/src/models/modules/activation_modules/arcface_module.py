@@ -25,11 +25,11 @@ class ArcMarginProduct(_xface_module.BaseMarginProduct):
         self.__cos_m = math.cos(theta)
         self.__sin_m = math.sin(theta)
 
-    def forward(self, x: torch.Tensor, t: torch.Tensor, is_train: bool) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
         assert self.weight.size(0) > 0
         cosine = f.linear(f.normalize(x), f.normalize(self.weight)).float()
 
-        if is_train:
+        if self.training:
             sine = torch.sqrt((1.0 - torch.pow(cosine, 2)).clamp(0, 1))
             phi = cosine * self.__cos_m - sine * self.__sin_m
             phi = torch.where(cosine > 0, phi, cosine)
