@@ -27,7 +27,7 @@ class GATProduct3DAttentionProduct(_attention_module.BaseAttentionProduct):
         """
         super().__init__()
         self.attention_hidden_dim = attention_hidden_dim
-        self.vector_a = nn.Linear(2 * attention_hidden_dim, 1)
+        self.vector_a = nn.Parameter(torch.empty(size=(2*attention_hidden_dim, 1)))
         self.leakyrelu = nn.LeakyReLU(leakyrelu_alpha)
 
     def forward(self, query: torch.Tensor, key: torch.Tensor) -> torch.Tensor:
@@ -38,8 +38,8 @@ class GATProduct3DAttentionProduct(_attention_module.BaseAttentionProduct):
         :param key: キー (n, a, h)
         :return: (n, a, a)
         """
-        qa = torch.matmul(query, self.a[:self.attention_hidden_dim])  # (n, a, h) x (h, 1) -> (n, a, 1)
-        ka = torch.matmul(key, self.a[self.attention_hidden_dim:])  # (n, a, h) x (h, 1) -> (n, a, 1)
+        qa = torch.matmul(query, self.vector_a[:self.attention_hidden_dim])  # (n, a, h) x (h, 1) -> (n, a, 1)
+        ka = torch.matmul(key, self.vector_a[self.attention_hidden_dim:])  # (n, a, h) x (h, 1) -> (n, a, 1)
         # broadcast add
-        e = qa + ka.T  # (n, a, 1) + (n, 1, a) -> (n, a, a) + (n, a, a)  (: repeated) -> (n, a, a)
+        e = qa + ka.transpose(2, 1)  # (n, a, 1) + (n, 1, a) -> (n, a, a) + (n, a, a)  (: repeated) -> (n, a, a)
         return self.leakyrelu(e)

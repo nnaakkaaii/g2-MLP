@@ -2,9 +2,9 @@ import argparse
 import os
 from typing import Any, Dict
 
-import torch
 import numpy as np
 import scipy.sparse as sp
+import torch
 
 from . import base_dataset
 
@@ -21,7 +21,7 @@ def dataset_modify_commandline_options(parser: argparse.ArgumentParser) -> argpa
 class CoraDataset(base_dataset.BaseDataset):
     """
     """
-    idx_features_lables_filename = 'cora.content'
+    idx_features_lables_filename = 'cora.contents'
     edges_unordered_filename = 'cora.cites'
 
     def __init__(self,  max_dataset_size: int, cora_dir: str, is_train: bool, train_ratio: float) -> None:
@@ -82,4 +82,4 @@ class CoraDataset(base_dataset.BaseDataset):
         return min(self.dataset_length, self.max_dataset_size)
 
     def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
-        return {'index': self.index, 'features': self.features, 'labels': self.labels, 'adj': self.adj}
+        return {'index': self.index, 'features': self.features, 'labels': self.labels, 'adj': self.adj > 0}

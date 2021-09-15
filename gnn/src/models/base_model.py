@@ -55,6 +55,7 @@ class BaseModel(AbstractModel, metaclass=abc.ABCMeta):
     forwardの実装 (その中でself.yの計算)
     modulesの上書き
     (任意)optimizerやschedulerの上書き(lrを変更する場合)
+    (任意)modulesのinit_weight
     """
     def __init__(self, opt: argparse.Namespace) -> None:
         """Initialize the BaseModel class.
@@ -71,6 +72,9 @@ class BaseModel(AbstractModel, metaclass=abc.ABCMeta):
         self.x: torch.Tensor = torch.tensor(0)
         self.y: torch.Tensor = torch.tensor(0)
         self.t: torch.Tensor = torch.tensor(0)
+
+        # 継承先でapply_init_weight
+        self.init_weight = init_weights[opt.init_weight_name]
 
         # moduleはmodelごとに定義
         if self.is_train:

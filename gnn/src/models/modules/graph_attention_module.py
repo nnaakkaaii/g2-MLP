@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as f
 
-from .attention_modules import attention_modules, attention_module_options
+from .attention_modules import attention_module_options, attention_modules
 
 
 def create_module(opt: argparse.Namespace) -> nn.Module:
@@ -30,19 +30,24 @@ class GraphAttentionModule(nn.Module):
         super().__init__()
         self.gat_dropout_rate = gat_dropout_rate
 
+        self.linears = nn.ModuleList()
         self.attentions = nn.ModuleList()
         for _ in range(n_heads):
-            self.attentions.append(nn.Linear(in_dim, attention_hidden_dim))
+            self.linears.append(nn.Linear(in_dim, attention_hidden_dim))
             self.attentions.append(attention_modules[attention_module_name](attention_hidden_dim, opt))
-            self.attentions.append(nn.ELU())
 
-        self.out_attention = nn.ModuleList()
-        self.out_attention.append(nn.Linear(attention_hidden_dim * n_heads, out_dim))
-        self.out_attention.append(attention_modules[attention_module_name](out_dim, opt))
+        self.out_linear = nn.Linear(attention_hidden_dim * n_heads, out_dim)
+        self.out_attention = attention_modules[attention_module_name](out_dim, opt)
 
     def forward(self, x: torch.Tensor, adj: torch.Tensor) -> torch.Tensor:
         x = f.dropout(x, self.gat_dropout_rate, training=self.training)
-        x = torch.cat([att(x, x, x, adj) for att in self.attentions], dim=1)
+        out = []
+        for linear, attention in zip(self.linears, self.attentions):
+            h = linear(x)
+            h = f.elu(attention(h, h, h, adj))
+            out.append(h)
+        x = torch.cat(out, dim=-1)
         x = f.dropout(x, self.gat_dropout_rate, training=self.training)
-        x = f.elu(self.out_att(x, x, x, adj))
-        return f.log_softmax(x, dim=1)
+        x = self.out_linear(x)
+        x = f.elu(self.out_attention(x, x, x, adj))
+        return f.log_softmax(x, dim=-1)

@@ -1,8 +1,7 @@
 import argparse
 from typing import Any, Callable, Dict
 
-from . import mnist_dataset
-from . import cora_dataset
+from . import cora_dataset, mnist_dataset
 from .base_dataset import BaseDataset
 
 datasets: Dict[str, Callable[[Any, bool, argparse.Namespace], BaseDataset]] = {

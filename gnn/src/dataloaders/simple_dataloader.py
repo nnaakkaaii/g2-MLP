@@ -1,5 +1,4 @@
 import argparse
-from typing import Any
 
 import torch.utils.data as data
 
