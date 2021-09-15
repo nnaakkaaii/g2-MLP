@@ -13,7 +13,7 @@ fix_seed(42)
 
 def train(opt: argparse.Namespace) -> None:
     train_transform = transforms[opt.train_transform_name](opt)
-    train_dataset = datasets[opt.dataset_name](train_transform, True, opt)
+    train_dataset = datasets[opt.dataset_name](train_transform, is_train=True, opt=opt)
     train_dataloader = dataloaders[opt.dataloader_name](train_dataset, opt)
     train_dataset_size = len(train_dataset)
     train_dataloader_size = len(train_dataloader)
@@ -40,6 +40,7 @@ def train(opt: argparse.Namespace) -> None:
             model.set_input(data)
             model.optimize_parameters()
             logger.end_train_iter()
+        model.eval_mode()
         for data in val_dataloader:
             model.set_input(data)
             model.test()

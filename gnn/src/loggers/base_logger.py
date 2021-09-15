@@ -4,7 +4,7 @@ import json
 import os
 import sys
 from collections import defaultdict
-from typing import DefaultDict, Dict, List
+from typing import DefaultDict, Dict, List, Optional
 
 from ..models.base_model import AbstractModel
 from .abstract_logger import AbstractLogger
@@ -34,7 +34,8 @@ class BaseLogger(AbstractLogger, metaclass=abc.ABCMeta):
 
     def start_epoch(self) -> None:
         self.train_averager.reset()
-        self.val_averager.reset()
+        if self._val_dataset_length > 0:
+            self.val_averager.reset()
         return
 
     def end_epoch(self) -> None:
@@ -51,14 +52,22 @@ class BaseLogger(AbstractLogger, metaclass=abc.ABCMeta):
         self.val_averager.send(current_losses)
         return
 
+    def end_test_iter(self) -> None:
+        current_losses = self.model.get_current_loss_and_metrics()
+        self.train_averager.send(current_losses)
+        return
+
     def save_options(self) -> None:
         with open(os.path.join(self.save_dir, 'options.json'), 'w') as f:
             json.dump(self.opt, f)
         return
 
-    def set_dataset_length(self, train_dataset_length: int, val_dataset_length) -> None:
+    def set_dataset_length(self, train_dataset_length: int, val_dataset_length: Optional[int] = None) -> None:
+        """testの場合は第一引数のみ利用
+        """
         self._train_dataset_length = train_dataset_length
-        self._val_dataset_length = train_dataset_length
+        if val_dataset_length is not None:
+            self._val_dataset_length = val_dataset_length
         return
 
     def _increment_epoch(self) -> None:

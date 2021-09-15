@@ -75,10 +75,10 @@ class BaseModel(AbstractModel, metaclass=abc.ABCMeta):
 
         # 継承先でapply_init_weight
         self.init_weight = init_weights[opt.init_weight_name]
+        self.criterion = losses[opt.loss_name](opt)
 
         # moduleはmodelごとに定義
         if self.is_train:
-            self.criterion = losses[opt.loss_name](opt)
             params = [{'params': v.parameters()} for v in self.modules.values()]  # lrを個別に設定する場合は継承後のクラスで設定
             self.optimizer = optimizers[opt.optimizer_name](params, opt)
             self.scheduler = schedulers[opt.scheduler_name](self.optimizer, opt)

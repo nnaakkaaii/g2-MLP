@@ -13,10 +13,8 @@ class TrainOption(BaseOption):
         parser.add_argument('--train_transform_name', type=str, required=True, choices=transforms.keys())
         parser.add_argument('--val_transform_name', type=str, required=True, choices=transforms.keys())
         # training parameters
-        parser.add_argument('--train_ratio', type=float, default=0.8, help='学習データと検証データに占める学習データの割合')
         parser.add_argument('--n_epochs', type=int, default=100, help='初期LearningRateで実行するエポック数')
         parser.add_argument('--n_epochs_decay', type=int, default=100, help='LearningRateを減衰させながら実行するエポック数')
-        parser.add_argument('--epoch', type=int, default=1, help='事前学習時の最後のepoch (読み込みたい重みのepoch)')
         parser.add_argument('--continue_train', action='store_true', help='前回の学習を続行するか')
 
         self.is_train = True

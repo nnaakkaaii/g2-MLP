@@ -1,4 +1,4 @@
-python3 gnn/train.py \
+python3 gnn/test.py \
 	--name cora_debug_0914 \
 	--gpu_ids 0 \
 	--verbose \
@@ -11,12 +11,9 @@ python3 gnn/train.py \
 	--in_dim 1433 \
 	--out_dim 7 \
 	--save_dir ./checkpoints \
-	--train_transform_name no \
-	--val_transform_name no \
+	--test_transform_name no \
 	--train_ratio 0.6 \
-	--n_epochs 5 \
-	--n_epochs_decay 5 \
-	--epoch 1 \
+	--epoch 100 \
 	--loss_name nll \
 	--optimizer_name adam \
 	--scheduler_name linear \
@@ -36,4 +33,5 @@ python3 gnn/train.py \
 	--lr 0.0001 \
 	--beta1 0.9 \
 	--beta2 0.99 \
-	--init_gain 1.414
+	--init_gain 1.414 \
+	--num_test 1

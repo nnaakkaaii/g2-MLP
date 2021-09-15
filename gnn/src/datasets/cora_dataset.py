@@ -21,11 +21,11 @@ def dataset_modify_commandline_options(parser: argparse.ArgumentParser) -> argpa
 class CoraDataset(base_dataset.BaseDataset):
     """
     """
-    idx_features_lables_filename = 'cora.contents'
+    idx_features_labels_filename = 'cora.contents'
     edges_unordered_filename = 'cora.cites'
 
     def __init__(self,  max_dataset_size: int, cora_dir: str, is_train: bool, train_ratio: float) -> None:
-        idx_features_labels = np.genfromtxt(os.path.join(cora_dir, self.idx_features_lables_filename), dtype=np.int32)
+        idx_features_labels = np.genfromtxt(os.path.join(cora_dir, self.idx_features_labels_filename), dtype=np.dtype(str))
         edges_unordered = np.genfromtxt(os.path.join(cora_dir, self.edges_unordered_filename), dtype=np.int32)
 
         idx = np.array(idx_features_labels[:, 0], dtype=np.int32)

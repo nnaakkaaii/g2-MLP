@@ -39,6 +39,9 @@ class BaseOption:
         parser.add_argument('--batch_size', type=int, default=32, help='バッチサイズ')
         parser.add_argument('--save_dir', type=str, default=os.path.join('checkpoints'), help='モデルの出力の保存先ルートディレクトリ')
 
+        parser.add_argument('--train_ratio', type=float, default=0.4, help='学習データと検証データに占める学習データの割合')
+        parser.add_argument('--epoch', type=int, default=1, help='事前学習時の最後のepoch (読み込みたい重みのepoch)')
+
         self.initialized = True
         return parser
 

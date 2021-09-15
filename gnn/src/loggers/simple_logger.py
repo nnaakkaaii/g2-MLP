@@ -28,8 +28,9 @@ class SimpleLogger(base_logger.BaseLogger):
         super().end_epoch()
         for key, value in self.train_averager.value().items():
             self.history[f'train_{key}'].append(value)
-        for key, value in self.val_averager.value().items():
-            self.history[f'val_{key}'].append(value)
+        if self._val_dataset_length > 0:
+            for key, value in self.val_averager.value().items():
+                self.history[f'val_{key}'].append(value)
 
         with open(os.path.join(self.save_dir, 'history.json'), 'w') as f:
             json.dump(self.history, f)
@@ -57,6 +58,15 @@ class SimpleLogger(base_logger.BaseLogger):
             is_train=False,
         )
         return
+
+    def end_test_iter(self) -> None:
+        current_losses = self.model.get_current_loss_and_metrics()
+        self.train_averager.send(current_losses)
+        self.print_status(
+            iterations=self.train_averager.iterations,
+            status_dict=current_losses,
+            is_train=True,
+        )
 
     def end_all_training(self) -> None:
         self.model.save_networks('last')
