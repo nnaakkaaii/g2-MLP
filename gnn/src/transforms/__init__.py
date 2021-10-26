@@ -1,14 +1,12 @@
 import argparse
 from typing import Any, Callable, Dict
 
-from . import affine_transform, no_transform
+from . import indegree_tranform
 
 transforms: Dict[str, Callable[[argparse.Namespace], Any]] = {
-    'no': no_transform.create_transform,
-    'affine': affine_transform.create_transform,
+    'indegree': indegree_tranform.create_transform,
 }
 
 transform_options: Dict[str, Callable[[argparse.ArgumentParser], argparse.ArgumentParser]] = {
-    'no': lambda x: x,
-    'affine': affine_transform.transform_modify_commandline_option,
+    'indegree': indegree_tranform.transform_modify_commandline_option,
 }

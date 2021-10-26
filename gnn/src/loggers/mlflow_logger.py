@@ -1,53 +1,53 @@
 import argparse
 import os
+from typing import Any, Dict
 
 import mlflow
 
-from ..models.base_model import AbstractModel
-from . import simple_logger
+from . import base_logger
 from .abstract_logger import AbstractLogger
 
 
-def create_logger(model: AbstractModel, opt: argparse.Namespace) -> AbstractLogger:
-    return MLflowLogger(model, opt)
+def create_logger(opt: argparse.Namespace) -> AbstractLogger:
+    return MLflowLogger(opt)
 
 
 def logger_modify_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
-    parser = simple_logger.logger_modify_commandline_options(parser)
+    parser = base_logger.logger_modify_commandline_options(parser)
     parser.add_argument('--mlflow_root_dir', type=str, default=os.path.join('mlruns'))
     parser.add_argument('--run_name', type=str, default='test')
     return parser
 
 
-class MLflowLogger(simple_logger.SimpleLogger):
-    def __init__(self, model: AbstractModel, opt: argparse.Namespace) -> None:
-        super().__init__(model=model, opt=opt)
-        self.__initialize_mlflow_logger()
+class MLflowLogger(base_logger.BaseLogger):
+    def __init__(self, opt: argparse.Namespace) -> None:
+        super().__init__(opt)
 
-    def __initialize_mlflow_logger(self) -> None:
-        mlflow_root_dir = self.opt['mlflow_root_dir']
-        os.makedirs(mlflow_root_dir, exist_ok=True)
+        os.makedirs(opt.mlflow_root_dir, exist_ok=True)
+        mlflow.set_tracking_uri(opt.mlflow_root_dir)
 
-        mlflow.set_tracking_uri(mlflow_root_dir)
+        if not bool(mlflow.get_experiment_by_name(opt.name)):
+            mlflow.create_experiment(opt.name, artifact_location=None)
 
-        task_name = self.opt['name']
-        run_name = self.opt['run_name']
-
-        if not bool(mlflow.get_experiment_by_name(task_name)):
-            mlflow.create_experiment(task_name, artifact_location=None)
-
-        mlflow.set_experiment(task_name)
-        mlflow.start_run(run_name=run_name)
-        mlflow.log_params(self.opt)
+        mlflow.set_experiment(opt.name)
+        mlflow.start_run(run_name=opt.run_name)
+        mlflow.log_params(vars(self.opt))
         return
 
-    def end_epoch(self) -> None:
-        super().end_epoch()
-        mlflow.log_metrics(self.train_averager.value(), step=self._trained_epoch)
-        mlflow.log_metrics(self.val_averager.value(), step=self._trained_epoch)
+    def on_end_epoch(self, state: Dict[str, Any]) -> None:
+        super().on_end_epoch(state)
+        metrics = {
+            'train_loss': self.fold_history['train_loss'][-1],
+            'train_metric': self.fold_history['train_metric'][-1],
+        }
+        if self._test_callback is not None:
+            metrics.update({
+                'test_loss': self.fold_history['test_loss'][-1],
+                'test_metric': self.fold_history['test_metric'][-1],
+            })
+        mlflow.log_metrics(metrics, step=state['epoch'])
         return
 
-    def end_all_training(self) -> None:
-        super().end_all_training()
+    def on_end_all_training(self) -> None:
+        super().on_end_all_training()
         mlflow.end_run()
-        return

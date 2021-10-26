@@ -1,8 +1,10 @@
 torch
+torchnet
 torchvision
 torch-scatter
 torch-sparse
 torch-geometric
+tqdm
 mlflow
 pillow
 sklearn

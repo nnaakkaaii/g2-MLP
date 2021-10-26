@@ -1,88 +1,152 @@
-import abc
 import argparse
 import json
 import os
 import sys
 from collections import defaultdict
-from typing import DefaultDict, Dict, List, Optional
+from typing import Any, Callable, DefaultDict, Dict, List
 
-from ..models.base_model import AbstractModel
+import torch
+import torch.nn as nn
+import torchnet as tnt
+
 from .abstract_logger import AbstractLogger
-from .utils.averager import Averager
+
+
+def create_logger(opt: argparse.Namespace) -> AbstractLogger:
+    return BaseLogger(opt)
 
 
 def logger_modify_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
+    parser.add_argument('--name', type=str, required=True, help='実験の固有名')
+    parser.add_argument('--save_freq', type=int, default=5, help='モデルの出力の保存頻度')
+    parser.add_argument('--save_dir', type=str, default=os.path.join('checkpoints'), help='モデルの出力の保存先ルートディレクトリ')
     return parser
 
 
-class BaseLogger(AbstractLogger, metaclass=abc.ABCMeta):
+class BaseLogger(AbstractLogger):
     """標準的なDataLoaderの実装
-    trainとvalで別のaveragerに計上していく
-    print_statusでtrainとvalを表示を分岐する
     """
-    def __init__(self, model: AbstractModel, opt: argparse.Namespace) -> None:
-        super().__init__(model=model, opt=opt)
-        self.save_dir = model.save_dir
-        self._trained_epoch = opt.epoch
-        self._train_dataset_length = -1
-        self._val_dataset_length = -1
-        self.train_averager = Averager()
-        self.val_averager = Averager()
+    def __init__(self, opt: argparse.Namespace) -> None:
+        super().__init__(opt)
+        self.over_save_dir = os.path.join(opt.save_dir, opt.name)  # 保存先のルートディレクトリ
+        self.fold_save_dir = ''  # 各foldの保存先ディレクトリ
+        self.save_freq = opt.save_freq
+        self._fold_number = 0
 
-        self.history: DefaultDict[str, List[float]] = defaultdict(list)
-        os.makedirs(self.save_dir, exist_ok=True)
+        self.loss_averager = tnt.meter.AverageValueMeter()
+        self.metric_averager = tnt.meter.MSEMeter() if opt.is_regression else tnt.meter.ClassErrorMeter(accuracy=True)
 
-    def start_epoch(self) -> None:
-        self.train_averager.reset()
-        if self._val_dataset_length > 0:
-            self.val_averager.reset()
+        self.fold_history: DefaultDict[str, List[float]] = defaultdict(list)  # 各foldの結果
+        self.over_history: DefaultDict[str, List[float]] = defaultdict(list)  # 全foldの結果
+
+        os.makedirs(self.over_save_dir, exist_ok=True)
+        self.save_options()
+
+    def set_test_callback(self, test_callback: Callable[[], None]) -> None:
+        self._test_callback = test_callback
         return
 
-    def end_epoch(self) -> None:
-        self._increment_epoch()
+    def set_network(self, network: nn.Module) -> None:
+        self._network = network
         return
 
-    def end_train_iter(self) -> None:
-        current_losses = self.model.get_current_loss_and_metrics()
-        self.train_averager.send(current_losses)
+    def on_start(self, state: Dict[str, Any]) -> None:
+        if state['training']:
+            self.fold_save_dir = os.path.join(self.over_save_dir, f'{self._fold_number:02}')
+            self.fold_history = defaultdict(list)
+            self._fold_number += 1
+
+            os.makedirs(self.fold_save_dir, exist_ok=True)
         return
 
-    def end_val_iter(self) -> None:
-        current_losses = self.model.get_current_loss_and_metrics()
-        self.val_averager.send(current_losses)
+    def on_end(self, state: Dict[str, Any]) -> None:
+        if state['training']:
+            for key, value in self.fold_history.items():
+                self.over_history[key].append(value[-1])  # 最後の値をover_historyに保存
+
+            with open(os.path.join(self.fold_save_dir, 'history.json'), 'w') as f:
+                json.dump(self.fold_history, f)
         return
 
-    def end_test_iter(self) -> None:
-        current_losses = self.model.get_current_loss_and_metrics()
-        self.train_averager.send(current_losses)
+    def on_sample(self, state: Dict[str, Any]) -> None:
+        state['sample'] = state['sample'], state['train']
+        return
+
+    def on_forward(self, state: Dict[str, Any]) -> None:
+        self.loss_averager.add(state['loss'].detach().cpu().item())
+        self.metric_averager.add(state['output'].detach().cpu(), state['sample'][0].y)
+        self.print_status(state)
+        return
+
+    def on_end_all_training(self) -> None:
+        with open(os.path.join(self.over_save_dir, 'history.json'), 'w') as f:
+            json.dump(self.over_history, f)
+        return
+
+    def _reset_averager(self) -> None:
+        self.loss_averager.reset()
+        self.metric_averager.reset()
+        return
+
+    def on_start_epoch(self, state: Dict[str, Any]) -> None:
+        self._reset_averager()
+        return
+
+    def on_end_epoch(self, state: Dict[str, Any]) -> None:
+        """trainでのみ呼ばれる
+        """
+        epoch = state['epoch']
+        self.fold_history['train_loss'].append(self.loss_averager.value()[0])
+        self.fold_history['train_metric'].append(self.metric_averager.value()[0])
+
+        if self._test_callback is not None:
+            self._reset_averager()
+            with torch.no_grad():
+                self._test_callback()
+
+            self.fold_history['test_loss'].append(self.loss_averager.value()[0])
+            self.fold_history['test_metric'].append(self.metric_averager.value()[0])
+
+        if epoch % self.save_freq == 0 and self._network is not None:
+            self.save_models(state)
+        return
+
+    def save_models(self, state: Dict[str, Any]) -> None:
+        assert state['train'] and self._network is not None
+        epoch = state['epoch']
+        save_path = os.path.join(self.fold_save_dir, f'net_{epoch}.pth')
+        torch.save(self._network.state_dict(), save_path)
         return
 
     def save_options(self) -> None:
-        with open(os.path.join(self.save_dir, 'options.json'), 'w') as f:
-            json.dump(self.opt, f)
+        with open(os.path.join(self.over_save_dir, 'options.json'), 'w') as f:
+            json.dump(vars(self.opt), f)
         return
 
-    def set_dataset_length(self, train_dataset_length: int, val_dataset_length: Optional[int] = None) -> None:
-        """testの場合は第一引数のみ利用
-        """
-        self._train_dataset_length = train_dataset_length
-        if val_dataset_length is not None:
-            self._val_dataset_length = val_dataset_length
-        return
-
-    def _increment_epoch(self) -> None:
-        self._trained_epoch += 1
-        return
-
-    def print_status(self, iterations: int, status_dict: Dict[str, float], is_train: bool) -> None:
-        if is_train:
-            status_str = f'[Epoch {self._trained_epoch}][{iterations:.0f}/{self._train_dataset_length}] '
-            for key, value in status_dict.items():
-                status_str += f'train_{key}: {value:.4f}, '
+    def print_status(self, state: Dict[str, Any]) -> None:
+        iteration = state['t']
+        max_iteration = len(state['iterator'])
+        if state['train']:
+            epoch = state['epoch']
+            status_str = f'[Epoch {epoch}][{iteration:.0f}/{max_iteration}] '
+            status_str += f'train_loss: {self.loss_averager.value()[0]:.4f}, '
+            status_str += f'train_metric: {self.metric_averager.value()[0]:.4f}, '
         else:
-            status_str = f'[Epoch {self._trained_epoch}][{iterations:.0f}/{self._val_dataset_length}] '
-            for key, value in status_dict.items():
-                status_str += f'val_{key}: {value:.4f}, '
+            status_str = f'[{iteration:.0f}/{max_iteration}] '
+            status_str += f'test_loss: {self.loss_averager.value()[0]:.4f}, '
+            status_str += f'test_metric: {self.metric_averager.value()[0]:.4f}, '
+
         sys.stdout.write(f'\r{status_str}')
         sys.stdout.flush()
+        return
+
+    def print_networks(self) -> None:
+        assert self._network is not None
+        print('---------- Networks initialized -------------')
+        num_params = 0
+        for param in self._network.parameters():
+            num_params += param.numel()
+        print(self._network)
+        print(f'Total number of parameters: {num_params / 1e6:.3f} M')
+        print('-----------------------------------------------')
         return
