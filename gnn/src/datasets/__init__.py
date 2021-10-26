@@ -5,7 +5,7 @@ import torch.utils.data as data
 
 from . import tu_dataset
 
-datasets: Dict[str, Callable[[Any, bool, argparse.Namespace], data.Dataset]] = {
+datasets: Dict[str, Callable[[Any, bool, int, argparse.Namespace], data.Dataset]] = {
     'DD': tu_dataset.create_dataset,
     'PTC_MR': tu_dataset.create_dataset,
     'NCI1': tu_dataset.create_dataset,
