@@ -24,12 +24,14 @@ def train(opt: argparse.Namespace) -> None:
     test_transform = transforms[opt.test_transform_name](opt)
     test_dataset = datasets[opt.dataset_name](test_transform, False, opt)
 
+    num_features, num_classes = train_dataset.num_features, train_dataset.num_classes
+
     engine = Engine()
     logger = loggers[opt.logger_name](opt)
 
     train_iter = tqdm(range(1, 11), desc='Training Model......')
     for i in train_iter:
-        network = networks[opt.network_name](opt)
+        network = networks[opt.network_name](num_features, num_classes, opt)
         network.to(device)
 
         loss = losses[opt.loss_name](opt)

@@ -4,11 +4,11 @@ from typing import Any
 
 import numpy as np
 import torch
-import torch.utils.data as data
+from torch_geometric.data.in_memory_dataset import InMemoryDataset
 from torch_geometric.datasets import TUDataset
 
 
-def create_dataset(transform: Any, is_train: bool, opt: argparse.Namespace) -> data.Dataset:
+def create_dataset(transform: Any, is_train: bool, opt: argparse.Namespace) -> InMemoryDataset:
     dataset = TUDataset(opt.data_dir, name=opt.dataset_name, transform=transform, use_node_attr=True)
     index_file_name = '{}_idx-{:02}.txt'.format('train' if is_train else 'test', opt.index_file_number)
     indices = torch.as_tensor(np.loadtxt(os.path.join(opt.index_file_dir, index_file_name), dtype=np.int32), dtype=torch.long)

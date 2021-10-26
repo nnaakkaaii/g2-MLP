@@ -8,13 +8,11 @@ from torch_geometric.nn import GCNConv, global_sort_pool
 from torch_geometric.utils import remove_self_loops
 
 
-def create_network(opt: argparse.Namespace) -> nn.Module:
-    return DGCNN(opt.num_features, opt.num_classes, opt.is_regression)
+def create_network(num_features: int, num_classes: int, opt: argparse.Namespace) -> nn.Module:
+    return DGCNN(num_features, num_classes, opt.is_regression)
 
 
 def network_modify_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
-    parser.add_argument('--num_features', type=int, required=True, help='特徴量の数')
-    parser.add_argument('--num_classes', type=int, default=1, help='予測対象のクラス数')
     return parser
 
 

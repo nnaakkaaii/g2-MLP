@@ -5,7 +5,7 @@ import torch.nn as nn
 
 from . import dynamic_graph_convolution_neural_network
 
-networks: Dict[str, Callable[[argparse.Namespace], nn.Module]] = {
+networks: Dict[str, Callable[[int, int, argparse.Namespace], nn.Module]] = {
     'DGCNN': dynamic_graph_convolution_neural_network.create_network,
 }
 
