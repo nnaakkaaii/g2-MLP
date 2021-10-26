@@ -19,10 +19,8 @@ def train(opt: argparse.Namespace) -> None:
     device = opt.device
 
     train_transform = transforms[opt.train_transform_name](opt)
-    train_dataset = datasets[opt.dataset_name](train_transform, True, opt)
 
     test_transform = transforms[opt.test_transform_name](opt)
-    test_dataset = datasets[opt.dataset_name](test_transform, False, opt)
 
     num_features, num_classes = train_dataset.num_features, train_dataset.num_classes
 
@@ -50,7 +48,10 @@ def train(opt: argparse.Namespace) -> None:
         if i == 0 and opt.verbose:
             logger.print_networks()
 
+        train_dataset = datasets[opt.dataset_name](train_transform, True, i, opt)
         train_dataloader = dataloaders[opt.dataloader_name](train_dataset, True, opt)
+
+        test_dataset = datasets[opt.dataset_name](test_transform, False, i, opt)
         test_dataloader = dataloaders[opt.dataloader_name](test_dataset, False, opt)
 
         logger.set_test_callback(lambda: engine.test(processor, test_dataloader))

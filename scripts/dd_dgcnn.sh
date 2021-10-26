@@ -1,0 +1,26 @@
+python3 gnn/train.py \
+    --gpu_ids 0 \
+    --verbose \
+    --loss_name nll \
+    --network_name DGCNN \
+    --dataset_name DD \
+    --dataloader_name simple \
+    --logger_name mlflow \
+    --batch_size 32 \
+    --train_transform_name indgree \
+    --test_transform_name indgree \
+    --optimizer_name adam \
+    --n_epochs 50 \
+    --data_dir ./inputs/DD/ \
+    --index_file_dir ./inputs/DD/10fold_idx/ \
+    --name dd \
+    --save_freq 5 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name test_dd \
+    --num_features 90 \
+    --num_classes 2 \
+    --lr 0.00001 \
+    --beta1 0.5 \
+    --beta2 0.999 \
+
