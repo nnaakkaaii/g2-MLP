@@ -1,6 +1,5 @@
 import json
 import os
-import warnings
 from collections import defaultdict
 from typing import Any, DefaultDict, Dict, List, Tuple
 
@@ -20,7 +19,6 @@ from torchnet.engine import Engine
 from torchnet.logger.visdomlogger import VisdomPlotLogger
 from tqdm import tqdm
 
-warnings.filterwarnings("ignore", category=UserWarning)
 fix_seed(42)
 
 
