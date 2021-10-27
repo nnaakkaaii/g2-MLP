@@ -1,56 +1,206 @@
-import argparse
+import os
+import json
+from typing import Tuple, Dict, Any, DefaultDict, List
+from collections import defaultdict
+
+import torch
+import mlflow
+import torchnet as tnt
+import numpy as np
+from torch_geometric.data import Data
+from torchnet.logger.visdomlogger import VisdomPlotLogger
 
 from src.dataloaders import dataloaders
 from src.datasets import datasets
-from src.loggers import loggers
-from src.models import models
+from src.models.losses import losses
+from src.models.networks import networks
+from src.models.optimizers import optimizers
 from src.options.train_option import TrainOption
 from src.transforms import transforms
 from src.utils.fix_seed import fix_seed
+from torchnet.engine import Engine
+from tqdm import tqdm
 
 fix_seed(42)
 
 
-def train(opt: argparse.Namespace) -> None:
-    train_transform = transforms[opt.train_transform_name](opt)
-    train_dataset = datasets[opt.dataset_name](train_transform, is_train=True, opt=opt)
-    train_dataloader = dataloaders[opt.dataloader_name](train_dataset, opt)
-    train_dataset_size = len(train_dataset)
-    train_dataloader_size = len(train_dataloader)
-    print('The number of training images = %s' % train_dataset_size)
+def setup():
+    os.makedirs(opt.mlflow_root_dir, exist_ok=True)
+    mlflow.set_tracking_uri(opt.mlflow_root_dir)
 
-    val_transform = transforms[opt.val_transform_name](opt)
-    val_dataset = datasets[opt.dataset_name](val_transform, True, opt)
-    val_dataloader = dataloaders[opt.dataloader_name](val_dataset, opt)
-    val_dataset_size = len(val_dataset)
-    val_dataloader_size = len(val_dataloader)
-    print('The number of validating images = %s' % val_dataset_size)
+    if not bool(mlflow.get_experiment_by_name(opt.name)):
+        mlflow.create_experiment(opt.name, artifact_location=None)
 
-    model = models[opt.model_name](opt)
-    model.setup(opt)
+    mlflow.set_experiment(opt.name)
+    mlflow.start_run(run_name=opt.run_name)
+    mlflow.log_params(vars(opt))
+    return
 
-    logger = loggers[opt.logger_name](model, opt)
-    logger.set_dataset_length(train_dataloader_size, val_dataloader_size)
-    logger.save_options()
 
-    for epoch in range(opt.epoch, opt.n_epochs + opt.n_epochs_decay + 1):
-        logger.start_epoch()
-        model.train_mode()
-        for data in train_dataloader:
-            model.set_input(data)
-            model.optimize_parameters()
-            logger.end_train_iter()
-        model.eval_mode()
-        for data in val_dataloader:
-            model.set_input(data)
-            model.test()
-            logger.end_val_iter()
-        logger.end_epoch()
-        model.update_learning_rate()
-    logger.end_all_training()
+def processor(sample: Tuple[Data, bool]) -> None:
+    data_, training = sample
+    data_.to(device)
+
+    network.train(training)
+
+    classes = network(data_)
+    loss_ = loss(classes, data_.y)
+    return loss_, classes
+
+
+def on_sample(state: Dict[str, Any]) -> None:
+    state['sample'] = state['sample'], state['train']
+    return
+
+
+def _reset_meters() -> None:
+    loss_averager.reset()
+    metric_averager.reset()
+    return
+
+
+def on_forward(state: Dict[str, Any]):
+    loss_averager.add(state['loss'].detach().cpu().item())
+    metric_averager.add(state['output'].detach().cpu(), state['sample'][0].y)
+    return
+
+
+def on_start_epoch(state: Dict[str, Any]) -> None:
+    _reset_meters()
+    return
+
+
+def on_end_epoch(state: Dict[str, Any]) -> None:
+    train_loss_logger.log(state['epoch'], loss_averager.value()[0], name='fold_' + str(fold_number))
+    train_metric_logger.log(state['epoch'], metric_averager.value()[0], name='fold_' + str(fold_number))
+    fold_history['train_loss'].append(loss_averager.value()[0])
+    fold_history['train_metric'].append(metric_averager.value()[0])
+
+    _reset_meters()
+    with torch.no_grad():
+        engine.test(processor, test_dataloader)
+
+    test_loss_logger.log(state['epoch'], loss_averager.value()[0], name='fold_' + str(fold_number))
+    test_metric_logger.log(state['epoch'], metric_averager.value()[0], name='fold_' + str(fold_number))
+    fold_history['test_loss'].append(loss_averager.value()[0])
+    fold_history['test_metric'].append(metric_averager.value()[0])
+
+    metrics = {
+        'train_loss': fold_history['train_loss'][-1],
+        'train_metric': fold_history['train_metric'][-1],
+        'test_loss': fold_history['test_loss'][-1],
+        'test_metric': fold_history['test_metric'][-1],
+    }
+    mlflow.log_metrics(metrics, step=state['epoch'])
+
+    # save model at every fold
+    epoch = state['epoch']
+    if epoch % opt.save_freq == 0:
+        save_path = os.path.join(fold_save_dir, f'net_{epoch}.pth')
+        os.makedirs(fold_save_dir, exist_ok=True)
+        torch.save(network.state_dict(), save_path)
+    return
+
+
+def on_end():
+    for key, value in fold_history.items():
+        over_history[key].append(value[-1])
+
+    train_iter.set_description(
+        '[Fold %d] Training Accuracy: %.2f%% Testing Accuracy: %.2f%%' % (
+            fold_number,
+            fold_history['train_metric'][-1],
+            fold_history['test_metric'][-1],
+        )
+    )
+
+    os.makedirs(fold_save_dir, exist_ok=True)
+    with open(os.path.join(fold_save_dir, 'history.json'), 'w') as f:
+        json.dump(fold_history, f)
+    return
+
+
+def on_end_all_training() -> None:
+    print(
+        'Overall Training Accuracy: %.2f%% (std: %.2f) Testing Accuracy: %.2f%% (std: %.2f)' %
+        (
+            np.array(over_history['train_metric']).mean(),
+            np.array(over_history['train_metric']).std(),
+            np.array(over_history['test_metric']).mean(),
+            np.array(over_history['test_metric']).std(),
+        )
+    )
+
+    with open(os.path.join(over_save_dir, 'history.json'), 'w') as f:
+        json.dump(over_history, f)
+
+    mlflow.end_run()
+    return
+
+
+def print_network():
+    print('---------- Networks initialized -------------')
+    num_params = 0
+    for param in network.parameters():
+        num_params += param.numel()
+    print(network)
+    print(f'Total number of parameters: {num_params / 1e6:.3f} M')
+    print('-----------------------------------------------')
     return
 
 
 if __name__ == '__main__':
     opt = TrainOption().parse()
-    train(opt)
+    setup()
+
+    over_save_dir = os.path.join(opt.save_dir, opt.name)
+    over_history: DefaultDict[str, List[float]] = defaultdict(list)  # 全foldの結果
+    device = torch.device('cuda:{}'.format(opt.gpu_ids[0])) if opt.gpu_ids else torch.device('cpu')
+
+    os.makedirs(over_save_dir, exist_ok=True)
+    with open(os.path.join(over_save_dir, 'options.json'), 'w') as f:
+        json.dump(vars(opt), f)
+
+    train_transform = transforms[opt.train_transform_name](opt)
+    test_transform = transforms[opt.test_transform_name](opt)
+
+    engine = Engine()
+    loss_averager = tnt.meter.AverageValueMeter()
+    metric_averager = tnt.meter.MSEMeter() if opt.is_regression else tnt.meter.ClassErrorMeter(accuracy=True)
+    train_loss_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Train Loss'})
+    train_metric_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Train Accuracy'})
+    test_loss_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Test Loss'})
+    test_metric_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Test Accuracy'})
+
+    engine.hooks['on_sample'] = on_sample
+    engine.hooks['on_forward'] = on_forward
+    engine.hooks['on_start_epoch'] = on_start_epoch
+    engine.hooks['on_end_epoch'] = on_end_epoch
+
+    train_iter = tqdm(range(1, 11), desc='Training Model......')
+    for fold_number in train_iter:
+        fold_save_dir = os.path.join(over_save_dir, f'{fold_number:02}')
+        fold_history: DefaultDict[str, List[float]] = defaultdict(list)  # 各foldの結果
+
+        train_dataset = datasets[opt.dataset_name](train_transform, True, fold_number, opt)
+        train_dataloader = dataloaders[opt.dataloader_name](train_dataset, True, opt)
+
+        test_dataset = datasets[opt.dataset_name](test_transform, False, fold_number, opt)
+        test_dataloader = dataloaders[opt.dataloader_name](test_dataset, False, opt)
+
+        num_features, num_classes = train_dataset.num_features, train_dataset.num_classes
+
+        loss = losses[opt.loss_name](opt)
+        network = networks[opt.network_name](num_features, num_classes, opt)
+
+        if fold_number == 1:
+            print_network()
+
+        network.to(device)
+
+        optimizer = optimizers[opt.optimizer_name](network.parameters(), opt)
+
+        engine.train(processor, train_dataloader, maxepoch=opt.n_epochs, optimizer=optimizer)
+        on_end()
+
+    on_end_all_training()

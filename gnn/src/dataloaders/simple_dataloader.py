@@ -1,12 +1,11 @@
 import argparse
 
-import torch.utils.data as data
+from torch_geometric.data.in_memory_dataset import InMemoryDataset
+from torch_geometric.loader import DataLoader
 
-from ..datasets.base_dataset import BaseDataset
 
-
-def create_dataloader(dataset: BaseDataset, opt: argparse.Namespace) -> data.DataLoader:
-    return data.DataLoader(dataset, batch_size=opt.batch_size, shuffle=not opt.serial_batches if dataset.is_train else False, num_workers=int(opt.num_threads))
+def create_dataloader(dataset: InMemoryDataset, is_train: bool, opt: argparse.Namespace) -> DataLoader:
+    return DataLoader(dataset, batch_size=opt.batch_size, shuffle=not opt.serial_batches and is_train, num_workers=int(opt.num_threads))
 
 
 def dataloader_modify_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:

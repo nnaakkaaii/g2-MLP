@@ -5,8 +5,8 @@ import torch
 
 from ..dataloaders import dataloader_options, dataloaders
 from ..datasets import dataset_options, datasets
-from ..loggers import logger_options, loggers
-from ..models import model_options, models
+from ..models.losses import loss_options, losses
+from ..models.networks import network_options, networks
 
 
 class BaseOption:
@@ -27,20 +27,22 @@ class BaseOption:
         """Define the common options that are used in both training and test.
         """
         parser.add_argument('--name', type=str, required=True, help='実験の固有名')
+        parser.add_argument('--mlflow_root_dir', type=str, default=os.path.join('mlruns'))
+        parser.add_argument('--run_name', type=str, default='test')
+        parser.add_argument('--save_freq', type=int, default=5, help='モデルの出力の保存頻度')
+        parser.add_argument('--save_dir', type=str, default=os.path.join('checkpoints'), help='モデルの出力の保存先ルートディレクトリ')
+
         parser.add_argument('--gpu_ids', type=str, default='0', help='使用するGPUのIDをカンマ区切り')
         parser.add_argument('--verbose', action='store_true', help='詳細を表示するか')
 
-        parser.add_argument('--model_name', type=str, required=True, choices=models.keys())
+        parser.add_argument('--loss_name', type=str, required=True, choices=losses.keys())
+        parser.add_argument('--network_name', type=str, required=True, choices=networks.keys())
         parser.add_argument('--dataset_name', type=str, required=True, choices=datasets.keys())
         parser.add_argument('--dataloader_name', type=str, required=True, choices=dataloaders.keys())
-        parser.add_argument('--logger_name', type=str, required=True, choices=loggers.keys())
 
-        parser.add_argument('--max_dataset_size', type=int, default=float('inf'), help='読み込むデータセット長の上限')
         parser.add_argument('--batch_size', type=int, default=32, help='バッチサイズ')
-        parser.add_argument('--save_dir', type=str, default=os.path.join('checkpoints'), help='モデルの出力の保存先ルートディレクトリ')
 
-        parser.add_argument('--train_ratio', type=float, default=0.4, help='学習データと検証データに占める学習データの割合')
-        parser.add_argument('--epoch', type=int, default=1, help='事前学習時の最後のepoch (読み込みたい重みのepoch)')
+        parser.add_argument('--is_regression', action='store_true', help='回帰のタスクであるか')
 
         self.initialized = True
         return parser
@@ -57,20 +59,20 @@ class BaseOption:
         parser = self.initialize(parser)
 
         opt, _ = parser.parse_known_args()  # extract arguments; modify following arguments dynamically
-        model_option_setter = model_options[opt.model_name]
-        parser = model_option_setter(parser)
+        loss_modify_commandline_options = loss_options[opt.loss_name]
+        parser = loss_modify_commandline_options(parser)
+
+        opt, _ = parser.parse_known_args()
+        network_modify_commandline_options = network_options[opt.network_name]
+        parser = network_modify_commandline_options(parser)
 
         opt, _ = parser.parse_known_args()
         dataset_modify_commandline_options = dataset_options[opt.dataset_name]
         parser = dataset_modify_commandline_options(parser)
 
         opt, _ = parser.parse_known_args()  # extract arguments; modify following arguments dynamically
-        dataloader_option_setter = dataloader_options[opt.dataloader_name]
-        parser = dataloader_option_setter(parser)
-
-        opt, _ = parser.parse_known_args()  # extract arguments; modify following arguments dynamically
-        logger_option_setter = logger_options[opt.logger_name]
-        parser = logger_option_setter(parser)
+        dataloader_modify_commandline_options = dataloader_options[opt.dataloader_name]
+        parser = dataloader_modify_commandline_options(parser)
 
         self.parser = parser
 
