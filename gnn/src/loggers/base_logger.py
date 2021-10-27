@@ -51,7 +51,7 @@ class BaseLogger(AbstractLogger):
         return
 
     def on_start(self, state: Dict[str, Any]) -> None:
-        if state['training']:
+        if state['train']:
             self.fold_save_dir = os.path.join(self.over_save_dir, f'{self._fold_number:02}')
             self.fold_history = defaultdict(list)
             self._fold_number += 1
@@ -60,7 +60,7 @@ class BaseLogger(AbstractLogger):
         return
 
     def on_end(self, state: Dict[str, Any]) -> None:
-        if state['training']:
+        if state['train']:
             for key, value in self.fold_history.items():
                 self.over_history[key].append(value[-1])  # 最後の値をover_historyに保存
 
@@ -95,6 +95,8 @@ class BaseLogger(AbstractLogger):
     def on_end_epoch(self, state: Dict[str, Any]) -> None:
         """trainでのみ呼ばれる
         """
+        sys.stdout.write('\n')
+
         epoch = state['epoch']
         self.fold_history['train_loss'].append(self.loss_averager.value()[0])
         self.fold_history['train_metric'].append(self.metric_averager.value()[0])
@@ -109,6 +111,8 @@ class BaseLogger(AbstractLogger):
 
         if epoch % self.save_freq == 0 and self._network is not None:
             self.save_models(state)
+
+        sys.stdout.write('\n')
         return
 
     def save_models(self, state: Dict[str, Any]) -> None:
@@ -124,15 +128,16 @@ class BaseLogger(AbstractLogger):
         return
 
     def print_status(self, state: Dict[str, Any]) -> None:
-        iteration = state['t']
         max_iteration = len(state['iterator'])
+        iteration = 1 + state['t'] % max_iteration
+
         if state['train']:
-            epoch = state['epoch']
-            status_str = f'[Epoch {epoch}][{iteration:.0f}/{max_iteration}] '
+            epoch = 1 + state['epoch']
+            status_str = f'[Epoch {epoch}][Iteration {iteration:.0f}/{max_iteration}] '
             status_str += f'train_loss: {self.loss_averager.value()[0]:.4f}, '
             status_str += f'train_metric: {self.metric_averager.value()[0]:.4f}, '
         else:
-            status_str = f'[{iteration:.0f}/{max_iteration}] '
+            status_str = f'         [Iteration {iteration:.0f}/{max_iteration}] '
             status_str += f'test_loss: {self.loss_averager.value()[0]:.4f}, '
             status_str += f'test_metric: {self.metric_averager.value()[0]:.4f}, '
 

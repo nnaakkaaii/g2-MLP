@@ -1,5 +1,7 @@
 import argparse
 
+import torch
+
 from src.dataloaders import dataloaders
 from src.datasets import datasets
 from src.loggers import loggers
@@ -10,23 +12,21 @@ from src.options.train_option import TrainOption
 from src.transforms import transforms
 from src.utils.fix_seed import fix_seed
 from torchnet.engine import Engine
-from tqdm import tqdm
 
 fix_seed(42)
 
 
 def train(opt: argparse.Namespace) -> None:
-    device = opt.device
+    device = torch.device('cuda:{}'.format(opt.gpu_ids[0])) if opt.gpu_ids else torch.device('cpu')
 
     train_transform = transforms[opt.train_transform_name](opt)
-
     test_transform = transforms[opt.test_transform_name](opt)
 
     engine = Engine()
     logger = loggers[opt.logger_name](opt)
 
-    train_iter = tqdm(range(1, 11), desc='Training Model......')
-    for i in train_iter:
+    for i in range(1, 11):
+        print(f'************************* FOLD {i:02} STARTED *************************')
         train_dataset = datasets[opt.dataset_name](train_transform, True, i, opt)
         train_dataloader = dataloaders[opt.dataloader_name](train_dataset, True, opt)
 
@@ -35,10 +35,9 @@ def train(opt: argparse.Namespace) -> None:
 
         num_features, num_classes = train_dataset.num_features, train_dataset.num_classes
 
+        loss = losses[opt.loss_name](opt)
         network = networks[opt.network_name](num_features, num_classes, opt)
         network.to(device)
-
-        loss = losses[opt.loss_name](opt)
 
         def processor(sample):
             data_, training = sample
@@ -59,7 +58,7 @@ def train(opt: argparse.Namespace) -> None:
 
         optimizer = optimizers[opt.optimizer_name](network.parameters(), opt)
 
-        engine.train(network, train_dataloader, maxepoch=opt.n_epochs, optimizer=optimizer)
+        engine.train(processor, train_dataloader, maxepoch=opt.n_epochs, optimizer=optimizer)
 
     logger.on_end_all_training()
     return

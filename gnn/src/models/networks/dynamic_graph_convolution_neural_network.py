@@ -55,6 +55,6 @@ class DGCNN(nn.Module):
         out = self.drop_out(out)
         out = self.classifier_2(out)
         if not self.is_regression:
-            out = F.log_softmax(self.classifier_2(out), dim=-1)
+            out = F.log_softmax(out, dim=-1)
 
         return out

@@ -1,18 +1,16 @@
-from argparse import ArgumentParser, Namespace
-from typing import Any, Optional
+import argparse
+from typing import Any
 
 import torch
 from torch_geometric.data import Data
 from torch_geometric.utils import degree
 
 
-def create_transform(opt: Namespace) -> Any:
-    return Indegree(not opt.transform_no_norm, opt.max_value)
+def create_transform(opt: argparse.Namespace) -> Any:
+    return Indegree()
 
 
-def transform_modify_commandline_option(parser: ArgumentParser) -> ArgumentParser:
-    parser.add_argument('--transform_no_norm', action='store_true', help='transformで加える次数の特徴に対してnormalizeを行わない場合は指定する')
-    parser.add_argument('--max_value', type=float, default=None, help='normalizeを行うときの分母を予め指定したい場合')
+def transform_modify_commandline_option(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     return parser
 
 
@@ -23,13 +21,13 @@ class Indegree:
     参考実装 : https://github.com/leftthomas/DGCNN/blob/master/utils.py
     """
 
-    def __init__(self, norm: bool = True, max_value: Optional[float] = None) -> None:
-        self.norm = norm
-        self.max_value = max_value
+    def __init__(self) -> None:
+        self.norm = True
+        self.max_value = None
 
-    def __call_(self, data: Data) -> Data:
+    def __call__(self, data: Data) -> Data:
         col, x = data.edge_index[1], data.x
-        deg = degree(col, col, data.num_nodes)
+        deg = degree(col, data.num_nodes)
 
         if self.norm:
             deg = deg / (deg.max() if self.max_value is None else self.max_value)
