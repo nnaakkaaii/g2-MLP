@@ -1,14 +1,50 @@
-# Various Graph Neural Network Models
+# Inductive Node Classification (Graph Neural Networks)
 
-## Supported
+## Author
 
-- Dataset
-	- CoraDataset
-- Model
-	- Graph Attention Networks
+Yu, Nakai. The University of Tokyo.
 
+Contact : nakai-yu623@g.ecc.u-tokyo.ac.jp
 
-## Errors
+## Dataset
+
+| Dataset | PPI |
+| ---- | ---- |
+| Graphs | 24 |
+| Average Nodes Per Graph | 2373 |
+| Average Edges Per Graph | 34113 |
+| Features of Nodes | 50 |
+| Classes | 121 (multilabel) |
+
+## Model
+
+### Graph Attention Networks (GAT; 2017)
+
+## Preparation
+
+1. install dependent packages
+
+	```bash
+	$ pip3 install torch==1.9.1
+	$ pip3 install -r requirements.txt
+	```
+
+2. download necessary data
+
+	```bash
+	$ make
+	```
+
+## Usage
+
+### Train & View results on Visdom
+
+- PPI x GAT
+	```bash
+	$ ./scripts/ppi_gat.sh
+	```
+
+## Troubleshooting
 
 ### `libcudart.so.9.0: cannot open shared object file: No such file or directory`
 
@@ -27,18 +63,11 @@
 
 ```bash
 $ python -c "import torch; print(torch.__version__)"
-```
-
-```bash
+1.9.1
 $ python -c "import torch; print(torch.version.cuda)"
-```
-
-```bash
-$ export TORCH=HOGE
-$ export CUDA=cuHOGE
-```
-
-```bash
+cu10.2
+$ export TORCH=1.9.1
+$ export CUDA=cu102
 $ pip install torch-scatter -f https://data.pyg.org/whl/torch-${TORCH}+${CUDA}.html
 $ pip install torch-sparse -f https://data.pyg.org/whl/torch-${TORCH}+${CUDA}.html
 $ pip install torch-geometric

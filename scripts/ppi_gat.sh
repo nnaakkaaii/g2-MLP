@@ -2,6 +2,7 @@ python3 -m visdom.server -logging_level WARNING & python3 gnn/train.py \
     --gpu_ids 0 \
     --verbose \
     --loss_name mce \
+    --task_type multi_label_classification \
     --network_name GAT \
     --dataset_name PPI \
     --train_transform_name indegree \

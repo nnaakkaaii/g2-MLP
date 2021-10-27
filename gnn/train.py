@@ -48,7 +48,7 @@ def processor(sample: Tuple[Data, bool]) -> Tuple[Any, Any]:
 
 def on_sample(state: Dict[str, Any]) -> None:
     state['sample'].y = state['sample'].y.flatten()
-    if not opt.is_regression:
+    if opt.task_type in ['classification', 'multi_label_classification']:
         state['sample'].y = state['sample'].y.long()
     state['sample'] = state['sample'], state['train']
     return
@@ -124,7 +124,10 @@ if __name__ == '__main__':
 
     engine = Engine()
     loss_averager = tnt.meter.AverageValueMeter()
-    metric_averager = tnt.meter.MSEMeter() if opt.is_regression else tnt.meter.ClassErrorMeter(accuracy=True)
+    if opt.task_type == 'regression':
+        metric_averager = tnt.meter.MSEMeter()
+    else:
+        metric_averager = tnt.meter.ClassErrorMeter(accuracy=True)
     train_loss_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Train Loss'})
     train_metric_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Train Accuracy'})
     test_loss_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Test Loss'})

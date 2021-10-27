@@ -40,7 +40,7 @@ class BaseOption:
 
         parser.add_argument('--batch_size', type=int, default=32, help='バッチサイズ')
 
-        parser.add_argument('--is_regression', action='store_true', help='回帰のタスクであるか')
+        parser.add_argument('--task_type', type=str, required=True, choices=['classification', 'multi_label_classification', 'regression'])
 
         self.initialized = True
         return parser
