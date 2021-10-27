@@ -5,7 +5,6 @@ python3 gnn/train.py \
     --network_name DGCNN \
     --dataset_name DD \
     --dataloader_name simple \
-    --logger_name mlflow \
     --batch_size 128 \
     --train_transform_name indegree \
     --test_transform_name indegree \
@@ -18,7 +17,7 @@ python3 gnn/train.py \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
     --run_name test_dd \
-    --lr 0.00001 \
-    --beta1 0.5 \
+    --lr 1e-3 \
+    --beta1 0.9 \
     --beta2 0.999 \
 

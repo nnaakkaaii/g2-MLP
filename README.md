@@ -24,3 +24,22 @@
 
 - pytorchのバージョンがあっていない
 - torch==1.9.1をインストール後、案内に従って残りのライブラリをインストール
+
+```bash
+$ python -c "import torch; print(torch.__version__)"
+```
+
+```bash
+$ python -c "import torch; print(torch.version.cuda)"
+```
+
+```bash
+$ export TORCH=HOGE
+$ export CUDA=cuHOGE
+```
+
+```bash
+$ pip install torch-scatter -f https://data.pyg.org/whl/torch-${TORCH}+${CUDA}.html
+$ pip install torch-sparse -f https://data.pyg.org/whl/torch-${TORCH}+${CUDA}.html
+$ pip install torch-geometric
+```

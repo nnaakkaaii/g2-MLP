@@ -5,7 +5,6 @@ import torch
 
 from ..dataloaders import dataloader_options, dataloaders
 from ..datasets import dataset_options, datasets
-from ..loggers import logger_options, loggers
 from ..models.losses import loss_options, losses
 from ..models.networks import network_options, networks
 
@@ -27,6 +26,12 @@ class BaseOption:
     def initialize(self, parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
         """Define the common options that are used in both training and test.
         """
+        parser.add_argument('--name', type=str, required=True, help='実験の固有名')
+        parser.add_argument('--mlflow_root_dir', type=str, default=os.path.join('mlruns'))
+        parser.add_argument('--run_name', type=str, default='test')
+        parser.add_argument('--save_freq', type=int, default=5, help='モデルの出力の保存頻度')
+        parser.add_argument('--save_dir', type=str, default=os.path.join('checkpoints'), help='モデルの出力の保存先ルートディレクトリ')
+
         parser.add_argument('--gpu_ids', type=str, default='0', help='使用するGPUのIDをカンマ区切り')
         parser.add_argument('--verbose', action='store_true', help='詳細を表示するか')
 
@@ -34,7 +39,6 @@ class BaseOption:
         parser.add_argument('--network_name', type=str, required=True, choices=networks.keys())
         parser.add_argument('--dataset_name', type=str, required=True, choices=datasets.keys())
         parser.add_argument('--dataloader_name', type=str, required=True, choices=dataloaders.keys())
-        parser.add_argument('--logger_name', type=str, required=True, choices=loggers.keys())
 
         parser.add_argument('--batch_size', type=int, default=32, help='バッチサイズ')
 
@@ -69,10 +73,6 @@ class BaseOption:
         opt, _ = parser.parse_known_args()  # extract arguments; modify following arguments dynamically
         dataloader_modify_commandline_options = dataloader_options[opt.dataloader_name]
         parser = dataloader_modify_commandline_options(parser)
-
-        opt, _ = parser.parse_known_args()  # extract arguments; modify following arguments dynamically
-        logger_modify_commandline_options = logger_options[opt.logger_name]
-        parser = logger_modify_commandline_options(parser)
 
         self.parser = parser
 
