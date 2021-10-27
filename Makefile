@@ -3,8 +3,8 @@ LOG_DIR = ./checkpoints/
 RUN_DIR = ./mlruns/
 MAKEDATA_DIR = ./makedata/
 
-DATA1 = tudataset
-DATA1_DIR = $(INPUT_DIR)
+DATA1 = PPI
+DATA1_DIR = $(INPUT_DIR)/${DATA1}
 MAKEDATA1_PATH = $(MAKEDATA_DIR)/$(DATA1)/download.sh
 
 all: $(INPUT_DIR) $(LOG_DIR) $(RUN_DIR) $(DATA1_DIR)

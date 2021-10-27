@@ -1,0 +1,20 @@
+python3 -m visdom.server -logging_level WARNING & python3 gnn/train.py \
+    --gpu_ids 0 \
+    --verbose \
+    --loss_name mce \
+    --network_name GAT \
+    --dataset_name PPI \
+    --train_transform_name indegree \
+    --test_transform_name indegree \
+    --optimizer_name adam \
+    --n_epochs 150 \
+    --data_dir ./inputs/PPI/ \
+    --index_file_dir ./inputs/PPI/10fold_idx/ \
+    --name gat_ppi \
+    --save_freq 5 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name debug_gat_ppi \
+    --lr 1e-3 \
+    --beta1 0.9 \
+    --beta2 0.999

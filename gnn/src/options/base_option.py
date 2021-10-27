@@ -3,7 +3,6 @@ import os
 
 import torch
 
-from ..dataloaders import dataloader_options, dataloaders
 from ..datasets import dataset_options, datasets
 from ..models.losses import loss_options, losses
 from ..models.networks import network_options, networks
@@ -38,7 +37,6 @@ class BaseOption:
         parser.add_argument('--loss_name', type=str, required=True, choices=losses.keys())
         parser.add_argument('--network_name', type=str, required=True, choices=networks.keys())
         parser.add_argument('--dataset_name', type=str, required=True, choices=datasets.keys())
-        parser.add_argument('--dataloader_name', type=str, required=True, choices=dataloaders.keys())
 
         parser.add_argument('--batch_size', type=int, default=32, help='バッチサイズ')
 
@@ -69,10 +67,6 @@ class BaseOption:
         opt, _ = parser.parse_known_args()
         dataset_modify_commandline_options = dataset_options[opt.dataset_name]
         parser = dataset_modify_commandline_options(parser)
-
-        opt, _ = parser.parse_known_args()  # extract arguments; modify following arguments dynamically
-        dataloader_modify_commandline_options = dataloader_options[opt.dataloader_name]
-        parser = dataloader_modify_commandline_options(parser)
 
         self.parser = parser
 
