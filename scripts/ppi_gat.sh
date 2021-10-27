@@ -8,7 +8,7 @@ python3 -m visdom.server -logging_level WARNING & python3 gnn/train.py \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 150 \
+    --n_epochs 300 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
     --name gat_ppi \
