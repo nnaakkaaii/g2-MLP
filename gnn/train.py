@@ -1,15 +1,12 @@
-import os
 import json
-from typing import Tuple, Dict, Any, DefaultDict, List
+import os
 from collections import defaultdict
+from typing import Any, DefaultDict, Dict, List, Tuple
 
-import torch
 import mlflow
-import torchnet as tnt
 import numpy as np
-from torch_geometric.data import Data
-from torchnet.logger.visdomlogger import VisdomPlotLogger
-
+import torch
+import torchnet as tnt
 from src.dataloaders import dataloaders
 from src.datasets import datasets
 from src.models.losses import losses
@@ -18,7 +15,9 @@ from src.models.optimizers import optimizers
 from src.options.train_option import TrainOption
 from src.transforms import transforms
 from src.utils.fix_seed import fix_seed
+from torch_geometric.data import Data
 from torchnet.engine import Engine
+from torchnet.logger.visdomlogger import VisdomPlotLogger
 from tqdm import tqdm
 
 fix_seed(42)
@@ -37,7 +36,7 @@ def setup():
     return
 
 
-def processor(sample: Tuple[Data, bool]) -> None:
+def processor(sample: Tuple[Data, bool]) -> Tuple[Any, Any]:
     data_, training = sample
     data_.to(device)
 
