@@ -41,7 +41,8 @@ class BaseOption:
 
         parser.add_argument('--batch_size', type=int, default=32, help='バッチサイズ')
 
-        parser.add_argument('--task_type', type=str, required=True, choices=['classification', 'multi_label_classification', 'regression'])
+        parser.add_argument('--task_type', type=str, required=True,
+                            choices=['node_classification', 'multi_label_node_classification', 'node_regression', 'graph_classification'])
 
         self.initialized = True
         return parser

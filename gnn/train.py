@@ -47,8 +47,9 @@ def processor(sample: Tuple[Data, bool]) -> Tuple[Any, Any]:
 
 
 def on_sample(state: Dict[str, Any]) -> None:
-    state['sample'].y = state['sample'].y.flatten()
-    if opt.task_type in ['classification', 'multi_label_classification']:
+    if opt.task_type in ['node_classification', 'multi_label_node_classification', 'node_regression']:
+        state['sample'].y = state['sample'].y.flatten()
+    if opt.task_type in ['node_classification', 'multi_label_node_classification']:
         state['sample'].y = state['sample'].y.long()
     state['sample'] = state['sample'], state['train']
     return
@@ -126,7 +127,7 @@ if __name__ == '__main__':
 
     engine = Engine()
     loss_averager = tnt.meter.AverageValueMeter()
-    if opt.task_type == 'regression':
+    if opt.task_type == 'node_regression':
         metric_averager = tnt.meter.MSEMeter()
     else:
         metric_averager = tnt.meter.ClassErrorMeter(accuracy=True)
@@ -147,7 +148,6 @@ if __name__ == '__main__':
         fold_history: DefaultDict[str, List[float]] = defaultdict(list)  # 各foldの結果
 
         train_dataset = datasets[opt.dataset_name](train_transform, True, fold_number, opt)
-
         test_dataset = datasets[opt.dataset_name](test_transform, False, fold_number, opt)
 
         num_features, num_classes = train_dataset.num_features, train_dataset.num_classes

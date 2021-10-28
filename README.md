@@ -6,6 +6,23 @@ Yu, Nakai. The University of Tokyo.
 
 Contact : nakai-yu623@g.ecc.u-tokyo.ac.jp
 
+## Results
+
+### PPI (iductive node classification)
+
+| | train accuracy | test accuracy | eclipsed time |
+| ---- | ---- | ---- | ---- |
+| GAT | 92.96% (±0.24) | 94.17% (±2.20) | 5.0h |
+| GCN | 80.81% (±0.13) | 80.74% (±0.69) | 3.2h |
+
+### MUTAG (inductive graph classification)
+
+
+| | train accuracy | test accuracy | eclipsed time |
+| ---- | ---- | ---- | ---- |
+| GAT | 82.88% (±5.79) | 79.44% (±9.31) | 0.2h |
+| GCN (DGCNN) | % (±) | % (±) | 0.2h |
+
 ## Dataset
 
 | Dataset | PPI |
@@ -19,6 +36,12 @@ Contact : nakai-yu623@g.ecc.u-tokyo.ac.jp
 ## Model
 
 ### Graph Attention Networks (GAT; 2017)
+
+Reference : [Graph Attention Networks](https://arxiv.org/abs/1710.10903)
+
+### Graph Convolution Networks (GCN; 2016)
+
+Reference : [Semi-Supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907)
 
 ## Preparation
 
@@ -72,3 +95,9 @@ $ pip install torch-scatter -f https://data.pyg.org/whl/torch-${TORCH}+${CUDA}.h
 $ pip install torch-sparse -f https://data.pyg.org/whl/torch-${TORCH}+${CUDA}.html
 $ pip install torch-geometric
 ```
+
+## References
+
+- [PyTorch Documentation](https://pytorch.org/docs/stable/index.html)
+- [PyTorch-Geometric Documentation](https://pytorch-geometric.readthedocs.io/en/latest/)
+- [DGCNN implementation by leftthomas](https://github.com/leftthomas/DGCNN)
