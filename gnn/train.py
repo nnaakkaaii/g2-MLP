@@ -74,8 +74,9 @@ def on_start_epoch(state: Dict[str, Any]) -> None:
 def on_end_epoch(state: Dict[str, Any]) -> None:
     current_loss = loss_averager.value()[0]
     current_metric = metric_averager.value()[0]
-    train_loss_logger.log(state['epoch'], current_loss, name='fold_' + str(fold_number))
-    train_metric_logger.log(state['epoch'], current_metric, name='fold_' + str(fold_number))
+    if not opt.no_visdom_logger:
+        train_loss_logger.log(state['epoch'], current_loss, name='fold_' + str(fold_number))
+        train_metric_logger.log(state['epoch'], current_metric, name='fold_' + str(fold_number))
     fold_history['train_loss'].append(current_loss)
     fold_history['train_metric'].append(current_metric)
 
@@ -85,8 +86,9 @@ def on_end_epoch(state: Dict[str, Any]) -> None:
 
     current_loss = loss_averager.value()[0]
     current_metric = metric_averager.value()[0]
-    test_loss_logger.log(state['epoch'], current_loss, name='fold_' + str(fold_number))
-    test_metric_logger.log(state['epoch'], current_metric, name='fold_' + str(fold_number))
+    if not opt.no_visdom_logger:
+        test_loss_logger.log(state['epoch'], current_loss, name='fold_' + str(fold_number))
+        test_metric_logger.log(state['epoch'], current_metric, name='fold_' + str(fold_number))
     fold_history['test_loss'].append(current_loss)
     fold_history['test_metric'].append(current_metric)
 
@@ -128,10 +130,11 @@ if __name__ == '__main__':
         metric_averager = tnt.meter.MSEMeter()
     else:
         metric_averager = tnt.meter.ClassErrorMeter(accuracy=True)
-    train_loss_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Train Loss'})
-    train_metric_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Train Accuracy'})
-    test_loss_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Test Loss'})
-    test_metric_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Test Accuracy'})
+    if not opt.no_visdom_logger:
+        train_loss_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Train Loss'})
+        train_metric_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Train Accuracy'})
+        test_loss_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Test Loss'})
+        test_metric_logger = VisdomPlotLogger('line', env=opt.name, opts={'title': 'Test Accuracy'})
 
     engine.hooks['on_sample'] = on_sample
     engine.hooks['on_forward'] = on_forward

@@ -30,6 +30,7 @@ class BaseOption:
         parser.add_argument('--run_name', type=str, default='test')
         parser.add_argument('--save_freq', type=int, default=5, help='モデルの出力の保存頻度')
         parser.add_argument('--save_dir', type=str, default=os.path.join('checkpoints'), help='モデルの出力の保存先ルートディレクトリ')
+        parser.add_argument('--no_visdom_logger', action='store_true', help='visdomのloggerを利用しない')
 
         parser.add_argument('--gpu_ids', type=str, default='0', help='使用するGPUのIDをカンマ区切り')
         parser.add_argument('--verbose', action='store_true', help='詳細を表示するか')
