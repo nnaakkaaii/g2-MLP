@@ -1,7 +1,7 @@
 import argparse
 
-import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch_geometric.data import Data
 from torch_geometric.nn.conv import GCNConv
 from torch_geometric.nn import global_sort_pool
@@ -28,6 +28,7 @@ class GCN(nn.Module):
         super().__init__()
         self.num_classes = num_classes
         self.task_type = task_type
+        self.dropout_rate = dropout_rate
 
         self.conv1 = GCNConv(num_features, hidden_dim)
         self.conv2 = GCNConv(hidden_dim, hidden_dim)
@@ -38,40 +39,27 @@ class GCN(nn.Module):
         elif task_type == 'graph_classification':
             self.conv3 = GCNConv(hidden_dim, 1)
             assert hidden_dim % 2 == 0
-            self.conv1d_1 = nn.Conv1d(1, 16, 2 * hidden_dim + 1, 2 * hidden_dim + 1)
-            self.conv1d_2 = nn.Conv1d(16, 32, 5, 1)
-            self.pool = nn.MaxPool1d(2, 2)
-            self.classifier_1 = nn.Linear(352, hidden_dim)
+            self.classifier_1 = nn.Linear(30, hidden_dim)
             self.classifier_2 = nn.Linear(hidden_dim, num_classes)
-            self.relu = nn.ReLU(inplace=True)
-
-        self.dropout = nn.Dropout(p=dropout_rate)
-        self.elu = nn.ELU(inplace=True)
 
     def forward(self, data: Data):
         x, edge_index, batch = data.x, data.edge_index, data.batch
 
-        x_1 = self.dropout(self.elu(self.conv1(x, edge_index)))
-        x_2 = self.dropout(self.elu(self.conv2(x_1, edge_index) + x_1))
-        out = self.conv3(x_2, edge_index)
+        x_1 = F.dropout(F.elu(self.conv1(x, edge_index), inplace=True), p=self.dropout_rate, training=self.training)
+        x_2 = F.dropout(F.elu(self.conv2(x_1, edge_index) + x_1, inplace=True), p=self.dropout_rate, training=self.training)
+        x_3 = self.conv3(x_2, edge_index)
 
         if self.task_type == 'node_regression':
-            return out.view(-1)  # ノード x 特徴量 -> flatten
+            return x_3.view(-1)  # ノード x 特徴量 -> flatten
         if self.task_type == 'multi_label_node_classification':
-            return out.view(-1, 2)
+            return x_3.view(-1, 2)
         if self.task_type == 'node_classification':
-            return out
+            return x_3
         if self.task_type == 'graph_classification':
-            out = torch.cat([x_1, x_2, out], dim=-1)
-            out = global_sort_pool(out, batch, k=30)
-            out = out.view(out.size(0), 1, out.size(-1))
-            out = self.relu(self.conv1d_1(out))
-            out = self.pool(out)
-            out = self.relu(self.conv1d_2(out))
-            out = out.view(out.size(0), -1)
-            out = self.relu(self.classifier_1(out))
-            out = self.dropout(out)
+            out = global_sort_pool(x_3, batch, k=30)
+            out = F.elu(self.classifier_1(out), inplace=True)
+            out = F.dropout(out, p=self.dropout_rate, training=self.training)
             out = self.classifier_2(out)
-            return out
+            return out.view(1, -1)
 
         raise NotImplementedError
