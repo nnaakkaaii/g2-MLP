@@ -60,17 +60,14 @@ class GraphUNet(torch.nn.Module):
         self.pool1 = Pool(hidden_dim, ratio, **pool_kwargs)
         self.down_conv2 = GNN(hidden_dim, hidden_dim, **gnn_kwargs)
         self.pool2 = Pool(hidden_dim, ratio, **pool_kwargs)
-        self.down_conv3 = GNN(hidden_dim, hidden_dim, **gnn_kwargs)
-        self.pool3 = Pool(hidden_dim, ratio, **pool_kwargs)
 
         self.up_conv1 = GNN(hidden_dim, hidden_dim, **gnn_kwargs)
-        self.up_conv2 = GNN(hidden_dim, hidden_dim, **gnn_kwargs)
         if task_type == 'multi_label_node_classification':
-            self.up_conv3 = GNN(hidden_dim, 2 * num_classes, **gnn_kwargs)
+            self.up_conv2 = GNN(hidden_dim, 2 * num_classes, **gnn_kwargs)
         elif task_type in ['node_classification', 'node_regression']:
-            self.up_conv3 = GNN(hidden_dim, num_classes, **gnn_kwargs)
+            self.up_conv2 = GNN(hidden_dim, num_classes, **gnn_kwargs)
         elif task_type in ['graph_classification']:
-            self.up_conv3 = GNN(hidden_dim, 1, **gnn_kwargs)
+            self.up_conv2 = GNN(hidden_dim, 1, **gnn_kwargs)
             self.classifier_1 = nn.Linear(30, hidden_dim)
             self.classifier_2 = nn.Linear(hidden_dim, num_classes)
 
@@ -79,13 +76,10 @@ class GraphUNet(torch.nn.Module):
     def reset_parameters(self):
         self.down_conv1.reset_parameters()
         self.down_conv2.reset_parameters()
-        self.down_conv3.reset_parameters()
         self.pool1.reset_parameters()
         self.pool2.reset_parameters()
-        self.pool3.reset_parameters()
         self.up_conv1.reset_parameters()
         self.up_conv2.reset_parameters()
-        self.up_conv3.reset_parameters()
         if hasattr(self, 'classifier_1'):
             self.classifier_1.reset_parameters()
         if hasattr(self, 'classifier_2'):
@@ -111,17 +105,6 @@ class GraphUNet(torch.nn.Module):
         edge_index3, edge_weight3 = augment_adj(edge_index2, edge_weight2, x2.size(0))
         x3, edge_index3, edge_weight3, batch, perm2, _ = self.pool2(x2, edge_index3, edge_weight3, batch)
         x3 = self.down_conv2(x3, edge_index3, edge_weight3)
-        x3 = F.dropout(F.elu(x3, inplace=True), p=self.dropout_rate, training=self.training)
-
-        edge_index4, edge_weight4 = augment_adj(edge_index3, edge_weight3, x3.size(0))
-        x4, edge_index4, edge_weight4, batch, perm3, _ = self.pool3(x3, edge_index4, edge_weight4, batch)
-        x4 = self.down_conv2(x4, edge_index4, edge_weight4)
-        x4 = F.dropout(F.elu(x4, inplace=True), p=self.dropout_rate, training=self.training)
-
-        up3 = torch.zeros_like(x3)
-        up3[perm3] = x4
-        x3 = x3 + up3
-        x3 = self.up_conv1(x3, edge_index3, edge_weight3)
         x3 = F.dropout(F.elu(x3, inplace=True), p=self.dropout_rate, training=self.training)
 
         up2 = torch.zeros_like(x2)

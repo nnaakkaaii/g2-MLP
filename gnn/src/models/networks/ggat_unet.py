@@ -62,26 +62,20 @@ class GGATUNet(nn.Module):
         self.down_conv2 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
                                     skip_connection=True, GGATBlock=GGAT, ratio=ratio,
                                     ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
-        self.down_conv3 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
-                                    skip_connection=True, GGATBlock=GGAT, ratio=ratio,
-                                    ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
 
         self.up_conv1 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
                                   skip_connection=True, GGATBlock=GGAT, ratio=1,
                                   ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
-        self.up_conv2 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
-                                  skip_connection=True, GGATBlock=GGAT, ratio=1,
-                                  ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
         if task_type == 'multi_label_node_classification':
-            self.up_conv3 = GGATLayer(hidden_dim * ggat_heads, 2 * num_classes, GNN=GNN, dropout_rate=dropout_rate,
+            self.up_conv2 = GGATLayer(hidden_dim * ggat_heads, 2 * num_classes, GNN=GNN, dropout_rate=dropout_rate,
                                       skip_connection=False, GGATBlock=GGAT, ratio=1,
                                       ggat_heads=ggat_heads, ggat_concat=False, **kwargs)
         elif task_type in ['node_classification', 'node_regression']:
-            self.up_conv3 = GGATLayer(hidden_dim * ggat_heads, num_classes, GNN=GNN, dropout_rate=dropout_rate,
+            self.up_conv2 = GGATLayer(hidden_dim * ggat_heads, num_classes, GNN=GNN, dropout_rate=dropout_rate,
                                       skip_connection=False, GGATBlock=GGAT, ratio=1,
                                       ggat_heads=ggat_heads, ggat_concat=False, **kwargs)
         elif task_type in ['graph_classification']:
-            self.up_conv3 = GGATLayer(hidden_dim * ggat_heads, 1, GNN=GNN, dropout_rate=dropout_rate,
+            self.up_conv2 = GGATLayer(hidden_dim * ggat_heads, 1, GNN=GNN, dropout_rate=dropout_rate,
                                       skip_connection=False, GGATBlock=GGAT, ratio=1,
                                       ggat_heads=ggat_heads, ggat_concat=False, **kwargs)
             self.classifier_1 = nn.Linear(30, hidden_dim)
@@ -93,10 +87,8 @@ class GGATUNet(nn.Module):
         self.conv.reset_parameters()
         self.down_conv1.reset_parameters()
         self.down_conv2.reset_parameters()
-        self.down_conv3.reset_parameters()
         self.up_conv1.reset_parameters()
         self.up_conv2.reset_parameters()
-        self.up_conv3.reset_parameters()
         if hasattr(self, 'classifier_1'):
             self.classifier_1.reset_parameters()
         if hasattr(self, 'classifier_2'):
@@ -120,15 +112,6 @@ class GGATUNet(nn.Module):
 
         edge_index3, edge_weight3 = augment_adj(edge_index2, edge_weight2, x2.size(0))
         x3, edge_index3, edge_weight3, batch, perm2, _ = self.down_conv2(x2, edge_index3, edge_weight3, batch)
-        x3 = F.dropout(F.elu(x3, inplace=True), p=self.dropout_rate, training=self.training)
-
-        edge_index4, edge_weight4 = augment_adj(edge_index3, edge_weight3, x3.size(0))
-        x4, edge_index4, edge_weight4, batch, perm3, _ = self.down_conv3(x3, edge_index4, edge_weight4, batch)
-        x4 = F.dropout(F.elu(x4, inplace=True), p=self.dropout_rate, training=self.training)
-
-        up3 = torch.zeros_like(x3)
-        up3[perm3] = x4
-        x3 = self.up_conv1(up3, edge_index3, y=x3)
         x3 = F.dropout(F.elu(x3, inplace=True), p=self.dropout_rate, training=self.training)
 
         up2 = torch.zeros_like(x2)
