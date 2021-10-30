@@ -50,8 +50,11 @@ class GGATUNet(nn.Module):
             kwargs['concat'] = False
             kwargs['dropout'] = dropout_rate
 
-        self.down_conv1 = GGATLayer(num_features, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
-                                    skip_connection=False, GGATBlock=GGAT, ratio=ratio,
+        self.conv = GGATLayer(num_features, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
+                              skip_connection=False, GGATBlock=GGAT, ratio=1,
+                              ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
+        self.down_conv1 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
+                                    skip_connection=True, GGATBlock=GGAT, ratio=ratio,
                                     ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
         self.down_conv2 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
                                     skip_connection=True, GGATBlock=GGAT, ratio=ratio,
@@ -84,6 +87,7 @@ class GGATUNet(nn.Module):
         self.reset_parameters()
 
     def reset_parameters(self):
+        self.conv.reset_parameters()
         self.down_conv1.reset_parameters()
         self.down_conv2.reset_parameters()
         self.down_conv3.reset_parameters()
@@ -102,7 +106,8 @@ class GGATUNet(nn.Module):
             batch = edge_index.new_zeros(x.size(0))
         edge_weight = x.new_ones(edge_index.size(1))
 
-        x1 = x
+        x1 = self.conv(x, edge_index)
+        x1 = F.dropout(F.elu(x1, inplace=True), p=self.dropout_rate, training=self.training)
         edge_index1 = edge_index
         edge_weight1 = edge_weight
 
