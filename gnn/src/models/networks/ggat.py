@@ -25,7 +25,7 @@ def network_modify_commandline_options(parser: argparse.ArgumentParser) -> argpa
     parser.add_argument('--ggat_type', type=str, choices=GGAT_TYPES.keys(), help='利用するGGATのタイプ')
     parser.add_argument('--ggat_heads', type=int, default=4, help='GGATの並列数')
     parser.add_argument('--gnn_type', type=str, choices=GNN_TYPES.keys(), help='利用するGNNのタイプ')
-    parser.add_argument('--hidden_dim', type=int, default=256, help='中間層の特徴量')
+    parser.add_argument('--hidden_dim', type=int, default=128, help='中間層の特徴量')
     parser.add_argument('--dropout_rate', type=float, default=0.1, help='dropoutの割合')
     parser.add_argument('--n_heads', type=int, default=4, help='GATの並列数(GNNがGATの時のみ有効)')
     return parser

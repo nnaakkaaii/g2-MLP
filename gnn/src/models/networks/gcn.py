@@ -17,7 +17,7 @@ def create_network(num_features: int, num_classes: int, opt: argparse.Namespace)
 
 
 def network_modify_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
-    parser.add_argument('--hidden_dim', type=int, default=256, help='中間層の特徴量')
+    parser.add_argument('--hidden_dim', type=int, default=128, help='中間層の特徴量')
     parser.add_argument('--dropout_rate', type=float, default=0.1, help='dropoutの割合')
     return parser
 
