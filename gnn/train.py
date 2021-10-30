@@ -30,8 +30,6 @@ def mlflow_setup():
         mlflow.create_experiment(opt.name, artifact_location=None)
 
     mlflow.set_experiment(opt.name)
-    mlflow.start_run(run_name=opt.run_name)
-    mlflow.log_params(vars(opt))
     return
 
 
@@ -144,6 +142,9 @@ if __name__ == '__main__':
 
     train_iter = tqdm(range(1, 11), desc='Training Model......')
     for fold_number in train_iter:
+        mlflow.start_run(run_name=opt.run_name)
+        mlflow.log_params(vars(opt))
+
         fold_save_dir = os.path.join(over_save_dir, f'{fold_number:02}')
         fold_history: DefaultDict[str, List[float]] = defaultdict(list)  # 各foldの結果
 
@@ -176,6 +177,8 @@ if __name__ == '__main__':
         with open(os.path.join(fold_save_dir, 'history.json'), 'w') as f:
             json.dump(fold_history, f)
 
+        mlflow.end_run()
+
     print(
         'Overall Training Accuracy: %.2f%% (std: %.2f) Testing Accuracy: %.2f%% (std: %.2f)' %
         (
@@ -188,5 +191,3 @@ if __name__ == '__main__':
 
     with open(os.path.join(over_save_dir, 'history.json'), 'w') as f:
         json.dump(over_history, f)
-
-    mlflow.end_run()
