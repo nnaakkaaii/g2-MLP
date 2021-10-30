@@ -133,7 +133,7 @@ class GraphUNet(torch.nn.Module):
         up1 = torch.zeros_like(x1)
         up1[perm1] = x2
         x1 = x1 + up1
-        x1 = self.up_conv1(x1, edge_index1, edge_weight1)
+        x1 = self.up_conv3(x1, edge_index1, edge_weight1)
 
         if self.task_type == 'node_regression':
             return x1.view(-1)

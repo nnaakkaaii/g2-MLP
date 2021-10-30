@@ -138,7 +138,7 @@ class GGATUNet(nn.Module):
 
         up1 = torch.zeros_like(x1)
         up1[perm1] = x2
-        x1 = self.up_conv1(up1, edge_index1, y=x1)
+        x1 = self.up_conv3(up1, edge_index1, y=x1)
 
         if self.task_type == 'node_regression':
             return x1.view(-1)
