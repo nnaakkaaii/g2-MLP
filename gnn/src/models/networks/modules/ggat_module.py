@@ -74,7 +74,7 @@ class GGAT1Block(AbstractGGATBlock):
         x = x_1 * x_2
         x = F.dropout(F.elu(x, inplace=True), p=self.dropout_rate, training=self.training)
 
-        return x, x_1
+        return x, x_1.view(-1)
 
 
 class GGAT2Block(AbstractGGATBlock):
@@ -109,7 +109,7 @@ class GGAT2Block(AbstractGGATBlock):
         x = torch.mm(x_1, x_2)
         x = F.dropout(F.elu(x, inplace=True), p=self.dropout_rate, training=self.training)
 
-        return x, x_1
+        return x, x_1.view(-1)
 
 
 class GGATLayer(nn.Module):

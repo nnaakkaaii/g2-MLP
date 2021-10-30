@@ -9,7 +9,7 @@ from .modules import GNN_TYPES, POOL_TYPES
 
 
 def create_network(num_features: int, num_classes: int, opt: argparse.Namespace) -> nn.Module:
-    return GNNSAGPool(
+    return GNNPool(
         num_features=num_features,
         num_classes=num_classes,
         task_type=opt.task_type,
@@ -32,7 +32,7 @@ def network_modify_commandline_options(parser: argparse.ArgumentParser) -> argpa
     return parser
 
 
-class GNNSAGPool(nn.Module):
+class GNNPool(nn.Module):
     def __init__(self, num_features: int, num_classes: int, task_type: str, gnn_type: str, pool_type: str,
                  hidden_dim: int, ratio: float, n_heads: int, dropout_rate: float):
         super().__init__()
@@ -61,7 +61,7 @@ class GNNSAGPool(nn.Module):
         self.pool1 = Pool(hidden_dim, ratio, **pool_kwargs)
         self.conv2 = GNN(hidden_dim, hidden_dim, **gnn_kwargs)
         self.pool2 = Pool(hidden_dim, ratio, **pool_kwargs)
-        self.conv3 = GNN(hidden_dim * n_heads, 1, **gnn_kwargs)
+        self.conv3 = GNN(hidden_dim, 1, **gnn_kwargs)
         self.classifier_1 = nn.Linear(30, hidden_dim)
         self.classifier_2 = nn.Linear(hidden_dim, num_classes)
 
