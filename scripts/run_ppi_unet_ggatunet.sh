@@ -34,6 +34,7 @@ python3 gnn/train.py \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
+    --pool_type SAGPool \
     --ggat_type GGAT1 \
     --gnn_type GAT &
 sleep 10
@@ -59,6 +60,7 @@ python3 gnn/train.py \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
+    --pool_type SAGPool \
     --ggat_type GGAT1 \
     --gnn_type GCN
 sleep 10
@@ -84,6 +86,7 @@ python3 gnn/train.py \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
+    --pool_type SAGPool \
     --ggat_type GGAT2 \
     --gnn_type GAT
 sleep 10
@@ -109,6 +112,7 @@ python3 gnn/train.py \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
+    --pool_type SAGPool \
     --ggat_type GGAT2 \
     --gnn_type GCN
 sleep 10

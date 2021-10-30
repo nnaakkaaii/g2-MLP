@@ -34,5 +34,6 @@ python3 gnn/train.py \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
+    --pool_type SAGPool \
     --ggat_type GGAT2 \
     --gnn_type GAT

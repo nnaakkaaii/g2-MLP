@@ -19,6 +19,7 @@ def create_network(num_features: int, num_classes: int, opt: argparse.Namespace)
         ggat_type=opt.ggat_type,
         ggat_heads=opt.ggat_heads,
         gnn_type=opt.gnn_type,
+        pool_type=opt.pool_type,
         hidden_dim=opt.hidden_dim,
         ratio=opt.ratio,
         n_heads=opt.n_heads,
