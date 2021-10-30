@@ -114,7 +114,7 @@ class GGAT2Block(AbstractGGATBlock):
 
 class GGATLayer(nn.Module):
     def __init__(self, in_features: int, out_features: int, GNN: Callable = GraphConv, dropout_rate: float = 0,
-                 nonlinearity: Callable = torch.tanh, skip_connection: bool = True, GGATLayer: AbstractGGATBlock = GGAT1Block,
+                 nonlinearity: Callable = torch.tanh, skip_connection: bool = True, GGATBlock: AbstractGGATBlock = GGAT1Block,
                  ggat_heads: int = 1, ratio: Union[float, int] = 1, ggat_concat: bool = False, **kwargs):
         super().__init__()
         self.ratio = ratio
@@ -123,7 +123,7 @@ class GGATLayer(nn.Module):
 
         self.heads = nn.ModuleList()
         for _ in range(ggat_heads):
-            self.heads.append(GGATLayer(
+            self.heads.append(GGATBlock(
                 in_features, out_features, GNN=GNN,
                 dropout_rate=dropout_rate, nonlinearity=nonlinearity, **kwargs
             ))
@@ -134,6 +134,9 @@ class GGATLayer(nn.Module):
 
     def forward(self, x: torch.Tensor, edge_index: Adj, edge_attr: Optional[torch.Tensor] = None,
                 batch: Optional[torch.Tensor] = None, y: Optional[torch.Tensor] = None):
+        if batch is None:
+            batch = edge_index.new_zeros(x.size(0))
+
         outs = [head(x, edge_index, y) for head in self.heads]
         if self.ggat_concat:
             x_all = torch.cat([out[0] for out in outs], dim=-1)

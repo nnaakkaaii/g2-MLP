@@ -1,21 +1,10 @@
 import argparse
-from typing import Dict
 
 import torch.nn as nn
-from torch_geometric.nn.conv import GATConv, GCNConv
 
-from .modules.ggat_module import AbstractGGATBlock, GGAT1Block, GGAT2Block, GGATLayer
+from .modules.ggat_module import GGATLayer
 from .base_3layer_gnn import Base3LayerGNN
-
-GGAT_TYPES: Dict[str, AbstractGGATBlock] = {
-    'GGAT1': GGAT1Block,
-    'GGAT2': GGAT2Block,
-}
-
-GNN_TYPES: Dict[str, nn.Module] = {
-    'GCN': GCNConv,
-    'GAT': GATConv,
-}
+from .modules import GGAT_TYPES, GNN_TYPES
 
 
 def create_network(num_features: int, num_classes: int, opt: argparse.Namespace) -> nn.Module:
@@ -51,30 +40,29 @@ class GGAT(Base3LayerGNN):
         GGAT = GGAT_TYPES[ggat_type]
         GNN = GNN_TYPES[gnn_type]
 
-        kwargs = {
-        }
+        kwargs = {}
         if gnn_type == 'GAT':
             kwargs['heads'] = n_heads
             kwargs['concat'] = False
             kwargs['dropout'] = dropout_rate
 
         self.conv1 = GGATLayer(num_features, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
-                               skip_connection=False, GGATLayer=GGAT,
+                               skip_connection=False, GGATBlock=GGAT,
                                ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
         self.conv2 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
-                               skip_connection=True, GGATLayer=GGAT,
+                               skip_connection=True, GGATBlock=GGAT,
                                ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
         if task_type == 'multi_label_node_classification':
             self.conv3 = GGATLayer(hidden_dim * ggat_heads, 2 * num_classes, GNN=GNN, dropout_rate=dropout_rate,
-                                   skip_connection=False, GGATLayer=GGAT,
+                                   skip_connection=False, GGATBlock=GGAT,
                                    ggat_heads=ggat_heads, ggat_concat=False, **kwargs)
         elif task_type in ['node_classification', 'node_regression']:
             self.conv3 = GGATLayer(hidden_dim * ggat_heads, num_classes, GNN=GNN, dropout_rate=dropout_rate,
-                                   skip_connection=False, GGATLayer=GGAT,
+                                   skip_connection=False, GGATBlock=GGAT,
                                    ggat_heads=ggat_heads, ggat_concat=False, **kwargs)
         elif task_type == 'graph_classification':
             self.conv3 = GGATLayer(hidden_dim * ggat_heads, 1, GNN=GNN, dropout_rate=dropout_rate,
-                                   skip_connection=False, GGATLayer=GGAT,
+                                   skip_connection=False, GGATBlock=GGAT,
                                    ggat_heads=ggat_heads, ggat_concat=False, **kwargs)
             self.classifier_1 = nn.Linear(30, hidden_dim)
             self.classifier_2 = nn.Linear(hidden_dim, num_classes)
