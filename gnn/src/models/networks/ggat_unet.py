@@ -87,7 +87,7 @@ class GGATUNet(nn.Module):
         elif task_type in ['graph_classification']:
             self.up_conv1 = GGATLayer(hidden_dim * ggat_heads, 1, GNN=GNN, dropout_rate=dropout_rate,
                                       skip_connection=False, GGATBlock=GGAT, ratio=1,
-                                      ggat_heads=ggat_heads, ggat_concat=False, **gnn_wargs)
+                                      ggat_heads=ggat_heads, ggat_concat=False, **gnn_kwargs)
             self.classifier_1 = nn.Linear(30, hidden_dim)
             self.classifier_2 = nn.Linear(hidden_dim, num_classes)
 
