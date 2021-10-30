@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from torch_geometric.data import Data
 from torch_geometric.nn import global_sort_pool
 
-from .modules import GGAT_TYPES, GNN_TYPES
+from .modules import GGAT_TYPES, GNN_TYPES, POOL_TYPES
 from .modules.ggat_module import GGATLayer
 from .utils import augment_adj
 
@@ -30,6 +30,7 @@ def network_modify_commandline_options(parser: argparse.ArgumentParser) -> argpa
     parser.add_argument('--ggat_type', type=str, choices=GGAT_TYPES.keys(), help='利用するGGATのタイプ')
     parser.add_argument('--ggat_heads', type=int, default=2, help='並列数')
     parser.add_argument('--gnn_type', type=str, choices=GNN_TYPES.keys(), help='利用するGNNのタイプ')
+    parser.add_argument('--pool_type', type=str, choices=POOL_TYPES.keys(), help='利用するpoolingのタイプ')
     parser.add_argument('--hidden_dim', type=int, default=128, help='中間層の特徴量')
     parser.add_argument('--ratio', type=float, default=0.5, help='pooling率')
     parser.add_argument('--n_heads', type=int, default=4, help='並列数')
@@ -38,7 +39,7 @@ def network_modify_commandline_options(parser: argparse.ArgumentParser) -> argpa
 
 
 class GGATUNet(nn.Module):
-    def __init__(self, num_features: int, num_classes: int, task_type: str, ggat_type: str, ggat_heads: int,
+    def __init__(self, num_features: int, num_classes: int, task_type: str, pool_type: str, ggat_type: str, ggat_heads: int,
                  gnn_type: str, hidden_dim: int, ratio: float, n_heads: int, dropout_rate: float):
         super().__init__()
         self.task_type = task_type
@@ -46,49 +47,61 @@ class GGATUNet(nn.Module):
 
         GGAT = GGAT_TYPES[ggat_type]
         GNN = GNN_TYPES[gnn_type]
+        Pool = POOL_TYPES[pool_type]
 
-        kwargs = {}
+        gnn_kwargs = {}
         if gnn_type == 'GAT':
-            kwargs['heads'] = n_heads
-            kwargs['concat'] = False
-            kwargs['dropout'] = dropout_rate
+            gnn_kwargs['heads'] = n_heads
+            gnn_kwargs['concat'] = False
+            gnn_kwargs['dropout'] = dropout_rate
+        elif gnn_type == 'GCN':
+            gnn_kwargs['improved'] = True
+        
+        pool_kwargs = {}
+        if pool_type == 'SAGPool':
+            pool_kwargs['GNN'] = GNN_TYPES['GCN']
+            pool_kwargs['improved'] = True
 
-        self.conv = GGATLayer(num_features, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
-                              skip_connection=False, GGATBlock=GGAT, ratio=1,
-                              ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
-        self.down_conv1 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
-                                    skip_connection=True, GGATBlock=GGAT, ratio=ratio,
-                                    ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
-        self.down_conv2 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
-                                    skip_connection=True, GGATBlock=GGAT, ratio=ratio,
-                                    ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
+        self.down_conv1 = GNN(num_features, hidden_dim, **gnn_kwargs)
+        self.pool1 = Pool(hidden_dim, ratio, **pool_kwargs)
+        self.down_conv2 = GNN(hidden_dim, hidden_dim, **gnn_kwargs)
+        self.pool2 = Pool(hidden_dim, ratio, **pool_kwargs)
+        self.down_conv3 = GNN(hidden_dim, hidden_dim, **gnn_kwargs)
+        self.pool3 = Pool(hidden_dim, ratio, **pool_kwargs)
 
-        self.up_conv1 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
+        self.up_conv3 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
                                   skip_connection=True, GGATBlock=GGAT, ratio=1,
-                                  ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
+                                  ggat_heads=ggat_heads, ggat_concat=True, **gnn_kwargs)
+        self.up_conv2 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
+                                  skip_connection=True, GGATBlock=GGAT, ratio=1,
+                                  ggat_heads=ggat_heads, ggat_concat=True, **gnn_kwargs)
         if task_type == 'multi_label_node_classification':
-            self.up_conv2 = GGATLayer(hidden_dim * ggat_heads, 2 * num_classes, GNN=GNN, dropout_rate=dropout_rate,
+            self.up_conv1 = GGATLayer(hidden_dim * ggat_heads, 2 * num_classes, GNN=GNN, dropout_rate=dropout_rate,
                                       skip_connection=False, GGATBlock=GGAT, ratio=1,
-                                      ggat_heads=ggat_heads, ggat_concat=False, **kwargs)
+                                      ggat_heads=ggat_heads, ggat_concat=False, **gnn_kwargs)
         elif task_type in ['node_classification', 'node_regression']:
-            self.up_conv2 = GGATLayer(hidden_dim * ggat_heads, num_classes, GNN=GNN, dropout_rate=dropout_rate,
+            self.up_conv1 = GGATLayer(hidden_dim * ggat_heads, num_classes, GNN=GNN, dropout_rate=dropout_rate,
                                       skip_connection=False, GGATBlock=GGAT, ratio=1,
-                                      ggat_heads=ggat_heads, ggat_concat=False, **kwargs)
+                                      ggat_heads=ggat_heads, ggat_concat=False, **gnn_kwargs)
         elif task_type in ['graph_classification']:
-            self.up_conv2 = GGATLayer(hidden_dim * ggat_heads, 1, GNN=GNN, dropout_rate=dropout_rate,
+            self.up_conv1 = GGATLayer(hidden_dim * ggat_heads, 1, GNN=GNN, dropout_rate=dropout_rate,
                                       skip_connection=False, GGATBlock=GGAT, ratio=1,
-                                      ggat_heads=ggat_heads, ggat_concat=False, **kwargs)
+                                      ggat_heads=ggat_heads, ggat_concat=False, **gnn_wargs)
             self.classifier_1 = nn.Linear(30, hidden_dim)
             self.classifier_2 = nn.Linear(hidden_dim, num_classes)
 
         self.reset_parameters()
 
     def reset_parameters(self):
-        self.conv.reset_parameters()
         self.down_conv1.reset_parameters()
         self.down_conv2.reset_parameters()
-        self.up_conv1.reset_parameters()
+        self.down_conv3.reset_parameters()
+        self.pool1.reset_parameters()
+        self.pool2.reset_parameters()
+        self.pool3.reset_parameters()
+        self.up_conv3.reset_parameters()
         self.up_conv2.reset_parameters()
+        self.up_conv1.reset_parameters()
         if hasattr(self, 'classifier_1'):
             self.classifier_1.reset_parameters()
         if hasattr(self, 'classifier_2'):
@@ -101,17 +114,29 @@ class GGATUNet(nn.Module):
             batch = edge_index.new_zeros(x.size(0))
         edge_weight = x.new_ones(edge_index.size(1))
 
-        x1 = self.conv(x, edge_index)
-        x1 = F.dropout(F.elu(x1, inplace=True), p=self.dropout_rate, training=self.training)
         edge_index1 = edge_index
         edge_weight1 = edge_weight
+        x1 = self.down_conv1(x, edge_index1, edge_weight1)
+        x1 = F.dropout(F.elu(x1, inplace=True), p=self.dropout_rate, training=self.training)
 
         edge_index2, edge_weight2 = augment_adj(edge_index1, edge_weight1, x1.size(0))
-        x2, edge_index2, edge_weight2, batch, perm1, _ = self.down_conv1(x1, edge_index2, edge_weight2, batch)
+        x2, edge_index2, edge_weight2, batch, perm1, _ = self.pool1(x1, edge_index2, edge_weight2, batch)
+        x2 = self.down_conv1(x2, edge_index2, edge_weight2)
         x2 = F.dropout(F.elu(x2, inplace=True), p=self.dropout_rate, training=self.training)
 
         edge_index3, edge_weight3 = augment_adj(edge_index2, edge_weight2, x2.size(0))
-        x3, edge_index3, edge_weight3, batch, perm2, _ = self.down_conv2(x2, edge_index3, edge_weight3, batch)
+        x3, edge_index3, edge_weight3, batch, perm2, _ = self.pool2(x2, edge_index3, edge_weight3, batch)
+        x3 = self.down_conv2(x3, edge_index3, edge_weight3)
+        x3 = F.dropout(F.elu(x3, inplace=True), p=self.dropout_rate, training=self.training)
+
+        edge_index4, edge_weight4 = augment_adj(edge_index3, edge_weight3, x3.size(0))
+        x4, edge_index4, edge_weight4, batch, perm3, _ = self.pool3(x3, edge_index4, edge_weight4, batch)
+        x4 = self.down_conv3(x4, edge_index4, edge_weight4)
+        x4 = F.dropout(F.elu(x4, inplace=True), p=self.dropout_rate, training=self.training)
+
+        up3 = torch.zeros_like(x3)
+        up3[perm3] = x4
+        x3 = self.up_conv1(up3, edge_index3, y=x3)
         x3 = F.dropout(F.elu(x3, inplace=True), p=self.dropout_rate, training=self.training)
 
         up2 = torch.zeros_like(x2)
