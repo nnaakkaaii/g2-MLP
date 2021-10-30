@@ -20,8 +20,8 @@ Contact : nakai-yu623@g.ecc.u-tokyo.ac.jp
 
 | | train accuracy | test accuracy | eclipsed time |
 | ---- | ---- | ---- | ---- |
-| GAT | 82.88% (±5.79) | 79.44% (±9.31) | 0.2h |
-| GCN (DGCNN) | % (±) | % (±) | 0.2h |
+| GAT | 83.88% (±2.30) | 83.89% (±9.11) | 0.2h |
+| GCN | 85.88% (±1.95) | 82.78% (±9.11) | 0.2h |
 
 ## Dataset
 

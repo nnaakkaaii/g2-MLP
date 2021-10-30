@@ -1,3 +1,4 @@
+"""
 import argparse
 from typing import Dict
 
@@ -84,3 +85,4 @@ class GNNSAGPool(nn.Module):
         out = F.dropout(out, p=self.dropout_rate, training=self.training)
         out = self.classifier_2(out)
         return out.view(1, -1)
+"""

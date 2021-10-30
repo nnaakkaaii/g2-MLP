@@ -1,0 +1,23 @@
+python3 -m visdom.server -logging_level WARNING & python3 gnn/train.py \
+    --gpu_ids 0 \
+    --verbose \
+    --loss_name mce \
+    --task_type graph_classification \
+    --network_name GGAT \
+    --dataset_name MUTAG \
+    --train_transform_name indegree \
+    --test_transform_name indegree \
+    --optimizer_name adam \
+    --n_epochs 100 \
+    --data_dir ./inputs/MUTAG/ \
+    --index_file_dir ./inputs/MUTAG/10fold_idx/ \
+    --name ggat1_with_gat_mutag \
+    --save_freq 5 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name debug_ggat1_with_gat_mutag \
+    --lr 1e-3 \
+    --beta1 0.9 \
+    --beta2 0.999 \
+    --ggat_type GGAT1 \
+    --gnn_type GAT

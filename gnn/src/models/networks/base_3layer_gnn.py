@@ -32,7 +32,7 @@ class Base3LayerGNN(nn.Module):
 
         x_1 = F.dropout(F.elu(self.conv1(x, edge_index), inplace=True))
         x_2 = F.dropout(F.elu(self.conv2(x_1, edge_index) + x_1, inplace=True))
-        x_3 = self.conv3(x_2, edge_index) + x_2
+        x_3 = self.conv3(x_2, edge_index)
 
         if self.task_type == 'node_regression':
             return x_3.view(-1)  # ノード x 特徴量 -> flatten
