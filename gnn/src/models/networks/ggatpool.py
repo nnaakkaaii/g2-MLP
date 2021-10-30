@@ -5,8 +5,8 @@ import torch.nn.functional as F
 from torch_geometric.data import Data
 from torch_geometric.nn import global_sort_pool
 
-from .modules.ggat_module import GGATLayer
 from .modules import GGAT_TYPES, GNN_TYPES
+from .modules.ggat_module import GGATLayer
 
 
 def create_network(num_features: int, num_classes: int, opt: argparse.Namespace) -> nn.Module:

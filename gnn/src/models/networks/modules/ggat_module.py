@@ -1,12 +1,12 @@
 import abc
+from typing import Callable, Optional, Tuple, Union
 from warnings import warn
-from typing import Union, Callable, Tuple, Optional
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch_geometric.nn import GraphConv
-from torch_geometric.nn.pool.topk_pool import topk, filter_adj
+from torch_geometric.nn.pool.topk_pool import filter_adj, topk
 from torch_geometric.typing import Adj
 
 

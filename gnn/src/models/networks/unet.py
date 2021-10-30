@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch_geometric.data import Data
+from torch_geometric.nn import global_sort_pool
 
 from .modules import GNN_TYPES, POOL_TYPES
 from .utils import augment_adj
@@ -134,4 +135,17 @@ class GraphUNet(torch.nn.Module):
         x1 = x1 + up1
         x1 = self.up_conv1(x1, edge_index1, edge_weight1)
 
-        return x1
+        if self.task_type == 'node_regression':
+            return x1.view(-1)
+        if self.task_type == 'multi_label_node_classification':
+            return x1.view(-1, 2)
+        if self.task_type == 'node_classification':
+            return x1
+        if self.task_type == 'graph_classification':
+            out = global_sort_pool(x1, batch, k=30)
+            out = F.elu(self.classifier_1(out), inplace=True)
+            out = F.dropout(out, p=self.dropout_rate, training=self.training)
+            out = self.classifier_2(out)
+            return out.view(1, -1)
+        
+        raise NotImplementedError

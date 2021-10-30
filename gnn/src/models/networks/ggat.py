@@ -2,9 +2,9 @@ import argparse
 
 import torch.nn as nn
 
-from .modules.ggat_module import GGATLayer
 from .base_3layer_gnn import Base3LayerGNN
 from .modules import GGAT_TYPES, GNN_TYPES
+from .modules.ggat_module import GGATLayer
 
 
 def create_network(num_features: int, num_classes: int, opt: argparse.Namespace) -> nn.Module:

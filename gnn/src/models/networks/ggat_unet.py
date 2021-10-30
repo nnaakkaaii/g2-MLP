@@ -1,11 +1,13 @@
 import argparse
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch_geometric.data import Data
+from torch_geometric.nn import global_sort_pool
 
-from .modules.ggat_module import GGATLayer
 from .modules import GGAT_TYPES, GNN_TYPES
+from .modules.ggat_module import GGATLayer
 from .utils import augment_adj
 
 
@@ -39,6 +41,7 @@ class GGATUNet(nn.Module):
     def __init__(self, num_features: int, num_classes: int, task_type: str, ggat_type: str, ggat_heads: int,
                  gnn_type: str, hidden_dim: int, ratio: float, n_heads: int, dropout_rate: float):
         super().__init__()
+        self.task_type = task_type
         self.dropout_rate = dropout_rate
 
         GGAT = GGAT_TYPES[ggat_type]
@@ -137,4 +140,17 @@ class GGATUNet(nn.Module):
         up1[perm1] = x2
         x1 = self.up_conv1(up1, edge_index1, y=x1)
 
-        return x1
+        if self.task_type == 'node_regression':
+            return x1.view(-1)
+        if self.task_type == 'multi_label_node_classification':
+            return x1.view(-1, 2)
+        if self.task_type == 'node_classification':
+            return x1
+        if self.task_type == 'graph_classification':
+            out = global_sort_pool(x1, batch, k=30)
+            out = F.elu(self.classifier_1(out), inplace=True)
+            out = F.dropout(out, p=self.dropout_rate, training=self.training)
+            out = self.classifier_2(out)
+            return out.view(1, -1)
+        
+        raise NotImplementedError

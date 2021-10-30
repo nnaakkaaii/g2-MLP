@@ -3,7 +3,7 @@ from typing import Callable, Dict
 
 import torch.nn as nn
 
-from . import gat, gcn, ggat, ggatpool, gnn_pool, ggat_unet, unet
+from . import gat, gcn, ggat, ggat_unet, ggatpool, gnn_pool, unet
 
 networks: Dict[str, Callable[[int, int, argparse.Namespace], nn.Module]] = {
     'GAT': gat.create_network,

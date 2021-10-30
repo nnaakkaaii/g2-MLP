@@ -1,9 +1,9 @@
-from typing import Union, Callable
+from typing import Callable, Union
 
 import torch
 import torch.nn as nn
 from torch_geometric.nn import GraphConv
-from torch_geometric.nn.pool.topk_pool import topk, filter_adj
+from torch_geometric.nn.pool.topk_pool import filter_adj, topk
 
 
 class SAGPooling(nn.Module):

@@ -3,7 +3,7 @@ from typing import Any, Callable, Dict
 
 from torch_geometric.data.in_memory_dataset import InMemoryDataset
 
-from . import ppi_dataset, dd_dataset, mutag_dataset, proteins_dataset
+from . import dd_dataset, mutag_dataset, ppi_dataset, proteins_dataset
 
 datasets: Dict[str, Callable[[Any, bool, int, argparse.Namespace], InMemoryDataset]] = {
     'PPI': ppi_dataset.create_dataset,

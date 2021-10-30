@@ -1,5 +1,6 @@
+from torch_geometric.utils import (add_self_loops, remove_self_loops,
+                                   sort_edge_index)
 from torch_sparse import spspmm
-from torch_geometric.utils import add_self_loops, sort_edge_index, remove_self_loops
 
 
 def augment_adj(edge_index, edge_weight, num_nodes):
