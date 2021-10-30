@@ -26,13 +26,13 @@ python3 gnn/train.py \
     --n_epochs 500 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name ggat1unet_with_gat_ppi \
+    --name ggat2unet_with_gat_ppi \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_ggat1unet_with_gat_ppi \
+    --run_name debug_ggat2unet_with_gat_ppi \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
-    --ggat_type GGAT1 \
+    --ggat_type GGAT2 \
     --gnn_type GAT
