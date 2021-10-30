@@ -62,7 +62,7 @@ python3 gnn/train.py \
     --beta2 0.999 \
     --pool_type SAGPool \
     --ggat_type GGAT1 \
-    --gnn_type GCN
+    --gnn_type GCN &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 2 \
@@ -88,7 +88,7 @@ python3 gnn/train.py \
     --beta2 0.999 \
     --pool_type SAGPool \
     --ggat_type GGAT2 \
-    --gnn_type GAT
+    --gnn_type GAT &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 3 \
@@ -114,7 +114,7 @@ python3 gnn/train.py \
     --beta2 0.999 \
     --pool_type SAGPool \
     --ggat_type GGAT2 \
-    --gnn_type GCN
+    --gnn_type GCN &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 4 \
@@ -139,7 +139,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --gnn_type GAT \
-    --pool_type SAGPool
+    --pool_type SAGPool &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 5 \
@@ -164,7 +164,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --gnn_type GAT \
-    --pool_type TopKPool
+    --pool_type TopKPool &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 6 \
@@ -189,7 +189,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --gnn_type GCN \
-    --pool_type SAGPool
+    --pool_type SAGPool &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 7 \
