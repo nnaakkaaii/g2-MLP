@@ -28,7 +28,7 @@ def create_network(num_features: int, num_classes: int, opt: argparse.Namespace)
 
 def network_modify_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     parser.add_argument('--ggat_type', type=str, choices=GGAT_TYPES.keys(), help='利用するGGATのタイプ')
-    parser.add_argument('--ggat_heads', type=int, default=4, help='並列数')
+    parser.add_argument('--ggat_heads', type=int, default=2, help='並列数')
     parser.add_argument('--gnn_type', type=str, choices=GNN_TYPES.keys(), help='利用するGNNのタイプ')
     parser.add_argument('--hidden_dim', type=int, default=256, help='中間層の特徴量')
     parser.add_argument('--ratio', type=float, default=0.5, help='pooling率')
