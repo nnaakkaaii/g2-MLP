@@ -1,7 +1,6 @@
 checkpoints/
 mlruns/
 inputs/
-run*.sh
 run*.out
 
 # Byte-compiled / optimized / DLL files
