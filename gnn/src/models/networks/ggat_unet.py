@@ -117,22 +117,22 @@ class GGATUNet(nn.Module):
 
         edge_index1 = edge_index
         edge_weight1 = edge_weight
-        x1 = self.down_conv1(x, edge_index1, edge_weight1)
+        x1 = self.down_conv1(x, edge_index1)
         x1 = F.dropout(F.elu(x1, inplace=True), p=self.dropout_rate, training=self.training)
 
         edge_index2, edge_weight2 = augment_adj(edge_index1, edge_weight1, x1.size(0))
         x2, edge_index2, edge_weight2, batch, perm1, _ = self.pool1(x1, edge_index2, edge_weight2, batch)
-        x2 = self.down_conv1(x2, edge_index2, edge_weight2)
+        x2 = self.down_conv1(x2, edge_index2)
         x2 = F.dropout(F.elu(x2, inplace=True), p=self.dropout_rate, training=self.training)
 
         edge_index3, edge_weight3 = augment_adj(edge_index2, edge_weight2, x2.size(0))
         x3, edge_index3, edge_weight3, batch, perm2, _ = self.pool2(x2, edge_index3, edge_weight3, batch)
-        x3 = self.down_conv2(x3, edge_index3, edge_weight3)
+        x3 = self.down_conv2(x3, edge_index3)
         x3 = F.dropout(F.elu(x3, inplace=True), p=self.dropout_rate, training=self.training)
 
         edge_index4, edge_weight4 = augment_adj(edge_index3, edge_weight3, x3.size(0))
         x4, edge_index4, edge_weight4, batch, perm3, _ = self.pool3(x3, edge_index4, edge_weight4, batch)
-        x4 = self.down_conv3(x4, edge_index4, edge_weight4)
+        x4 = self.down_conv3(x4, edge_index4)
         x4 = F.dropout(F.elu(x4, inplace=True), p=self.dropout_rate, training=self.training)
 
         up3 = torch.zeros_like(x3)
