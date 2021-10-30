@@ -58,7 +58,7 @@ class GGATPool(nn.Module):
         self.conv2 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
                                skip_connection=True, GGATBlock=GGAT, ratio=ratio,
                                ggat_heads=ggat_heads, ggat_concat=True, **kwargs)
-        self.conv3 = GGATLayer(hidden_dim * n_heads, 1, GNN=GNN, dropout_rate=dropout_rate,
+        self.conv3 = GGATLayer(hidden_dim * ggat_heads, 1, GNN=GNN, dropout_rate=dropout_rate,
                                skip_connection=False, GGATBlock=GGAT, ratio=1,
                                ggat_heads=ggat_heads, ggat_concat=False, **kwargs)
         self.classifier_1 = nn.Linear(30, hidden_dim)

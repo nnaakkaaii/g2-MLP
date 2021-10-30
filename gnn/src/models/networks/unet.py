@@ -1,7 +1,9 @@
 import argparse
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch_geometric.data import Data
 
 from .modules import GNN_TYPES, POOL_TYPES
 from .utils import augment_adj
@@ -88,7 +90,9 @@ class GraphUNet(torch.nn.Module):
         if hasattr(self, 'classifier_2'):
             self.classifier_2.reset_parameters()
 
-    def forward(self, x, edge_index, batch=None):
+    def forward(self, data: Data):
+        x, edge_index, batch = data.x, data.edge_index, data.batch
+
         if batch is None:
             batch = edge_index.new_zeros(x.size(0))
         edge_weight = x.new_ones(edge_index.size(1))

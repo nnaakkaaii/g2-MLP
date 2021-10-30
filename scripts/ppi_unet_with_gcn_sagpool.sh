@@ -1,0 +1,23 @@
+python3 -m visdom.server -logging_level WARNING & python3 gnn/train.py \
+    --gpu_ids 0 \
+    --verbose \
+    --loss_name mce \
+    --task_type multi_label_node_classification \
+    --network_name UNet \
+    --dataset_name PPI \
+    --train_transform_name indegree \
+    --test_transform_name indegree \
+    --optimizer_name adam \
+    --n_epochs 300 \
+    --data_dir ./inputs/PPI/ \
+    --index_file_dir ./inputs/PPI/10fold_idx/ \
+    --name unet_with_gcn_sagpool_ppi \
+    --save_freq 5 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name debug_unet_with_gcn_sagpool_ppi \
+    --lr 1e-3 \
+    --beta1 0.9 \
+    --beta2 0.999 \
+    --gnn_type GCN \
+    --pool_type SAGPool
