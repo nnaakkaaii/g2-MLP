@@ -17,8 +17,8 @@ python3 gnn/train.py \
     --verbose \
     --no_visdom_logger \
     --loss_name mce \
-    --task_type multi_label_classification \
-    --network_name GAT \
+    --task_type multi_label_node_classification \
+    --network_name UNet \
     --dataset_name PPI \
     --train_transform_name indegree \
     --test_transform_name indegree \
@@ -26,11 +26,13 @@ python3 gnn/train.py \
     --n_epochs 500 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name gat_ppi \
+    --name unet_with_gat_sagpool_ppi \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_gat_ppi \
+    --run_name debug_unet_with_gat_sagpool_ppi \
     --lr 1e-3 \
     --beta1 0.9 \
-    --beta2 0.999
+    --beta2 0.999 \
+    --gnn_type GAT \
+    --pool_type SAGPool

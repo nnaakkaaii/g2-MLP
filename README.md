@@ -14,6 +14,10 @@ Contact : nakai-yu623@g.ecc.u-tokyo.ac.jp
 | ---- | ---- | ---- | ---- |
 | GAT | 92.96% (±0.24) | 94.17% (±2.20) | 5.0h |
 | GCN | 80.81% (±0.13) | 80.74% (±0.69) | 3.2h |
+| GGAT1 with GAT | % (±) | % (±) | h |
+| GGAT1 with GCN | 83.83% (±0.24) | 83.58% (±1.22) | 5.3h |
+| GGAT2 with GAT | % (±) | % (±) | h |
+| GGAT2 with GCN | % (±) | % (±) | h |
 
 ### MUTAG (inductive graph classification)
 
@@ -24,7 +28,7 @@ Contact : nakai-yu623@g.ecc.u-tokyo.ac.jp
 | GCN | 85.88% (±1.95) | 82.78% (±9.11) | 0.2h |
 | GGAT1 with GAT | 86.12% (±2.41) | 80.56% (±9.70) | 1.6h |
 | GGAT1 with GCN | 86.06% (±2.35) | 82.78% (±10.67) | 1.1h |
-| GGAT2 with GAT | 84.00% (±1.87) | 80.00 (±11.71) | 2.3h |
+| GGAT2 with GAT | 84.00% (±1.87) | 80.00% (±11.71) | 2.3h |
 | GGAT2 with GCN | 84.82% (±1.60) | 82.78% (±9.77) | 1.5h |
 
 ## Dataset

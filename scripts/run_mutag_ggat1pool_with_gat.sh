@@ -2,7 +2,7 @@
 
 #PJM -L rscgrp=regular-a
 #PJM -L node=1
-#PJM -L elapse=48:00:00
+#PJM -L elapse=10:00:00
 #PJM -g gs84
 #PJM -j
 
@@ -17,20 +17,22 @@ python3 gnn/train.py \
     --verbose \
     --no_visdom_logger \
     --loss_name mce \
-    --task_type multi_label_classification \
-    --network_name GAT \
-    --dataset_name PPI \
+    --task_type graph_classification \
+    --network_name GGATPool \
+    --dataset_name MUTAG \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 500 \
-    --data_dir ./inputs/PPI/ \
-    --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name gat_ppi \
+    --n_epochs 100 \
+    --data_dir ./inputs/MUTAG/ \
+    --index_file_dir ./inputs/MUTAG/10fold_idx/ \
+    --name ggat1pool_with_gat_mutag \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_gat_ppi \
+    --run_name debug_ggat1pool_with_gat_mutag \
     --lr 1e-3 \
     --beta1 0.9 \
-    --beta2 0.999
+    --beta2 0.999 \
+    --ggat_type GGAT1 \
+    --gnn_type GAT

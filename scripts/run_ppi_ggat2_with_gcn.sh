@@ -2,7 +2,7 @@
 
 #PJM -L rscgrp=regular-a
 #PJM -L node=1
-#PJM -L elapse=10:00:00
+#PJM -L elapse=48:00:00
 #PJM -g gs84
 #PJM -j
 
@@ -23,7 +23,7 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 300 \
+    --n_epochs 500 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
     --name ggat2_with_gcn_ppi \
