@@ -23,14 +23,14 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name ggat1unet_with_gat_ppi \
+    --name ppi_ggat1unet_with_gat \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_ggat1unet_with_gat_ppi \
+    --run_name debug_ppi_ggat1unet_with_gat \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
@@ -49,14 +49,14 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name ggat1unet_with_gcn_ppi \
+    --name ppi_ggat1unet_with_gcn \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_ggat1unet_with_gcn_ppi \
+    --run_name debug_ppi_ggat1unet_with_gcn \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
@@ -75,14 +75,14 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name ggat2unet_with_gat_ppi \
+    --name ppi_ggat2unet_with_gat \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_ggat2unet_with_gat_ppi \
+    --run_name debug_ppi_ggat2unet_with_gat \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
@@ -101,14 +101,14 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name ggat2unet_with_gcn_ppi \
+    --name ppi_ggat2unet_with_gcn \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_ggat2unet_with_gcn_ppi \
+    --run_name debug_ppi_ggat2unet_with_gcn \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
@@ -127,14 +127,14 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name unet_with_gat_sagpool_ppi \
+    --name ppi_unet_with_gat_sagpool \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_unet_with_gat_sagpool_ppi \
+    --run_name debug_ppi_unet_with_gat_sagpool \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
@@ -152,14 +152,14 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name unet_with_gat_topkpool_ppi \
+    --name ppi_unet_with_gat_topkpool \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_unet_with_gat_topkpool_ppi \
+    --run_name debug_ppi_unet_with_gat_topkpool \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
@@ -177,14 +177,14 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name unet_with_gcn_sagpool_ppi \
+    --name ppi_unet_with_gcn_sagpool \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_unet_with_gcn_sagpool_ppi \
+    --run_name debug_ppi_unet_with_gcn_sagpool \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
@@ -202,14 +202,14 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --test_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name unet_with_gcn_topkpool_ppi \
+    --name ppi_unet_with_gcn_topkpool \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_unet_with_gcn_topkpool_ppi \
+    --run_name debug_ppi_unet_with_gcn_topkpool \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \

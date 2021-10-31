@@ -35,14 +35,14 @@ Contact : nakai-yu623@g.ecc.u-tokyo.ac.jp
 | GGAT2UNet with GCN | % (±) | % (±) | h |
 | UNet with GAT & SAGPool | % (±) | % (±) | h |
 | UNet with GAT & TopKPool | % (±) | % (±) | h |
-| UNet with GCN & SAGPool | % (±) | % (±) | h |
+| UNet with GCN & SAGPool | 79.21% (±0.13) | 79.24% (±0.72) | h |
 | UNet with GCN & TopKPool | % (±) | % (±) | h |
 
 ### MUTAG (inductive graph classification)
 
-| | train accuracy | test accuracy | eclipsed time |
+| | train accuracy | test accuracy | eclipsed time | run_at |
 | ---- | ---- | ---- | ---- |
-| GAT | 83.88% (±2.30) | 83.89% (±9.11) | 0.2h |
+| GAT | 83.88% (±2.30) | 83.89% (±9.11) | 0.2h | 
 | GCN | 85.88% (±1.95) | 82.78% (±9.11) | 0.2h |
 | GGAT1 with GAT | 86.12% (±2.41) | 80.56% (±9.70) | 1.6h |
 | GGAT1 with GCN | 86.06% (±2.35) | 82.78% (±10.67) | 1.1h |
