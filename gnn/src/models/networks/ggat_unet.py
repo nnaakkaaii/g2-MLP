@@ -70,7 +70,7 @@ class GGATUNet(nn.Module):
         self.down_conv3 = GNN(hidden_dim, hidden_dim, **gnn_kwargs)
 
         self.up_conv2 = GGATLayer(hidden_dim * ggat_heads, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
-                                  skip_connection=True, GGATBlock=GGAT, ratio=1,
+                                  skip_connection=False, GGATBlock=GGAT, ratio=1,
                                   ggat_heads=ggat_heads, ggat_concat=True, **gnn_kwargs)
         if task_type == 'multi_label_node_classification':
             self.up_conv1 = GGATLayer(hidden_dim * ggat_heads, 2 * num_classes, GNN=GNN, dropout_rate=dropout_rate,
