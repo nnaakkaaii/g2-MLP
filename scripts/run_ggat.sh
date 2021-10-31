@@ -211,4 +211,4 @@ python3 gnn/train.py \
     --beta2 0.999 \
     --ggat_type GGAT2 \
     --gnn_type GCN > ./run_mutag_ggat2_with_gcn.sh.out &
-&
+wait
