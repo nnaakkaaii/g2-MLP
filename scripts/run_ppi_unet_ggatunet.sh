@@ -214,11 +214,5 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --gnn_type GCN \
-    --pool_type TopKPool > ./run_ppi_unet_with_gcn_topkpool.sh.out
-fg
-fg
-fg
-fg
-fg
-fg
-fg
+    --pool_type TopKPool > ./run_ppi_unet_with_gcn_topkpool.sh.out &
+wait

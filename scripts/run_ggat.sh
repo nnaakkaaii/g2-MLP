@@ -210,11 +210,5 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --ggat_type GGAT2 \
-    --gnn_type GCN > ./run_mutag_ggat2_with_gcn.sh.out
-fg
-fg
-fg
-fg
-fg
-fg
-fg
+    --gnn_type GCN > ./run_mutag_ggat2_with_gcn.sh.out &
+&
