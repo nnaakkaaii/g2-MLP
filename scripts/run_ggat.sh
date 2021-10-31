@@ -35,7 +35,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --ggat_type GGAT1 \
-    --gnn_type GAT &
+    --gnn_type GAT > ./run_ppi_ggat1_with_gat.sh.out &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 1 \
@@ -60,7 +60,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --ggat_type GGAT1 \
-    --gnn_type GCN &
+    --gnn_type GCN > ./run_ppi_ggat1_with_gcn.sh.out &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 2 \
@@ -85,7 +85,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --ggat_type GGAT2 \
-    --gnn_type GAT &
+    --gnn_type GAT > ./run_ppi_ggat2_with_gat.sh.out &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 3 \
@@ -110,7 +110,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --ggat_type GGAT2 \
-    --gnn_type GCN &
+    --gnn_type GCN > ./run_ppi_ggat2_with_gcn.sh.out &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 4 \
@@ -135,7 +135,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --ggat_type GGAT1 \
-    --gnn_type GAT &
+    --gnn_type GAT > ./run_mutag_ggat1_with_gat.sh.out &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
@@ -160,7 +160,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --ggat_type GGAT1 \
-    --gnn_type GCN &
+    --gnn_type GCN > ./run_mutag_ggat1_with_gcn.sh.out &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 6 \
@@ -185,7 +185,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --ggat_type GGAT2 \
-    --gnn_type GAT &
+    --gnn_type GAT > ./run_mutag_ggat2_with_gcn.sh.out &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 7 \
@@ -210,4 +210,11 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --ggat_type GGAT2 \
-    --gnn_type GCN
+    --gnn_type GCN > ./run_mutag_ggat2_with_gcn.sh.out
+fg
+fg
+fg
+fg
+fg
+fg
+fg
