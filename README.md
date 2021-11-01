@@ -44,7 +44,7 @@ Contact : nakai-yu623@g.ecc.u-tokyo.ac.jp
 | ---- | ---- | ---- | ---- |
 | GAT | 83.88% (±2.30) | 83.89% (±9.11) | 0.2h | 
 | GCN | 85.88% (±1.95) | 82.78% (±9.11) | 0.2h |
-| GGAT1 with GAT | 86.12% (±2.41) | 80.56% (±9.70) | 1.6h |
+| GGAT1 with GAT | 86.12% (±1.85) | 84.44% (±8.53) | 0.2h (±0.0) | 2021-11-03-08:15 |
 | GGAT1 with GCN | 86.06% (±2.35) | 82.78% (±10.67) | 1.1h |
 | GGAT2 with GAT | 84.00% (±1.87) | 80.00% (±11.71) | 2.3h |
 | GGAT2 with GCN | 84.82% (±1.60) | 82.78% (±9.77) | 1.5h |
@@ -56,6 +56,9 @@ Contact : nakai-yu623@g.ecc.u-tokyo.ac.jp
 | GAT TopKPool | % (±) | % (±) | h |
 | GCN SAGPool | % (±) | % (±) | h |
 | GCN TopKPool | % (±) | % (±) | h |
+
+#### GGAT1 with GAT
+
 
 
 ## Dataset
