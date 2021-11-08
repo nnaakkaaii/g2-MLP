@@ -70,19 +70,19 @@ class GGATUNet(nn.Module):
         self.down_conv3 = GNN(hidden_dim, hidden_dim, **gnn_kwargs)
 
         self.up_conv2 = GGATLayer(hidden_dim, hidden_dim, GNN=GNN, dropout_rate=dropout_rate,
-                                  skip_connection=False, GGATBlock=GGAT, ratio=1,
+                                  skip_connection=True, GGATBlock=GGAT, ratio=1,
                                   ggat_heads=ggat_heads, ggat_concat=False, **gnn_kwargs)
         if task_type == 'multi_label_node_classification':
             self.up_conv1 = GGATLayer(hidden_dim, 2 * num_classes, GNN=GNN, dropout_rate=dropout_rate,
-                                      skip_connection=False, GGATBlock=GGAT, ratio=1,
+                                      skip_connection=True, GGATBlock=GGAT, ratio=1,
                                       ggat_heads=ggat_heads, ggat_concat=False, **gnn_kwargs)
         elif task_type in ['node_classification', 'node_regression']:
             self.up_conv1 = GGATLayer(hidden_dim, num_classes, GNN=GNN, dropout_rate=dropout_rate,
-                                      skip_connection=False, GGATBlock=GGAT, ratio=1,
+                                      skip_connection=True, GGATBlock=GGAT, ratio=1,
                                       ggat_heads=ggat_heads, ggat_concat=False, **gnn_kwargs)
         elif task_type in ['graph_classification']:
             self.up_conv1 = GGATLayer(hidden_dim, 1, GNN=GNN, dropout_rate=dropout_rate,
-                                      skip_connection=False, GGATBlock=GGAT, ratio=1,
+                                      skip_connection=True, GGATBlock=GGAT, ratio=1,
                                       ggat_heads=ggat_heads, ggat_concat=False, **gnn_kwargs)
             self.classifier_1 = nn.Linear(30, hidden_dim)
             self.classifier_2 = nn.Linear(hidden_dim, num_classes)

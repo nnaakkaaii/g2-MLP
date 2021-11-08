@@ -101,11 +101,11 @@ python3 gnn/train.py \
     --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name ppi_ggat2_with_gat \
+    --name ppi_ggat2_with_gcn \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_ppi_ggat2_with_gat \
+    --run_name debug_ppi_ggat2_with_gcn \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999 \
@@ -185,7 +185,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.999 \
     --ggat_type GGAT2 \
-    --gnn_type GAT > ./run_mutag_ggat2_with_gcn.sh.out &
+    --gnn_type GAT > ./run_mutag_ggat2_with_gan.sh.out &
 sleep 10
 python3 gnn/train.py \
     --gpu_ids 7 \
