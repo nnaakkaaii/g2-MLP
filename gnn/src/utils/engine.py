@@ -37,15 +37,23 @@ class Engine:
             for sample in state['train_loader']:
                 self.hook('on_start_train_iteration', state)
                 state['input'] = sample  # input : torch_geometric.data.Data
-                state['label'] = sample.y  # label : torch.Tensor (data.y)
+                state['label'] = None  # on_sampleで設定する
                 self.hook('on_sample', state)
 
                 def closure():
                     output = state['network'](state['input'])
-                    loss = criterion(output, state['label'])
+
+                    if not isinstance(output, list):
+                        output = [output]
+
+                    loss = []
+                    for out, label in zip(output, state['label']):
+                        l = criterion(out, label)
+                        l.backward()
+                        loss.append(l)
+
                     state['output'] = output
                     state['loss'] = loss
-                    loss.backward()
                     self.hook('on_forward', state)
                     # to free memory in save_for_backward
                     state['output'] = None
@@ -70,7 +78,15 @@ class Engine:
 
                 def closure():
                     output = state['network'](state['input'])
-                    loss = criterion(output, state['label'])
+
+                    if not isinstance(output, list):
+                        output = [output]
+
+                    loss = []
+                    for out, label in zip(output, state['label']):
+                        l = criterion(out, label)
+                        loss.append(l)
+
                     state['output'] = output
                     state['loss'] = loss
                     self.hook('on_forward', state)

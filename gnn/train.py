@@ -44,17 +44,22 @@ class Logger:
 
     def on_sample(self, state):
         state['input'].to(self.device)
-        state['label'] = state['input'].y
+        if isinstance(state['input'], list):
+            state['label'] = [data.y for data in state['input']]
+        else:
+            state['label'] = [state['input'].y]
         return
 
     def on_forward(self, state):
-        state['loss_averager'].add(state['loss'].detach().cpu().item())
-        if state['output'].dim() == state['label'].dim() == 2:
-            # MCEと同じ形式に揃える
-            state['output'] = state['output'].view(-1)
-            state['output'] = torch.stack([(state['output'] < 0).long(), (state['output'] > 0).long()], dim=1)
-            state['label'] = state['label'].view(-1)
-        state['accuracy_averager'].add(state['output'].detach().cpu(), state['label'])
+        for loss in state['loss']:
+            state['loss_averager'].add(loss.detach().cpu().item())
+        for out, label in zip(state['output'], state['label']):
+            if out.dim() == label.dim() == 2:
+                # MCEと同じ形式に揃える
+                out = out.view(-1)
+                out = torch.stack([(out < 0).long(), (out > 0).long()], dim=1)
+                label = label.view(-1)
+            state['accuracy_averager'].add(out.detach().cpu(), label)
         return
 
     def on_update(self, state):
