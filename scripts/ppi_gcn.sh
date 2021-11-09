@@ -1,5 +1,6 @@
 python3 gnn/train.py \
-    --gpu_ids -1 \
+    --gpu_ids 0 \
+    --batch_size 2 \
     --verbose \
     --loss_name bce \
     --network_name gcn \
@@ -7,7 +8,7 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 10 \
+    --n_epochs 500 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
     --name gcn_ppi \

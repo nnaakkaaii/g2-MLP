@@ -11,7 +11,7 @@ class Engine:
         if name in self.hooks:
             self.hooks[name](state)
 
-    def train(self, network, train_loader, val_loader, max_epoch, optimizer, criterion):
+    def train(self, network, train_loader, val_loader, max_epoch, optimizer, scheduler, criterion):
         state = {
             'network': network,
             'train_loader': train_loader,
@@ -19,6 +19,7 @@ class Engine:
             'max_epoch': max_epoch,
             'optimizer': optimizer,
             'criterion': criterion,
+            'scheduler': scheduler,
             'epoch': 0,
             'iteration': 0,
             'train': True,
@@ -53,6 +54,7 @@ class Engine:
 
                 state['optimizer'].zero_grad()
                 state['optimizer'].step(closure)
+                state['scheduler'].step()
                 self.hook('on_update', state)
                 self.hook('on_end_train_iteration', state)
                 state['iteration'] += 1

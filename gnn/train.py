@@ -12,6 +12,7 @@ from src.datasets import datasets
 from src.models.losses import losses
 from src.models.networks import networks
 from src.models.optimizers import optimizers
+from src.models.schedulers import schedulers
 from src.options.train_option import TrainOption
 from src.transforms import transforms
 from src.utils.fix_seed import fix_seed
@@ -21,7 +22,7 @@ fix_seed(42)
 
 
 class Logger:
-    def __init__(self, opt, result_dir=None):
+    def __init__(self, opt, device, result_dir=None):
         self.current_history = {
             'train_loss': None,
             'train_accuracy': None,
@@ -30,6 +31,7 @@ class Logger:
         }
         # 以下では静的データのみインスタンス変数化する. 動的データはstateで保管する.
         self.opt = opt  # 保存用
+        self.device = device
         self.result_dir = result_dir if result_dir is not None else opt.save_dir
         self.name = opt.name
         self.save_freq = opt.save_freq
@@ -40,6 +42,8 @@ class Logger:
         os.makedirs(self.mlflow_root_dir, exist_ok=True)
 
     def on_sample(self, state):
+        state['input'].to(self.device)
+        state['label'] = state['input'].y
         return
 
     def on_forward(self, state):
@@ -130,7 +134,10 @@ class Logger:
         # save network
         if epoch % self.save_freq == 0:
             save_path = os.path.join(self.result_dir, f'net_{epoch}.pth')
-            torch.save(state['network'].state_dict(), save_path)
+            if isinstance(state['network'], torch.nn.DataParallel):
+                torch.save(state['network'].module.state_dict(), save_path)
+            else:
+                torch.save(state['network'].state_dict(), save_path)
         return
 
     def on_end_training(self, state):
@@ -139,7 +146,10 @@ class Logger:
         with open(os.path.join(self.result_dir, 'history.json'), 'w') as f:
             json.dump(state['history'], f)
         save_path = os.path.join(self.result_dir, f'net_last.pth')
-        torch.save(state['network'].state_dict(), save_path)
+        if isinstance(state['network'], torch.nn.DataParallel):
+            torch.save(state['network'].module.state_dict(), save_path)
+        else:
+            torch.save(state['network'].state_dict(), save_path)
         return
 
     @property
@@ -163,9 +173,7 @@ class Logger:
         }
 
 
-if __name__ == '__main__':
-    opt = TrainOption().parse()
-
+def train(opt):
     save_dir = os.path.join(opt.save_dir, opt.name)
     os.makedirs(save_dir, exist_ok=True)
     with open(os.path.join(save_dir, 'options.json'), 'w') as f:
@@ -180,7 +188,8 @@ if __name__ == '__main__':
 
     train_iter = tqdm(range(1, 11), desc='Training Model......')
     for fold_number in train_iter:
-        logger = Logger(opt, result_dir=os.path.join(save_dir, f'{fold_number:02}'))
+        device = torch.device('cuda:{}'.format(opt.gpu_ids[0])) if opt.gpu_ids else torch.device('cpu')
+        logger = Logger(opt, device, result_dir=os.path.join(save_dir, f'{fold_number:02}'))
 
         engine = Engine()
         engine.hooks.update(logger.hooks)
@@ -196,15 +205,20 @@ if __name__ == '__main__':
         # loss
         loss = losses[opt.loss_name](opt)
         # network
-        device = torch.device('cuda:{}'.format(opt.gpu_ids[0])) if opt.gpu_ids else torch.device('cpu')
         num_features, num_classes, node_level = train_dataset.num_features, train_dataset.num_classes, train_dataset.node_level
         network = networks[opt.network_name](num_features, num_classes, node_level, opt)
         network.to(device)
         # optimizer
-        optimizer = optimizers[opt.optimizer_name](network.parameters(), opt)
+        if len(opt.gpu_ids) > 1:
+            network = torch.nn.DataParallel(network, device_ids=opt.gpu_ids)
+            optimizer = optimizers[opt.optimizer_name](network.module.parameters(), opt)
+        else:
+            optimizer = optimizers[opt.optimizer_name](network.parameters(), opt)
+        # scheduler
+        scheduler = schedulers[opt.scheduler_name](optimizer, opt)
 
         # train
-        engine.train(network, train_dataloader, val_dataloader, opt.n_epochs, optimizer, loss)
+        engine.train(network, train_dataloader, val_dataloader, opt.n_epochs, optimizer, scheduler, loss)
 
         # update history
         for key, value in logger.current_history.items():
@@ -221,3 +235,10 @@ if __name__ == '__main__':
 
     with open(os.path.join(save_dir, 'history.json'), 'w') as f:
         json.dump(history, f)
+
+    return history
+
+
+if __name__ == '__main__':
+    opt = TrainOption().parse()
+    train(opt)

@@ -1,5 +1,5 @@
 python3 gnn/train.py \
-    --gpu_ids -1 \
+    --gpu_ids 0 \
     --verbose \
     --loss_name mce \
     --network_name gat \
@@ -7,7 +7,7 @@ python3 gnn/train.py \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 10 \
+    --n_epochs 50 \
     --data_dir ./inputs/MUTAG/ \
     --index_file_dir ./inputs/MUTAG/10fold_idx/ \
     --name gat_mutag \

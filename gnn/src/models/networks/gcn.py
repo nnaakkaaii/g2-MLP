@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from torch_geometric.nn.conv import GCNConv
 from torch_geometric.nn.glob import global_sort_pool
 
-from .modules import Resnet
+from .modules import Residual
 
 
 def create_network(num_features, num_classes, node_level, opt):
@@ -35,7 +35,7 @@ class GCN(nn.Module):
         self.conv_layers = nn.ModuleList()
         self.conv_layers += [GCNConv(num_features, hidden_dim, improved=True)]
         for _ in range(n_layers - 2):
-            self.conv_layers += [Resnet(GCNConv(hidden_dim, hidden_dim, improved=True))]
+            self.conv_layers += [Residual(GCNConv(hidden_dim, hidden_dim, improved=True))]
 
         if node_level:
             self.conv_layers += [GCNConv(hidden_dim, num_classes, improved=True)]

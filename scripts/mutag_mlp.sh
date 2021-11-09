@@ -1,21 +1,20 @@
 python3 gnn/train.py \
     --gpu_ids 0 \
-    --batch_size 2 \
     --verbose \
-    --loss_name bce \
-    --network_name gat \
-    --dataset_name ppi \
+    --loss_name mce \
+    --network_name mlp \
+    --dataset_name mutag \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 200 \
-    --data_dir ./inputs/PPI/ \
-    --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name gat_ppi \
+    --n_epochs 50 \
+    --data_dir ./inputs/MUTAG/ \
+    --index_file_dir ./inputs/MUTAG/10fold_idx/ \
+    --name mlp_mutag \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_gat_ppi \
+    --run_name debug_mlp_mutag \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.999

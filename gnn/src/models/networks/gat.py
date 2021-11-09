@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from torch_geometric.nn.conv import GATConv
 from torch_geometric.nn.glob import global_sort_pool
 
-from .modules import Resnet
+from .modules import Residual
 
 
 def create_network(num_features, num_classes, node_level, opt):
@@ -37,7 +37,7 @@ class GAT(nn.Module):
         self.conv_layers = nn.ModuleList()
         self.conv_layers += [GATConv(num_features, hidden_dim, n_heads, concat=False, dropout=dropout_rate)]
         for _ in range(n_layers - 2):
-            self.conv_layers += [Resnet(GATConv(hidden_dim, hidden_dim, n_heads, concat=False, dropout=dropout_rate))]
+            self.conv_layers += [Residual(GATConv(hidden_dim, hidden_dim, n_heads, concat=False, dropout=dropout_rate))]
 
         if node_level:
             self.conv_layers += [GATConv(hidden_dim, num_classes, n_heads, concat=False)]

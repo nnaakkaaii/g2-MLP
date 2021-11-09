@@ -1,6 +1,6 @@
-from .resnet import Resnet
+from .residual import Residual
 
 
 __all__ = [
-    'Resnet',
+    'Residual',
 ]

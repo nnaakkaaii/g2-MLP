@@ -1,7 +1,7 @@
 import torch.nn as nn
 
 
-class Resnet(nn.Module):
+class Residual(nn.Module):
     def __init__(self, fn):
         super().__init__()
         self.fn = fn
