@@ -42,16 +42,8 @@ class Engine:
 
                 def closure():
                     output = state['network'](state['input'])
-
-                    if not isinstance(output, list):
-                        output = [output]
-
-                    loss = []
-                    for out, label in zip(output, state['label']):
-                        l = criterion(out, label)
-                        l.backward()
-                        loss.append(l)
-
+                    loss = criterion(output, state['label'])
+                    loss.backward()
                     state['output'] = output
                     state['loss'] = loss
                     self.hook('on_forward', state)
@@ -78,15 +70,7 @@ class Engine:
 
                 def closure():
                     output = state['network'](state['input'])
-
-                    if not isinstance(output, list):
-                        output = [output]
-
-                    loss = []
-                    for out, label in zip(output, state['label']):
-                        l = criterion(out, label)
-                        loss.append(l)
-
+                    loss = criterion(output, state['label'])
                     state['output'] = output
                     state['loss'] = loss
                     self.hook('on_forward', state)

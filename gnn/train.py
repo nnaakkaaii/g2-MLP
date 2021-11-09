@@ -44,24 +44,21 @@ class Logger:
 
     def on_sample(self, state):
         if isinstance(state['input'], list):
-            for data in state['input']:
-                data.to(self.device)
-            state['label'] = [data.y for data in state['input']]
+            state['input'] = [data.to(self.device) for data in state['input']]
+            state['label'] = torch.cat([data.y for data in state['input']], dim=0).to(self.device)
         else:
-            state['input'].to(self.device)
-            state['label'] = [state['input'].y]
+            state['input'] = state['input'].to(self.device)
+            state['label'] = state['input'].y
         return
 
     def on_forward(self, state):
-        for loss in state['loss']:
-            state['loss_averager'].add(loss.detach().cpu().item())
-        for out, label in zip(state['output'], state['label']):
-            if out.dim() == label.dim() == 2:
-                # MCEと同じ形式に揃える
-                out = out.view(-1)
-                out = torch.stack([(out < 0).long(), (out > 0).long()], dim=1)
-                label = label.view(-1)
-            state['accuracy_averager'].add(out.detach().cpu(), label)
+        state['loss_averager'].add(state['loss'].detach().cpu().item())
+        if state['output'].dim() == state['label'].dim() == 2:
+            # MCEと同じ形式に揃える
+            state['output'] = state['output'].view(-1)
+            state['output'] = torch.stack([(state['output'] < 0).long(), (state['output'] > 0).long()], dim=1)
+            state['label'] = state['label'].view(-1)
+        state['accuracy_averager'].add(state['output'].detach().cpu(), state['label'])
         return
 
     def on_update(self, state):
