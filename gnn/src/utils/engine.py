@@ -65,7 +65,7 @@ class Engine:
             for sample in state['val_loader']:
                 self.hook('on_start_val_iteration', state)
                 state['input'] = sample
-                state['label'] = sample.y
+                state['label'] = None
                 self.hook('on_sample', state)
 
                 def closure():
