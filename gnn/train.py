@@ -7,6 +7,7 @@ import torch
 import torchnet as tnt
 from tqdm import tqdm
 from torch_geometric.loader import DataLoader
+from torch_geometric.nn import DataParallel
 
 from src.datasets import datasets
 from src.models.losses import losses
@@ -134,7 +135,7 @@ class Logger:
         # save network
         if epoch % self.save_freq == 0:
             save_path = os.path.join(self.result_dir, f'net_{epoch}.pth')
-            if isinstance(state['network'], torch.nn.DataParallel):
+            if isinstance(state['network'], DataParallel):
                 torch.save(state['network'].module.state_dict(), save_path)
             else:
                 torch.save(state['network'].state_dict(), save_path)
@@ -146,7 +147,7 @@ class Logger:
         with open(os.path.join(self.result_dir, 'history.json'), 'w') as f:
             json.dump(state['history'], f)
         save_path = os.path.join(self.result_dir, f'net_last.pth')
-        if isinstance(state['network'], torch.nn.DataParallel):
+        if isinstance(state['network'], DataParallel):
             torch.save(state['network'].module.state_dict(), save_path)
         else:
             torch.save(state['network'].state_dict(), save_path)
@@ -211,7 +212,7 @@ def train(opt):
         network.to(device)
         # optimizer
         if len(opt.gpu_ids) > 1:
-            network = torch.nn.DataParallel(network, device_ids=opt.gpu_ids)
+            network = DataParallel(network, device_ids=opt.gpu_ids)
             optimizer = optimizers[opt.optimizer_name](network.module.parameters(), opt)
         else:
             optimizer = optimizers[opt.optimizer_name](network.parameters(), opt)
