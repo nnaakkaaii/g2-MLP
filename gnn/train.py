@@ -6,7 +6,7 @@ import numpy as np
 import torch
 import torchnet as tnt
 from tqdm import tqdm
-from torch_geometric.loader import DataLoader
+from torch_geometric.loader import DataLoader, DataListLoader
 from torch_geometric.nn import DataParallel
 
 from src.datasets import datasets
@@ -201,8 +201,12 @@ def train(opt):
         # dataloader
         train_dataset = datasets[opt.dataset_name](train_transform, True, fold_number, opt)
         val_dataset = datasets[opt.dataset_name](val_transform, False, fold_number, opt)
-        train_dataloader = DataLoader(train_dataset, batch_size=opt.batch_size, shuffle=True)
-        val_dataloader = DataLoader(val_dataset, batch_size=opt.batch_size, shuffle=True)
+        if len(opt.gpu_ids) > 1:
+            train_dataloader = DataListLoader(train_dataset, batch_size=opt.batch_size, shuffle=True)
+            val_dataloader = DataListLoader(val_dataset, batch_size=opt.batch_size, shuffle=True)
+        else:
+            train_dataloader = DataLoader(train_dataset, batch_size=opt.batch_size, shuffle=True)
+            val_dataloader = DataLoader(val_dataset, batch_size=opt.batch_size, shuffle=True)
         # loss
         loss = losses[opt.loss_name](opt)
         loss.to(device)
