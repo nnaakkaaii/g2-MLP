@@ -43,10 +43,12 @@ class Logger:
         os.makedirs(self.mlflow_root_dir, exist_ok=True)
 
     def on_sample(self, state):
-        state['input'].to(self.device)
         if isinstance(state['input'], list):
+            for data in state['input']:
+                data.to(self.device)
             state['label'] = [data.y for data in state['input']]
         else:
+            state['input'].to(self.device)
             state['label'] = [state['input'].y]
         return
 
