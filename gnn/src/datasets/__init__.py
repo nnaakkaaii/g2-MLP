@@ -6,15 +6,15 @@ from torch_geometric.data.in_memory_dataset import InMemoryDataset
 from . import dd_dataset, mutag_dataset, ppi_dataset, proteins_dataset
 
 datasets: Dict[str, Callable[[Any, bool, int, argparse.Namespace], InMemoryDataset]] = {
-    'PPI': ppi_dataset.create_dataset,
-    'DD': dd_dataset.create_dataset,
-    'MUTAG': mutag_dataset.create_dataset,
-    'PROTEINS': proteins_dataset.create_dataset,
+    'ppi': ppi_dataset.create_dataset,
+    'dd': dd_dataset.create_dataset,
+    'mutag': mutag_dataset.create_dataset,
+    'proteins': proteins_dataset.create_dataset,
 }
 
 dataset_options: Dict[str, Callable[[argparse.ArgumentParser], argparse.ArgumentParser]] = {
-    'PPI': ppi_dataset.dataset_modify_commandline_options,
-    'DD': dd_dataset.dataset_modify_commandline_options,
-    'MUTAG': mutag_dataset.dataset_modify_commandline_options,
-    'PROTEINS': proteins_dataset.dataset_modify_commandline_options,
+    'ppi': ppi_dataset.dataset_modify_commandline_options,
+    'dd': dd_dataset.dataset_modify_commandline_options,
+    'mutag': mutag_dataset.dataset_modify_commandline_options,
+    'proteins': proteins_dataset.dataset_modify_commandline_options,
 }

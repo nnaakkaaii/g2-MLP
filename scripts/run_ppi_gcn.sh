@@ -15,13 +15,11 @@ source /work/02/gs84/s84000/inductive_node_classification_models/.venv/bin/activ
 python3 gnn/train.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
     --verbose \
-    --no_visdom_logger \
-    --loss_name mce \
-    --task_type multi_label_node_classification \
-    --network_name GCN \
-    --dataset_name PPI \
+    --loss_name bce \
+    --network_name gcn \
+    --dataset_name ppi \
     --train_transform_name indegree \
-    --test_transform_name indegree \
+    --val_transform_name indegree \
     --optimizer_name adam \
     --n_epochs 500 \
     --data_dir ./inputs/PPI/ \

@@ -12,7 +12,9 @@ def create_dataset(transform: Any, is_train: bool, fold_number: int, opt: argpar
     dataset = PPIDataset(opt.data_dir, transform=transform)
     index_file_name = '{}_idx-{:02}.txt'.format('train' if is_train else 'test', fold_number)
     indices = torch.as_tensor(np.loadtxt(os.path.join(opt.index_file_dir, index_file_name), dtype=np.int32), dtype=torch.long)
-    return dataset[indices]
+    dataset = dataset[indices]
+    dataset.node_level = True
+    return dataset
 
 
 def dataset_modify_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:

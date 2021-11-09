@@ -12,7 +12,7 @@ class TrainOption(BaseOption):
     def initialize(self, parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
         parser = super().initialize(parser)
         parser.add_argument('--train_transform_name', type=str, required=True, choices=transforms.keys())
-        parser.add_argument('--test_transform_name', type=str, required=True, choices=transforms.keys())
+        parser.add_argument('--val_transform_name', type=str, required=True, choices=transforms.keys())
         parser.add_argument('--optimizer_name', type=str, required=True, choices=optimizers.keys())
 
         # training parameters
@@ -29,8 +29,8 @@ class TrainOption(BaseOption):
         parser = train_transform_modify_commandline_options(parser)
 
         opt, _ = parser.parse_known_args()
-        test_transform_modify_commandline_options = transform_options[opt.test_transform_name]
-        parser = test_transform_modify_commandline_options(parser)
+        val_transform_modify_commandline_options = transform_options[opt.val_transform_name]
+        parser = val_transform_modify_commandline_options(parser)
 
         opt, _ = parser.parse_known_args()
         optimizer_modify_commandline_options = optimizer_options[opt.optimizer_name]
