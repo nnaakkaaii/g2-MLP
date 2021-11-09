@@ -204,15 +204,16 @@ def train(opt):
         val_dataloader = DataLoader(val_dataset, batch_size=opt.batch_size, shuffle=True)
         # loss
         loss = losses[opt.loss_name](opt)
+        loss.to(device)
         # network
         num_features, num_classes, node_level = train_dataset.num_features, train_dataset.num_classes, train_dataset.node_level
         network = networks[opt.network_name](num_features, num_classes, node_level, opt)
+        network.to(device)
         # optimizer
         if len(opt.gpu_ids) > 1:
             network = torch.nn.DataParallel(network, device_ids=opt.gpu_ids)
             optimizer = optimizers[opt.optimizer_name](network.module.parameters(), opt)
         else:
-            network.to(device)
             optimizer = optimizers[opt.optimizer_name](network.parameters(), opt)
         # scheduler
         scheduler = schedulers[opt.scheduler_name](optimizer, opt)
