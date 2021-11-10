@@ -24,7 +24,7 @@ python3 gnn/tuning.py \
     --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name tuning_gmlp_ppi \
+    --name tuning_gmlp_ppi_1111 \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -52,7 +52,7 @@ python3 gnn/tuning.py \
     --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name tuning_gmlp_ppi \
+    --name tuning_gmlp_ppi_1111 \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -80,7 +80,7 @@ python3 gnn/tuning.py \
     --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name tuning_gmlp_ppi \
+    --name tuning_gmlp_ppi_1111 \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -108,7 +108,7 @@ python3 gnn/tuning.py \
     --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name tuning_gmlp_ppi \
+    --name tuning_gmlp_ppi_1111 \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -136,7 +136,7 @@ python3 gnn/tuning.py \
     --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name tuning_gmlp_ppi \
+    --name tuning_gmlp_ppi_1111 \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
