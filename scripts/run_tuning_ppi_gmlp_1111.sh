@@ -1,6 +1,18 @@
+#!/bin/sh
+
+#PJM -L rscgrp=regular-a
+#PJM -L node=1
+#PJM -L elapse=48:00:00
+#PJM -g gs84
+#PJM -j
+
+module load cuda/11.1
+module load pytorch/1.8.1
+
+source /work/02/gs84/s84000/inductive_node_classification_models/.venv/bin/activate
 python3 gnn/tuning.py \
-    --gpu_ids 0 \
-    --batch_size 8 \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 256 \
     --verbose \
     --loss_name bce \
     --network_name gmlp \
@@ -19,6 +31,10 @@ python3 gnn/tuning.py \
     --run_name tuning_gmlp_ppi \
     --lr 1e-3 \
     --beta1 0.9 \
-    --beta2 0.999 \
-    --lr_decay_iters 200 \
-    --lr_decay_gamma 0.5
+    --beta2 0.9 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.5 \
+    --hidden_dim 128 \
+    --ffn_dim 1024 \
+    --n_layers 6 \
+    --prob_survival 1.0

@@ -1,6 +1,6 @@
-python3 gnn/train.py \
+python3 gnn/tuning.py \
     --gpu_ids 0 \
-    --batch_size 4 \
+    --batch_size 8 \
     --verbose \
     --loss_name bce \
     --network_name gmlp \
@@ -12,11 +12,11 @@ python3 gnn/train.py \
     --n_epochs 1500 \
     --data_dir ./inputs/PPI/ \
     --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name gmlp_ppi \
+    --name tuning_gmlp_ppi \
     --save_freq 5 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_gmlp_ppi \
+    --run_name tuning_gmlp_ppi \
     --lr 1e-3 \
     --beta1 0.9 \
     --beta2 0.9 \

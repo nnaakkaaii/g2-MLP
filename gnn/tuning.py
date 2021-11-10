@@ -17,25 +17,31 @@ def objective(trial):
 
     # network hyper parameters
     if conf.network_name == 'gmlp':
-        conf.hidden_dim = trial.suggest_categorical('hidden_dim', [16, 32, 64, 128, 256])
-        conf.ffn_dim = trial.suggest_categorical('ffn_dim', [64, 128, 256, 512, 1024])
-        conf.n_layers = trial.suggest_int('n_layers', 2, 8)
-        conf.prob_survival = trial.suggest_categorical('prob_survival', [0.6, 0.8, 1.0])
+        # conf.hidden_dim = trial.suggest_categorical('hidden_dim', [16, 32, 64, 128, 256])  # afbd8d67521466b227665efc0c7078ba339e4341
+        conf.hidden_dim = trial.suggest_categorical('hidden_dim', [64, 128, 256])
+        # conf.ffn_dim = trial.suggest_categorical('ffn_dim', [64, 128, 256, 512, 1024])  # afbd8d67521466b227665efc0c7078ba339e4341
+        conf.ffn_dim = trial.suggest_categorical('ffn_dim', [512, 1024, 2048])
+        # conf.n_layers = trial.suggest_int('n_layers', 2, 8)  # afbd8d67521466b227665efc0c7078ba339e4341
+        conf.n_layers = trial.suggest_int('n_layers', 4, 8)
+        # conf.prob_survival = trial.suggest_categorical('prob_survival', [0.6, 0.8, 1.0])  # afbd8d67521466b227665efc0c7078ba339e4341
+        conf.prob_survival = trial.suggest_categorical('prob_survival', [0.8, 1.0])
     else:
         raise NotImplementedError
 
     # optimizer hyper parameters
     if conf.optimizer_name == 'adam':
-        conf.lr = trial.suggest_loguniform('lr', 1e-5, 1e-2)
-        conf.beta1 = trial.suggest_uniform('beta1', 0.0, 1.0)
-        conf.beta2 = trial.suggest_uniform('beta2', 0.0, 1.0)
+        # conf.lr = trial.suggest_loguniform('lr', 1e-5, 1e-2)  # afbd8d67521466b227665efc0c7078ba339e4341
+        conf.lr = trial.suggest_loguniform('lr', 8e-4, 5e-3)
+        # conf.beta1 = trial.suggest_uniform('beta1', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
+        # conf.beta2 = trial.suggest_uniform('beta2', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
     else:
         raise NotImplementedError
 
     # scheduler hyper parameters
     if conf.scheduler_name == 'step':
-        conf.lr_decay_iters = trial.suggest_categorical('lr_decay_iters', [100, 200, 300, 400, 500])
-        conf.lr_decay_gamma = trial.suggest_uniform('lr_decay_gamma', 0.0, 1.0)
+        # conf.lr_decay_iters = trial.suggest_categorical('lr_decay_iters', [100, 200, 300, 400, 500])  # afbd8d67521466b227665efc0c7078ba339e4341
+        # conf.lr_decay_gamma = trial.suggest_uniform('lr_decay_gamma', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
+        conf.lr_decay_gamma = trial.suggest_uniform('lr_decay_gamma', 0.3, 0.6)
     else:
         raise NotImplementedError
 
