@@ -46,7 +46,7 @@ def objective(trial):
 
 if __name__ == '__main__':
     opt = TrainOption().parse()
-    study = optuna.create_study(study_name=opt.name, storage='sqlite:///./sqlite3.db', load_if_exists=True)
+    study = optuna.create_study(study_name=opt.name, storage='sqlite:///./sqlite3.db', load_if_exists=True, direction='maximize')
     study.optimize(objective, n_trials=100)
 
     with open(os.path.join(opt.save_dir, 'optuna_history.json'), 'w') as f:
