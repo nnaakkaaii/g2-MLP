@@ -197,8 +197,8 @@ def train(opt, fold_number=None):
         train_dataset = datasets[opt.dataset_name](train_transform, True, fold_number, opt)
         val_dataset = datasets[opt.dataset_name](val_transform, False, fold_number, opt)
     else:
-        train_dataset = datasets[opt.dataset_name](train_transform, True, 0, opt)
-        val_dataset = datasets[opt.dataset_name](val_transform, False, 0, opt)
+        train_dataset = datasets[opt.dataset_name](train_transform, True, 1, opt)
+        val_dataset = datasets[opt.dataset_name](val_transform, False, 1, opt)
 
     if len(opt.gpu_ids) > 1:
         train_dataloader = DataListLoader(train_dataset, batch_size=opt.batch_size, shuffle=True)
