@@ -178,7 +178,57 @@ class Logger:
         }
 
 
-def train(opt):
+def train(opt, fold_number=None):
+    save_dir = os.path.join(opt.save_dir, opt.name)
+    device = torch.device('cuda:{}'.format(opt.gpu_ids[0])) if opt.gpu_ids else torch.device('cpu')
+    if fold_number is not None:
+        logger = Logger(opt, device, result_dir=os.path.join(save_dir, f'{fold_number:02}'))
+    else:
+        logger = Logger(opt, device, result_dir=save_dir)
+
+    engine = Engine()
+    engine.hooks.update(logger.hooks)
+
+    # transform
+    train_transform = transforms[opt.train_transform_name](opt)
+    val_transform = transforms[opt.val_transform_name](opt)
+    # dataloader
+    if fold_number is not None:
+        train_dataset = datasets[opt.dataset_name](train_transform, True, fold_number, opt)
+        val_dataset = datasets[opt.dataset_name](val_transform, False, fold_number, opt)
+    else:
+        train_dataset = datasets[opt.dataset_name](train_transform, True, 0, opt)
+        val_dataset = datasets[opt.dataset_name](val_transform, False, 0, opt)
+
+    if len(opt.gpu_ids) > 1:
+        train_dataloader = DataListLoader(train_dataset, batch_size=opt.batch_size, shuffle=True)
+        val_dataloader = DataListLoader(val_dataset, batch_size=opt.batch_size, shuffle=True)
+    else:
+        train_dataloader = DataLoader(train_dataset, batch_size=opt.batch_size, shuffle=True)
+        val_dataloader = DataLoader(val_dataset, batch_size=opt.batch_size, shuffle=True)
+    # loss
+    loss = losses[opt.loss_name](opt)
+    loss.to(device)
+    # network
+    num_features, num_classes, node_level = train_dataset.num_features, train_dataset.num_classes, train_dataset.node_level
+    network = networks[opt.network_name](num_features, num_classes, node_level, opt)
+    network.to(device)
+    # optimizer
+    if len(opt.gpu_ids) > 1:
+        network = DataParallel(network, device_ids=opt.gpu_ids)
+        optimizer = optimizers[opt.optimizer_name](network.module.parameters(), opt)
+    else:
+        optimizer = optimizers[opt.optimizer_name](network.parameters(), opt)
+    # scheduler
+    scheduler = schedulers[opt.scheduler_name](optimizer, opt)
+
+    # train
+    engine.train(network, train_dataloader, val_dataloader, opt.n_epochs, optimizer, scheduler, loss)
+
+    return logger.current_history
+
+
+def run(opt):
     save_dir = os.path.join(opt.save_dir, opt.name)
     os.makedirs(save_dir, exist_ok=True)
     with open(os.path.join(save_dir, 'options.json'), 'w') as f:
@@ -193,45 +243,10 @@ def train(opt):
 
     train_iter = tqdm(range(1, 11), desc='Training Model......')
     for fold_number in train_iter:
-        device = torch.device('cuda:{}'.format(opt.gpu_ids[0])) if opt.gpu_ids else torch.device('cpu')
-        logger = Logger(opt, device, result_dir=os.path.join(save_dir, f'{fold_number:02}'))
-
-        engine = Engine()
-        engine.hooks.update(logger.hooks)
-
-        # transform
-        train_transform = transforms[opt.train_transform_name](opt)
-        val_transform = transforms[opt.val_transform_name](opt)
-        # dataloader
-        train_dataset = datasets[opt.dataset_name](train_transform, True, fold_number, opt)
-        val_dataset = datasets[opt.dataset_name](val_transform, False, fold_number, opt)
-        if len(opt.gpu_ids) > 1:
-            train_dataloader = DataListLoader(train_dataset, batch_size=opt.batch_size, shuffle=True)
-            val_dataloader = DataListLoader(val_dataset, batch_size=opt.batch_size, shuffle=True)
-        else:
-            train_dataloader = DataLoader(train_dataset, batch_size=opt.batch_size, shuffle=True)
-            val_dataloader = DataLoader(val_dataset, batch_size=opt.batch_size, shuffle=True)
-        # loss
-        loss = losses[opt.loss_name](opt)
-        loss.to(device)
-        # network
-        num_features, num_classes, node_level = train_dataset.num_features, train_dataset.num_classes, train_dataset.node_level
-        network = networks[opt.network_name](num_features, num_classes, node_level, opt)
-        network.to(device)
-        # optimizer
-        if len(opt.gpu_ids) > 1:
-            network = DataParallel(network, device_ids=opt.gpu_ids)
-            optimizer = optimizers[opt.optimizer_name](network.module.parameters(), opt)
-        else:
-            optimizer = optimizers[opt.optimizer_name](network.parameters(), opt)
-        # scheduler
-        scheduler = schedulers[opt.scheduler_name](optimizer, opt)
-
-        # train
-        engine.train(network, train_dataloader, val_dataloader, opt.n_epochs, optimizer, scheduler, loss)
+        current_history = train(opt, fold_number)
 
         # update history
-        for key, value in logger.current_history.items():
+        for key, value in current_history.items():
             history[key].append(value)
 
         train_iter.set_description('[Fold %d] Training Accuracy: %.2f%% Testing Accuracy: %.2f%%' % (
@@ -251,4 +266,4 @@ def train(opt):
 
 if __name__ == '__main__':
     opt = TrainOption().parse()
-    train(opt)
+    run(opt)
