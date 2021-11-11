@@ -19,7 +19,7 @@ def create_dataset(transform: Any, is_train: bool, fold_number: int, opt: argpar
 
 def dataset_modify_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     parser.add_argument('--data_dir', type=str, default=os.path.join('inputs', 'PPI'), help='PPIデータを保存する場所')
-    parser.add_argument('--index_file_dir', type=str, default=os.path.join('inputs', 'PPI', '10fold_idx'), help='PPIデータのindexファイルを保存するディレクトリ')
+    parser.add_argument('--index_file_dir', type=str, default=os.path.join('inputs', 'PPI', '5fold_idx'), help='PPIデータのindexファイルを保存するディレクトリ')
     return parser
 
 

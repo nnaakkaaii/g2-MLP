@@ -241,7 +241,7 @@ def run(opt):
         'val_accuracy': [],
     }
 
-    train_iter = tqdm(range(1, 11), desc='Training Model......')
+    train_iter = tqdm(range(1, 6), desc='Training Model......')
     for fold_number in train_iter:
         current_history = train(opt, fold_number)
 
