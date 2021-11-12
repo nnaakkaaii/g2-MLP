@@ -19,8 +19,6 @@ from src.transforms import transforms
 from src.utils.fix_seed import fix_seed
 from src.utils.engine import Engine
 
-fix_seed(42)
-
 
 class Logger:
     def __init__(self, opt, device, result_dir=None):
@@ -248,6 +246,8 @@ def run(opt):
 
     train_iter = tqdm(range(1, 6), desc='Training Model......')
     for i in train_iter:
+        fix_seed(i)
+
         current_history = train(opt)
 
         # update history

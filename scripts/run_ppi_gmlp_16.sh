@@ -9,7 +9,7 @@
 module load cuda/11.1
 module load pytorch/1.8.1
 
-source /work/02/gs84/s84000/g2-MLP/.venv/bin/activate
+source /work/02/gs84/s84000/inductive_node_classification_models/.venv/bin/activate
 
 # n_layers = 16
 python3 gnn/train.py \
