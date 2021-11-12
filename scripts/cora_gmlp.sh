@@ -2,16 +2,16 @@ python3 gnn/train.py \
     --gpu_ids 0 \
     --batch_size 64 \
     --verbose \
-    --loss_name bce \
+    --loss_name mce \
     --network_name gmlp \
-    --dataset_name ppi \
+    --dataset_name cora \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
     --scheduler_name step \
-    --n_epochs 1000 \
-    --data_dir ./inputs/PPI/ \
-    --name gmlp_ppi \
+    --n_epochs 300 \
+    --data_dir ./inputs/Cora/ \
+    --name gmlp_cora \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -19,9 +19,9 @@ python3 gnn/train.py \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
-    --hidden_dim 12 \
-    --ffn_dim 208 \
+    --hidden_dim 256 \
+    --ffn_dim 1024 \
     --n_layers 2 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 0.8
+    --prob_survival 0.6

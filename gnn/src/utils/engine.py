@@ -34,6 +34,7 @@ class Engine:
             self.hook('on_start_epoch', state)
             self.hook('on_start_train_epoch', state)
             state['network'].train()
+            state['train'] = True
             for sample in state['train_loader']:
                 self.hook('on_start_train_iteration', state)
                 state['input'] = sample  # input : torch_geometric.data.Data
@@ -42,11 +43,12 @@ class Engine:
 
                 def closure():
                     output = state['network'](state['input'])
-                    loss = criterion(output, state['label'])
-                    loss.backward()
                     state['output'] = output
-                    state['loss'] = loss
                     self.hook('on_forward', state)
+                    loss = criterion(state['output'], state['label'])
+                    loss.backward()
+                    state['loss'] = loss
+                    self.hook('on_backward', state)
                     # to free memory in save_for_backward
                     state['output'] = None
                     state['loss'] = None
@@ -62,6 +64,7 @@ class Engine:
 
             self.hook('on_start_val_epoch', state)
             state['network'].eval()
+            state['train'] = False
             for sample in state['val_loader']:
                 self.hook('on_start_val_iteration', state)
                 state['input'] = sample
@@ -70,10 +73,11 @@ class Engine:
 
                 def closure():
                     output = state['network'](state['input'])
-                    loss = criterion(output, state['label'])
                     state['output'] = output
-                    state['loss'] = loss
                     self.hook('on_forward', state)
+                    loss = criterion(state['output'], state['label'])
+                    state['loss'] = loss
+                    self.hook('on_backward', state)
                     # to free memory in save_for_backward
                     state['output'] = None
                     state['loss'] = None

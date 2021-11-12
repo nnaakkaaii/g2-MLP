@@ -1,18 +1,16 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch_geometric.nn.glob import global_sort_pool
 from torch_geometric.nn.conv import GCNConv
 
 from .modules import Residual
 from .utils.dropout_layers import dropout_layers
 
 
-def create_network(num_features, num_classes, node_level, opt):
+def create_network(num_features, num_classes, opt):
     return gMLP(
         num_features=num_features,
         num_classes=num_classes,
-        node_level=node_level,
         hidden_dim=opt.hidden_dim,
         ffn_dim=opt.ffn_dim,
         n_layers=opt.n_layers,
@@ -29,9 +27,8 @@ def network_modify_commandline_options(parser):
 
 
 class gMLP(nn.Module):
-    def __init__(self, num_features, num_classes, node_level, hidden_dim, ffn_dim, n_layers, prob_survival, top_k=30):
+    def __init__(self, num_features, num_classes, hidden_dim, ffn_dim, n_layers, prob_survival, top_k=30):
         super().__init__()
-        self.node_level = node_level
         self.prob_survival = prob_survival
         self.top_k = top_k
 
@@ -42,12 +39,7 @@ class gMLP(nn.Module):
         for _ in range(n_layers):
             self.layers += [Residual(gMLPBlock(hidden_dim, ffn_dim))]
         
-        if node_level:
-            self.linear = nn.Linear(hidden_dim, num_classes)
-        else:
-            self.linear = nn.Linear(hidden_dim, 1)
-            self.classifier_1 = nn.Linear(top_k, hidden_dim)
-            self.classifier_2 = nn.Linear(hidden_dim, num_classes)
+        self.linear = nn.Linear(hidden_dim, num_classes)
 
         self.reset_parameters()
 
@@ -56,10 +48,6 @@ class gMLP(nn.Module):
         for layer in self.layers:
             layer.reset_parameters()
         self.linear.reset_parameters()
-        if hasattr(self, 'classifier_1'):
-            self.classifier_1.reset_parameters()
-        if hasattr(self, 'classifier_2'):
-            self.classifier_2.reset_parameters()
 
     def forward(self, data):
         x, edge_index, batch = data.x, data.edge_index, data.batch
@@ -70,15 +58,7 @@ class gMLP(nn.Module):
             x = layer(x, edge_index)
         x = self.linear(x)
 
-        if self.node_level:
-            return x
-        else:
-            x = F.gelu(x)
-            x = global_sort_pool(x, batch, k=self.top_k)
-            x = self.classifier_1(x)
-            x = F.gelu(x)
-            x = self.classifier_2(x)
-            return x
+        return x
 
 
 class gMLPBlock(nn.Module):

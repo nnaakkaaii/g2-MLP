@@ -8,7 +8,7 @@ from . import gcn
 from . import mlp
 from . import gmlp
 
-networks: Dict[str, Callable[[int, int, bool, argparse.Namespace], nn.Module]] = {
+networks: Dict[str, Callable[[int, int, argparse.Namespace], nn.Module]] = {
     'gat': gat.create_network,
     'gcn': gcn.create_network,
     'mlp': mlp.create_network,

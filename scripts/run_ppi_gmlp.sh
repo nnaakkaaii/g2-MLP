@@ -25,7 +25,6 @@ python3 gnn/train.py \
     --scheduler_name step \
     --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
-    --index_file_dir ./inputs/PPI/5fold_idx/ \
     --name gmlp_ppi_tuned \
     --save_freq 10 \
     --save_dir ./checkpoints \
@@ -55,7 +54,6 @@ python3 gnn/train.py \
     --scheduler_name step \
     --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
-    --index_file_dir ./inputs/PPI/5fold_idx/ \
     --name gmlp_ppi_tuned \
     --save_freq 10 \
     --save_dir ./checkpoints \
@@ -85,7 +83,6 @@ python3 gnn/train.py \
     --scheduler_name step \
     --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
-    --index_file_dir ./inputs/PPI/5fold_idx/ \
     --name gmlp_ppi_tuned \
     --save_freq 10 \
     --save_dir ./checkpoints \
@@ -115,7 +112,6 @@ python3 gnn/train.py \
     --scheduler_name step \
     --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
-    --index_file_dir ./inputs/PPI/5fold_idx/ \
     --name gmlp_ppi_tuned \
     --save_freq 10 \
     --save_dir ./checkpoints \

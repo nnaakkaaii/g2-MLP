@@ -52,6 +52,17 @@ class Logger:
         return
 
     def on_forward(self, state):
+        if state['train'] and hasattr(state['input'], 'train_mask'):
+            mask = state['input'].train_mask
+            state['output'] = state['output'][mask]
+            state['label'] = state['label'][mask]
+        if not state['train'] and hasattr(state['input'], 'test_mask'):
+            mask = state['input'].test_mask
+            state['output'] = state['output'][mask]
+            state['label'] = state['label'][mask]
+        return
+
+    def on_backward(self, state):
         state['loss_averager'].add(state['loss'].detach().cpu().item())
         if state['output'].dim() == state['label'].dim() == 2:
             # MCEと同じ形式に揃える
@@ -162,6 +173,7 @@ class Logger:
         return {
             'on_sample': self.on_sample,
             'on_forward': self.on_forward,
+            'on_backward': self.on_backward,
             'on_update': self.on_update,
             'on_start_training': self.on_start_training,
             'on_start_epoch': self.on_start_epoch,
@@ -178,13 +190,10 @@ class Logger:
         }
 
 
-def train(opt, fold_number=None):
+def train(opt):
     save_dir = os.path.join(opt.save_dir, opt.name)
     device = torch.device('cuda:{}'.format(opt.gpu_ids[0])) if opt.gpu_ids else torch.device('cpu')
-    if fold_number is not None:
-        logger = Logger(opt, device, result_dir=os.path.join(save_dir, f'{fold_number:02}'))
-    else:
-        logger = Logger(opt, device, result_dir=save_dir)
+    logger = Logger(opt, device, result_dir=save_dir)
 
     engine = Engine()
     engine.hooks.update(logger.hooks)
@@ -193,12 +202,8 @@ def train(opt, fold_number=None):
     train_transform = transforms[opt.train_transform_name](opt)
     val_transform = transforms[opt.val_transform_name](opt)
     # dataloader
-    if fold_number is not None:
-        train_dataset = datasets[opt.dataset_name](train_transform, True, fold_number, opt)
-        val_dataset = datasets[opt.dataset_name](val_transform, False, fold_number, opt)
-    else:
-        train_dataset = datasets[opt.dataset_name](train_transform, True, 1, opt)
-        val_dataset = datasets[opt.dataset_name](val_transform, False, 1, opt)
+    train_dataset = datasets[opt.dataset_name](train_transform, True, opt)
+    val_dataset = datasets[opt.dataset_name](val_transform, False, opt)
 
     if len(opt.gpu_ids) > 1:
         train_dataloader = DataListLoader(train_dataset, batch_size=opt.batch_size, shuffle=True)
@@ -210,8 +215,8 @@ def train(opt, fold_number=None):
     loss = losses[opt.loss_name](opt)
     loss.to(device)
     # network
-    num_features, num_classes, node_level = train_dataset.num_features, train_dataset.num_classes, train_dataset.node_level
-    network = networks[opt.network_name](num_features, num_classes, node_level, opt)
+    num_features, num_classes = train_dataset.num_features, train_dataset.num_classes
+    network = networks[opt.network_name](num_features, num_classes, opt)
     network.to(device)
     # optimizer
     if len(opt.gpu_ids) > 1:
@@ -242,15 +247,15 @@ def run(opt):
     }
 
     train_iter = tqdm(range(1, 6), desc='Training Model......')
-    for fold_number in train_iter:
-        current_history = train(opt, fold_number)
+    for i in train_iter:
+        current_history = train(opt)
 
         # update history
         for key, value in current_history.items():
             history[key].append(value)
 
-        train_iter.set_description('[Fold %d] Training Accuracy: %.2f%% Testing Accuracy: %.2f%%' % (
-            fold_number, history['train_accuracy'][-1], history['val_accuracy'][-1]
+        train_iter.set_description('[Exp %d] Training Accuracy: %.2f%% Testing Accuracy: %.2f%%' % (
+            i, history['train_accuracy'][-1], history['val_accuracy'][-1]
         ))
 
     print('Overall Training Accuracy: %.2f%% (std: %.2f) Testing Accuracy: %.2f%% (std: %.2f)' % (

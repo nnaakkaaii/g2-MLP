@@ -1,20 +1,23 @@
 python3 gnn/train.py \
     --gpu_ids 0 \
+    --batch_size 64 \
     --verbose \
     --loss_name mce \
     --network_name gat \
-    --dataset_name mutag \
+    --dataset_name cora \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 50 \
-    --data_dir ./inputs/MUTAG/ \
-    --index_file_dir ./inputs/MUTAG/10fold_idx/ \
-    --name gat_mutag \
-    --save_freq 5 \
+    --scheduler_name step \
+    --n_epochs 300 \
+    --data_dir ./inputs/Cora/ \
+    --name gat_cora \
+    --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_gat_mutag \
-    --lr 1e-3 \
+    --run_name layer_2 \
+    --lr 2.5e-3 \
     --beta1 0.9 \
-    --beta2 0.999
+    --beta2 0.9 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3
