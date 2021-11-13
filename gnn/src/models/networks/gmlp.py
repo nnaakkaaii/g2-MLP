@@ -50,7 +50,7 @@ class gMLP(nn.Module):
         self.linear.reset_parameters()
 
     def forward(self, data):
-        x, edge_index, batch = data.x, data.edge_index, data.batch
+        x, edge_index = data.x, data.edge_index
         prob_survival = self.prob_survival if self.training else 1
 
         x = self.embedding(x)

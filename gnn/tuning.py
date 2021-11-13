@@ -1,10 +1,9 @@
-import os
 import json
+import os
 from copy import deepcopy
 
-import optuna
 import numpy as np
-
+import optuna
 from src.options.train_option import TrainOption
 from train import train
 

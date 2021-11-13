@@ -1,5 +1,5 @@
-import os
 import argparse
+import os
 from typing import Any
 
 from torch_geometric.data.in_memory_dataset import InMemoryDataset

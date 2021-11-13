@@ -1,4 +1,5 @@
-from torch_geometric.utils import add_self_loops, remove_self_loops, sort_edge_index
+from torch_geometric.utils import (add_self_loops, remove_self_loops,
+                                   sort_edge_index)
 from torch_sparse import spspmm
 
 

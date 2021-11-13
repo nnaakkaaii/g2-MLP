@@ -5,10 +5,6 @@ import mlflow
 import numpy as np
 import torch
 import torchnet as tnt
-from tqdm import tqdm
-from torch_geometric.loader import DataLoader, DataListLoader
-from torch_geometric.nn import DataParallel
-
 from src.datasets import datasets
 from src.models.losses import losses
 from src.models.networks import networks
@@ -16,8 +12,11 @@ from src.models.optimizers import optimizers
 from src.models.schedulers import schedulers
 from src.options.train_option import TrainOption
 from src.transforms import transforms
-from src.utils.fix_seed import fix_seed
 from src.utils.engine import Engine
+from src.utils.fix_seed import fix_seed
+from torch_geometric.loader import DataListLoader, DataLoader
+from torch_geometric.nn import DataParallel
+from tqdm import tqdm
 
 
 class Logger:
@@ -42,6 +41,7 @@ class Logger:
 
     def on_sample(self, state):
         if isinstance(state['input'], list):
+            # for Multi-GPU
             state['input'] = [data.to(self.device) for data in state['input']]
             state['label'] = torch.cat([data.y for data in state['input']], dim=0).to(self.device)
         else:
@@ -51,13 +51,20 @@ class Logger:
 
     def on_forward(self, state):
         if state['train'] and hasattr(state['input'], 'train_mask'):
+            # on transductive task
             mask = state['input'].train_mask
             state['output'] = state['output'][mask]
             state['label'] = state['label'][mask]
         if not state['train'] and hasattr(state['input'], 'test_mask'):
+            # on transductive task
             mask = state['input'].test_mask
             state['output'] = state['output'][mask]
             state['label'] = state['label'][mask]
+        if state['label'].dim() == 1:
+            # on graph classification task (with cls_token_transform)
+            batch = state['input'].batch
+            cls_token_indices = [i for i in range(len(batch)) if i == 0 or batch[i - 1] != batch[i]]
+            state['output'] = state['output'][cls_token_indices]  # (batch_size, num_classes)
         return
 
     def on_backward(self, state):
