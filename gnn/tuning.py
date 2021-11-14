@@ -6,6 +6,7 @@ import numpy as np
 import optuna
 from src.options.train_option import TrainOption
 from train import train
+from src.utils.fix_seed import fix_seed
 
 
 def objective(trial):
@@ -19,13 +20,14 @@ def objective(trial):
         conf.hidden_dim = trial.suggest_categorical('hidden_dim', [16, 32, 64, 128, 256])  # afbd8d67521466b227665efc0c7078ba339e4341
         conf.ffn_dim = trial.suggest_categorical('ffn_dim', [64, 128, 256, 512, 1024])  # afbd8d67521466b227665efc0c7078ba339e4341
         conf.n_layers = trial.suggest_int('n_layers', 2, 8)  # afbd8d67521466b227665efc0c7078ba339e4341
-        conf.prob_survival = trial.suggest_categorical('prob_survival', [0.6, 0.8, 1.0])  # afbd8d67521466b227665efc0c7078ba339e4341
+        # conf.prob_survival = trial.suggest_categorical('prob_survival', [0.6, 0.8, 1.0])  # afbd8d67521466b227665efc0c7078ba339e4341
     else:
         raise NotImplementedError
 
     # optimizer hyper parameters
     if conf.optimizer_name == 'adam':
-        conf.lr = trial.suggest_loguniform('lr', 1e-5, 1e-2)  # afbd8d67521466b227665efc0c7078ba339e4341
+        pass
+        # conf.lr = trial.suggest_loguniform('lr', 1e-5, 1e-2)  # afbd8d67521466b227665efc0c7078ba339e4341
         # conf.beta1 = trial.suggest_uniform('beta1', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
         # conf.beta2 = trial.suggest_uniform('beta2', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
     else:
@@ -33,12 +35,27 @@ def objective(trial):
 
     # scheduler hyper parameters
     if conf.scheduler_name == 'step':
-        conf.lr_decay_iters = trial.suggest_categorical('lr_decay_iters', [10, 20, 30, 40, 50])  # afbd8d67521466b227665efc0c7078ba339e4341
-        conf.lr_decay_gamma = trial.suggest_uniform('lr_decay_gamma', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
+        pass
+        # conf.lr_decay_iters = trial.suggest_categorical('lr_decay_iters', [10, 20, 30, 40, 50])  # afbd8d67521466b227665efc0c7078ba339e4341
+        # conf.lr_decay_gamma = trial.suggest_uniform('lr_decay_gamma', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
     else:
         raise NotImplementedError
 
-    history = train(conf)
+    history = {
+        'train_loss': [],
+        'train_accuracy': [],
+        'val_loss': [],
+        'val_accuracy': [],
+    }
+
+    for i in range(1, 6):
+        fix_seed(i)
+
+        current_history = train(opt)
+
+        # update history
+        for key, value in current_history.items():
+            history[key].append(value)
 
     return np.mean(history['val_accuracy'])
 

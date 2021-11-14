@@ -60,11 +60,6 @@ class Logger:
             mask = state['input'].test_mask
             state['output'] = state['output'][mask]
             state['label'] = state['label'][mask]
-        if state['label'].dim() == 1:
-            # on graph classification task (with cls_token_transform)
-            batch = state['input'].batch
-            cls_token_indices = [i for i in range(len(batch)) if i == 0 or batch[i - 1] != batch[i]]
-            state['output'] = state['output'][cls_token_indices]  # (batch_size, num_classes)
         return
 
     def on_backward(self, state):
@@ -221,7 +216,8 @@ def train(opt):
     loss.to(device)
     # network
     num_features, num_classes = train_dataset.num_features, train_dataset.num_classes
-    network = networks[opt.network_name](num_features, num_classes, opt)
+    is_graph_classification = train_dataset[0].y.dim() == 1
+    network = networks[opt.network_name](num_features, num_classes, is_graph_classification, opt)
     network.to(device)
     # optimizer
     if len(opt.gpu_ids) > 1:

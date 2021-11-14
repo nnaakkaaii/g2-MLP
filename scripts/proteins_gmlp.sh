@@ -4,14 +4,14 @@ python3 gnn/train.py \
     --verbose \
     --loss_name mce \
     --network_name gmlp \
-    --dataset_name dd \
+    --dataset_name proteins \
     --train_transform_name cls_token_indegree \
     --val_transform_name cls_token_indegree \
     --optimizer_name adam \
     --scheduler_name step \
-    --n_epochs 1000 \
-    --data_dir ./inputs/DD/ \
-    --name gmlp_dd \
+    --n_epochs 150 \
+    --data_dir ./inputs/PROTEINS/ \
+    --name gmlp_proteins \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
