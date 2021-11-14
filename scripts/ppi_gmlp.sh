@@ -1,6 +1,6 @@
 python3 gnn/train.py \
     --gpu_ids 0 \
-    --batch_size 64 \
+    --batch_size 1 \
     --verbose \
     --loss_name bce \
     --network_name gmlp \

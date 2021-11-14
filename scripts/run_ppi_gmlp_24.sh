@@ -9,26 +9,35 @@
 module load cuda/11.1
 module load pytorch/1.8.1
 
-# source /work/gs84/s84000/inductive_node_classification_models/.venv/bin/activate
 source /work/02/gs84/s84000/inductive_node_classification_models/.venv/bin/activate
-# source /work/opt/local/x86_64/apps/cuda/11.1/pytorch/1.8.1/bin/activate
+
+# n_layers = 24
 python3 gnn/train.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
     --verbose \
     --loss_name bce \
-    --network_name gcn \
+    --network_name gmlp \
     --dataset_name ppi \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
-    --n_epochs 500 \
+    --scheduler_name step \
+    --n_epochs 1500 \
     --data_dir ./inputs/PPI/ \
-    --index_file_dir ./inputs/PPI/10fold_idx/ \
-    --name gcn_ppi \
-    --save_freq 5 \
+    --name gmlp_ppi_tuned \
+    --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name debug_gcn_ppi \
-    --lr 1e-3 \
+    --run_name layer_24_1500 \
+    --lr 2.5e-3 \
     --beta1 0.9 \
-    --beta2 0.999
+    --beta2 0.9 \
+    --hidden_dim 128 \
+    --ffn_dim 2084 \
+    --n_layers 24 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --prob_survival 0.8 &
+
+wait

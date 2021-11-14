@@ -216,8 +216,7 @@ def train(opt):
     loss.to(device)
     # network
     num_features, num_classes = train_dataset.num_features, train_dataset.num_classes
-    is_graph_classification = train_dataset[0].y.dim() == 1
-    network = networks[opt.network_name](num_features, num_classes, is_graph_classification, opt)
+    network = networks[opt.network_name](num_features, num_classes, opt)
     network.to(device)
     # optimizer
     if len(opt.gpu_ids) > 1:

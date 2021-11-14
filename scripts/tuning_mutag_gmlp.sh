@@ -3,19 +3,19 @@ python3 gnn/tuning.py \
     --batch_size 64 \
     --verbose \
     --loss_name mce \
-    --network_name gmlp \
+    --network_name gmlp_graph_classification \
     --dataset_name mutag \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
     --scheduler_name step \
-    --n_epochs 200 \
+    --n_epochs 150 \
     --data_dir ./inputs/MUTAG/ \
-    --name tuning_gmlp_mutag_mean_max_sort_jk \
+    --name tuning_gmlp_graph_classification_mutag \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name mean_max_sort_jk \
+    --run_name tuning_1115_0437 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
