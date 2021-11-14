@@ -11,11 +11,11 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 200 \
     --data_dir ./inputs/MUTAG/ \
-    --name tuning_gmlp_mutag \
+    --name tuning_gmlp_mutag_mean_max_sort_jk \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning \
+    --run_name mean_max_sort_jk \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -24,4 +24,4 @@ python3 gnn/tuning.py \
     --n_layers 4 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 0.8
+    --prob_survival 1.

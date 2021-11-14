@@ -4,14 +4,14 @@ python3 gnn/tuning.py \
     --verbose \
     --loss_name mce \
     --network_name gmlp \
-    --dataset_name proteins \
+    --dataset_name enzymes \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
     --scheduler_name step \
     --n_epochs 150 \
-    --data_dir ./inputs/PROTEINS/ \
-    --name tuning_gmlp_proteins_mean_max_sort_jk \
+    --data_dir ./inputs/ENZYMES/ \
+    --name tuning_gmlp_enzymes_mean_max_sort_jk \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \

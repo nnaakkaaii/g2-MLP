@@ -1,6 +1,7 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch_geometric.nn import global_sort_pool
+from torch_geometric.nn import global_max_pool, global_mean_pool
 
 from .modules import Residual
 from .utils.dropout_layers import dropout_layers
@@ -29,11 +30,10 @@ def network_modify_commandline_options(parser):
 
 
 class MLP(nn.Module):
-    def __init__(self, num_features, num_classes, hidden_dim, ffn_dim, n_layers, prob_survival, dropout_rate, is_graph_classification, top_k=30):
+    def __init__(self, num_features, num_classes, hidden_dim, ffn_dim, n_layers, prob_survival, dropout_rate, is_graph_classification):
         super().__init__()
         self.prob_survival = prob_survival
         self.dropout_rate = dropout_rate
-        self.top_k = top_k
 
         assert n_layers >= 2
         self.layers = nn.ModuleList()
@@ -45,7 +45,7 @@ class MLP(nn.Module):
             self.layers += [nn.Linear(hidden_dim, num_classes)]
         else:
             self.classifiers = nn.ModuleList([
-                nn.Linear(top_k * hidden_dim, hidden_dim),
+                nn.Linear(2 * hidden_dim, hidden_dim),
                 nn.Linear(hidden_dim, num_classes),
             ])
 
@@ -67,8 +67,7 @@ class MLP(nn.Module):
 
         if hasattr(self, 'classifiers'):
             x = F.dropout(F.gelu(x), p=self.dropout_rate, training=self.training)
-            x = global_sort_pool(x, batch, k=self.top_k)
-            x = x.view(x.size(0), -1)
+            x = torch.cat([global_mean_pool(x, batch), global_max_pool(x, batch)], dim=1)
             for i, layer in enumerate(self.classifiers):
                 if i > 0:
                     x = F.dropout(F.gelu(x), p=self.dropout_rate, training=self.training)
