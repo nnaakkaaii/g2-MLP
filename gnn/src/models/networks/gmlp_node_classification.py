@@ -37,7 +37,6 @@ class gMLPNodeClassification(nn.Module):
             self.layers += [Residual(gMLPLayer(hidden_dim, ffn_dim))]
 
         self.classifier = nn.ModuleList([
-            nn.LayerNorm(hidden_dim),
             nn.Linear(hidden_dim, num_classes),
         ])
 
