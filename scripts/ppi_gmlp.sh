@@ -1,27 +1,27 @@
 python3 gnn/train.py \
     --gpu_ids 0 \
-    --batch_size 1 \
+    --batch_size 4 \
     --verbose \
     --loss_name bce \
-    --network_name gmlp \
+    --network_name gmlp_node_classification \
     --dataset_name ppi \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
     --scheduler_name step \
-    --n_epochs 1000 \
+    --n_epochs 1500 \
     --data_dir ./inputs/PPI/ \
-    --name gmlp_ppi \
+    --name gmlp_node_classification_ppi_tuned \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name layer_2 \
+    --run_name layer_20_1500 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
-    --hidden_dim 12 \
-    --ffn_dim 208 \
-    --n_layers 2 \
+    --hidden_dim 128 \
+    --ffn_dim 2084 \
+    --n_layers 20 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
     --prob_survival 0.8

@@ -15,26 +15,31 @@ def objective(trial):
     conf.save_dir = os.path.join(conf.save_dir, conf.name, trial_id)
     conf.run_name = conf.save_dir + trial_id
 
-    conf.n_epochs = trial.suggest_int('n_epochs', 10, 300)
+    conf.n_epochs = trial.suggest_int('n_epochs', 10, 100)
 
     # network hyper parameters
-    if conf.network_name in 'gmlp_node_classification':
+    if conf.network_name == 'gmlp_node_classification':
         conf.hidden_dim = trial.suggest_categorical('hidden_dim', [16, 32, 64, 128, 256])  # afbd8d67521466b227665efc0c7078ba339e4341
         conf.ffn_dim = trial.suggest_categorical('ffn_dim', [64, 128, 256, 512, 1024])  # afbd8d67521466b227665efc0c7078ba339e4341
         conf.n_layers = trial.suggest_int('n_layers', 2, 8)  # afbd8d67521466b227665efc0c7078ba339e4341
         # conf.prob_survival = trial.suggest_categorical('prob_survival', [0.6, 0.8, 1.0])  # afbd8d67521466b227665efc0c7078ba339e4341
-    elif conf.network_name in 'gmlp_graph_classification':
+    elif conf.network_name == 'gmlp_graph_classification':
         conf.hidden_dim = trial.suggest_categorical('hidden_dim', [16, 32, 64, 128, 256])
         conf.ffn_dim = trial.suggest_categorical('ffn_dim', [64, 128, 256, 512, 1024])
         conf.n_layers = trial.suggest_int('n_layers', 2, 8)
         # conf.prob_survival = trial.suggest_categorical('prob_survival', [0.6, 0.8, 1.0])  # afbd8d67521466b227665efc0c7078ba339e4341
+    elif conf.network_name in ['gmlp_sagpool_graph_classification1', 'gmlp_sagpool_graph_classification2', 'gmlp_sagpool_graph_classification3', 'gmlp_sagpool_graph_classification4']:
+        conf.hidden_dim = trial.suggest_categorical('hidden_dim', [16, 32, 64, 128, 256])
+        conf.ffn_dim = trial.suggest_categorical('ffn_dim', [64, 128, 256, 512, 1024])
+        conf.n_layers = trial.suggest_int('n_layers', 2, 5)
+        conf.pool_ratio = trial.suggest_uniform('pool_ratio', 0.1, 0.5)
+        conf.n_hierarchies = trial.suggest_int('n_hierarchies', 2, 6)
     else:
         raise NotImplementedError
 
     # optimizer hyper parameters
     if conf.optimizer_name == 'adam':
-        pass
-        # conf.lr = trial.suggest_loguniform('lr', 1e-5, 1e-2)  # afbd8d67521466b227665efc0c7078ba339e4341
+        conf.lr = trial.suggest_loguniform('lr', 1e-4, 1e-2)  # afbd8d67521466b227665efc0c7078ba339e4341
         # conf.beta1 = trial.suggest_uniform('beta1', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
         # conf.beta2 = trial.suggest_uniform('beta2', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
     else:

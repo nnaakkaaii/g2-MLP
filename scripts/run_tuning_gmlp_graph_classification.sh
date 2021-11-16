@@ -29,7 +29,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -56,7 +56,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -66,6 +66,175 @@ python3 gnn/tuning.py \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
     --prob_survival 1. &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification2 \
+    --dataset_name dd \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/DD/ \
+    --name tuning_gmlp_sagpool_graph_classification2_dd \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification2 \
+    --dataset_name dd \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/DD/ \
+    --name tuning_gmlp_sagpool_graph_classification2_dd \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification3 \
+    --dataset_name dd \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/DD/ \
+    --name tuning_gmlp_sagpool_graph_classification3_dd \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification3 \
+    --dataset_name dd \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/DD/ \
+    --name tuning_gmlp_sagpool_graph_classification3_dd \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification4 \
+    --dataset_name dd \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/DD/ \
+    --name tuning_gmlp_sagpool_graph_classification4_dd \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification4 \
+    --dataset_name dd \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/DD/ \
+    --name tuning_gmlp_sagpool_graph_classification4_dd \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+
 # enzymes
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
@@ -84,7 +253,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -111,35 +280,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
-    --lr 2.5e-3 \
-    --beta1 0.9 \
-    --beta2 0.9 \
-    --hidden_dim 32 \
-    --ffn_dim 512 \
-    --n_layers 4 \
-    --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
-# frankenstein
-python3 gnn/tuning.py \
-    --gpu_ids 0,1,2,3,4,5,6,7 \
-    --batch_size 64 \
-    --verbose \
-    --loss_name mce \
-    --network_name gmlp_graph_classification \
-    --dataset_name frankenstein \
-    --train_transform_name indegree \
-    --val_transform_name indegree \
-    --optimizer_name adam \
-    --scheduler_name step \
-    --n_epochs 150 \
-    --data_dir ./inputs/FRANKENSTEIN/ \
-    --name tuning_gmlp_graph_classification_frankenstein \
-    --save_freq 10 \
-    --save_dir ./checkpoints \
-    --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -154,19 +295,19 @@ python3 gnn/tuning.py \
     --batch_size 64 \
     --verbose \
     --loss_name mce \
-    --network_name gmlp_graph_classification \
-    --dataset_name frankenstein \
+    --network_name gmlp_sagpool_graph_classification2 \
+    --dataset_name enzymes \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
     --scheduler_name step \
     --n_epochs 150 \
-    --data_dir ./inputs/FRANKENSTEIN/ \
-    --name tuning_gmlp_graph_classification_frankenstein \
+    --data_dir ./inputs/ENZYMES/ \
+    --name tuning_gmlp_sagpool_graph_classification2_enzymes \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -175,7 +316,149 @@ python3 gnn/tuning.py \
     --n_layers 4 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification2 \
+    --dataset_name mutag \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/ENZYMES/ \
+    --name tuning_gmlp_sagpool_graph_classification2_enzymes \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification3 \
+    --dataset_name enzymes \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/ENZYMES/ \
+    --name tuning_gmlp_sagpool_graph_classification3_enzymes \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification3 \
+    --dataset_name enzymes \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/ENZYMES/ \
+    --name tuning_gmlp_sagpool_graph_classification3_enzymes \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification4 \
+    --dataset_name enzymes \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/ENZYMES/ \
+    --name tuning_gmlp_sagpool_graph_classification4_enzymes \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification4 \
+    --dataset_name enzymes \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/ENZYMES/ \
+    --name tuning_gmlp_sagpool_graph_classification4_enzymes \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+
 # nci1
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
@@ -194,7 +477,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -221,7 +504,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -231,6 +514,175 @@ python3 gnn/tuning.py \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
     --prob_survival 1. &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification2 \
+    --dataset_name nci1 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI1/ \
+    --name tuning_gmlp_sagpool_graph_classification2_nci1 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification2 \
+    --dataset_name nci1 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI1/ \
+    --name tuning_gmlp_sagpool_graph_classification2_nci1 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification3 \
+    --dataset_name nci1 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI1/ \
+    --name tuning_gmlp_sagpool_graph_classification3_nci1 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification3 \
+    --dataset_name nci1 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI1/ \
+    --name tuning_gmlp_sagpool_graph_classification3_nci1 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification4 \
+    --dataset_name nci1 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI1/ \
+    --name tuning_gmlp_sagpool_graph_classification4_nci1 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification4 \
+    --dataset_name nci1 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI1/ \
+    --name tuning_gmlp_sagpool_graph_classification4_nci1 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+
 # nci109
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
@@ -249,7 +701,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -276,7 +728,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -286,6 +738,175 @@ python3 gnn/tuning.py \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
     --prob_survival 1. &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification2 \
+    --dataset_name nci109 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI109/ \
+    --name tuning_gmlp_sagpool_graph_classification2_nci109 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification2 \
+    --dataset_name nci109 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI109/ \
+    --name tuning_gmlp_sagpool_graph_classification2_nci109 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification3 \
+    --dataset_name nci109 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI109/ \
+    --name tuning_gmlp_sagpool_graph_classification3_nci109 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification3 \
+    --dataset_name nci109 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI109/ \
+    --name tuning_gmlp_sagpool_graph_classification3_nci109 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification4 \
+    --dataset_name nci109 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI109/ \
+    --name tuning_gmlp_sagpool_graph_classification4_nci109 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification4 \
+    --dataset_name nci109 \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/NCI109/ \
+    --name tuning_gmlp_sagpool_graph_classification4_nci109 \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+
 # proteins
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
@@ -304,7 +925,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -331,7 +952,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1116_1903 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -341,5 +962,173 @@ python3 gnn/tuning.py \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
     --prob_survival 1. &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification2 \
+    --dataset_name proteins \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/PROTEINS/ \
+    --name tuning_gmlp_sagpool_graph_classification2_proteins \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification2 \
+    --dataset_name proteins \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/PROTEINS/ \
+    --name tuning_gmlp_sagpool_graph_classification2_proteins \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification3 \
+    --dataset_name proteins \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/PROTEINS/ \
+    --name tuning_gmlp_sagpool_graph_classification3_proteins \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification3 \
+    --dataset_name proteins \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/PROTEINS/ \
+    --name tuning_gmlp_sagpool_graph_classification3_proteins \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification4 \
+    --dataset_name proteins \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/PROTEINS/ \
+    --name tuning_gmlp_sagpool_graph_classification4_proteins \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
+python3 gnn/tuning.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 64 \
+    --verbose \
+    --loss_name mce \
+    --network_name gmlp_sagpool_graph_classification4 \
+    --dataset_name proteins \
+    --train_transform_name indegree \
+    --val_transform_name indegree \
+    --optimizer_name adam \
+    --scheduler_name step \
+    --n_epochs 150 \
+    --data_dir ./inputs/PROTEINS/ \
+    --name tuning_gmlp_sagpool_graph_classification4_proteins \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name tuning_1116_1903 \
+    --lr 2.5e-3 \
+    --beta1 0.9 \
+    --beta2 0.9 \
+    --hidden_dim 32 \
+    --ffn_dim 512 \
+    --n_layers 4 \
+    --lr_decay_iters 300 \
+    --lr_decay_gamma 0.3 \
+    --pool_ratio 0.25 \
+    --n_hierarchies 3 &
 
 wait

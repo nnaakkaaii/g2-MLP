@@ -9,7 +9,7 @@ from torch_geometric.datasets import TUDataset
 
 
 def create_dataset(transform: Any, is_train: bool, opt: argparse.Namespace) -> InMemoryDataset:
-    dataset = TUDataset(opt.data_dir, name='NCI1', transform=transform, use_node_attr=True)
+    dataset = TUDataset(opt.data_dir, name='NCI1', transform=transform)
     index_file_name = '{}-idx.txt'.format('train' if is_train else 'test')
     indices = torch.as_tensor(np.loadtxt(os.path.join(opt.data_dir, index_file_name), dtype=np.int32), dtype=torch.long)
     dataset = dataset[indices]

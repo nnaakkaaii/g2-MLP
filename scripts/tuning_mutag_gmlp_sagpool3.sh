@@ -3,7 +3,7 @@ python3 gnn/tuning.py \
     --batch_size 64 \
     --verbose \
     --loss_name mce \
-    --network_name gmlp_graph_classification \
+    --network_name gmlp_sagpool_graph_classification3 \
     --dataset_name mutag \
     --train_transform_name indegree \
     --val_transform_name indegree \
@@ -11,7 +11,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 150 \
     --data_dir ./inputs/MUTAG/ \
-    --name tuning_gmlp_graph_classification_mutag2 \
+    --name tuning_gmlp_sagpool_graph_classification3_mutag \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -24,4 +24,5 @@ python3 gnn/tuning.py \
     --n_layers 4 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 1.
+    --pool_ratio 0.25 \
+    --n_hierarchies 3
