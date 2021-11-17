@@ -4,18 +4,18 @@ python3 gnn/tuning.py \
     --verbose \
     --loss_name mce \
     --network_name gmlp_graph_classification \
-    --dataset_name nci1 \
+    --dataset_name imdb_binary \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
     --scheduler_name step \
     --n_epochs 150 \
-    --data_dir ./inputs/NCI1/ \
-    --name tuning_gmlp_graph_classification_nci1 \
+    --data_dir ./inputs/IMDB-BINARY/ \
+    --name tuning_gmlp_graph_classification_imdb_binary \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1118 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \

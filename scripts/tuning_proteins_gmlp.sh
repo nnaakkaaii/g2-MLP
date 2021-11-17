@@ -15,7 +15,7 @@ python3 gnn/tuning.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name tuning_1115_0437 \
+    --run_name tuning_1118 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
