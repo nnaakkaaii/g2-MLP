@@ -25,7 +25,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 100 \
     --data_dir ./inputs/COLLAB/ \
-    --name tuning_gmlp_graph_classification_collab \
+    --name 1118_tuning_gmlp_graph_classification_collab \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -54,7 +54,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 100 \
     --data_dir ./inputs/IMDB-BINARY/ \
-    --name tuning_gmlp_graph_classification_imdb_binary \
+    --name 1118_tuning_gmlp_graph_classification_imdb_binary \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -83,7 +83,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 100 \
     --data_dir ./inputs/IMDB-MULTI/ \
-    --name tuning_gmlp_graph_classification_imdb_multi \
+    --name 1118_tuning_gmlp_graph_classification_imdb_multi \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -112,7 +112,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 100 \
     --data_dir ./inputs/DD/ \
-    --name tuning_gmlp_graph_classification_dd \
+    --name 1118_tuning_gmlp_graph_classification_dd \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -141,7 +141,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 100 \
     --data_dir ./inputs/PROTEINS/ \
-    --name tuning_gmlp_graph_classification_proteins \
+    --name 1118_tuning_gmlp_graph_classification_proteins \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -170,7 +170,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 100 \
     --data_dir ./inputs/NCI1/ \
-    --name tuning_gmlp_graph_classification_nci1 \
+    --name 1118_tuning_gmlp_graph_classification_nci1 \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
