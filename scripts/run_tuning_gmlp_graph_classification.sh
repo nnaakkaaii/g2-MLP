@@ -18,7 +18,7 @@ python3 gnn/tuning.py \
     --verbose \
     --loss_name mce \
     --network_name gmlp_graph_classification \
-    --dataset_name COLLAB \
+    --dataset_name collab \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
@@ -47,7 +47,7 @@ python3 gnn/tuning.py \
     --verbose \
     --loss_name mce \
     --network_name gmlp_graph_classification \
-    --dataset_name IMDB-BINARY \
+    --dataset_name imdb_binary \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
@@ -76,7 +76,7 @@ python3 gnn/tuning.py \
     --verbose \
     --loss_name mce \
     --network_name gmlp_graph_classification \
-    --dataset_name IMDB-MULTI \
+    --dataset_name imdb_multi \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
@@ -105,7 +105,7 @@ python3 gnn/tuning.py \
     --verbose \
     --loss_name mce \
     --network_name gmlp_graph_classification \
-    --dataset_name DD \
+    --dataset_name dd \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
@@ -134,7 +134,7 @@ python3 gnn/tuning.py \
     --verbose \
     --loss_name mce \
     --network_name gmlp_graph_classification \
-    --dataset_name PROTEINS \
+    --dataset_name proteins \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
@@ -163,7 +163,7 @@ python3 gnn/tuning.py \
     --verbose \
     --loss_name mce \
     --network_name gmlp_graph_classification \
-    --dataset_name NCI1 \
+    --dataset_name nci1 \
     --train_transform_name indegree \
     --val_transform_name indegree \
     --optimizer_name adam \
