@@ -14,7 +14,7 @@ source /work/02/gs84/s84000/inductive_node_classification_models/.venv/bin/activ
 # COLLAB (5000 x 74.5)
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
-    --batch_size 256 \
+    --batch_size 5096 \
     --verbose \
     --loss_name mce \
     --network_name gmlp_graph_classification \
@@ -101,7 +101,7 @@ python3 gnn/tuning.py \
 # DD (1178 x 284.3)
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
-    --batch_size 128 \
+    --batch_size 2048 \
     --verbose \
     --loss_name mce \
     --network_name gmlp_graph_classification \
@@ -159,7 +159,7 @@ python3 gnn/tuning.py \
 # NCI1 (4110 x 29.9)
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
-    --batch_size 256 \
+    --batch_size 5096 \
     --verbose \
     --loss_name mce \
     --network_name gmlp_graph_classification \

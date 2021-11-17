@@ -11,7 +11,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 150 \
     --data_dir ./inputs/MUTAG/ \
-    --name tuning_gmlp_graph_classification_mutag2 \
+    --name 1118_tuning_gmlp_graph_classification_mutag2 \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \

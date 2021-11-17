@@ -11,7 +11,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 150 \
     --data_dir ./inputs/MUTAG/ \
-    --name tuning_gmlp_hierarchical_sagpool_graph_classification_mutag \
+    --name 1118_tuning_gmlp_hierarchical_sagpool_graph_classification_mutag \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
