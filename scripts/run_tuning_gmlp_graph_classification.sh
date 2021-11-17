@@ -38,7 +38,7 @@ python3 gnn/tuning.py \
     --n_layers 4 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 1.
+    --prob_survival 1. &
 
 # IMDB-BINARY (1000 x 19.8)
 python3 gnn/tuning.py \
@@ -67,7 +67,7 @@ python3 gnn/tuning.py \
     --n_layers 4 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 1.
+    --prob_survival 1. &
 
 # IMDB-MULTI (1500 x 13)
 python3 gnn/tuning.py \
@@ -96,7 +96,7 @@ python3 gnn/tuning.py \
     --n_layers 4 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 1.
+    --prob_survival 1. &
 
 # DD (1178 x 284.3)
 python3 gnn/tuning.py \
@@ -125,7 +125,7 @@ python3 gnn/tuning.py \
     --n_layers 4 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 1.
+    --prob_survival 1. &
 
 # PROTEINS (1113 x 39.1)
 python3 gnn/tuning.py \
@@ -154,7 +154,7 @@ python3 gnn/tuning.py \
     --n_layers 4 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 1.
+    --prob_survival 1. &
 
 # NCI1 (4110 x 29.9)
 python3 gnn/tuning.py \
@@ -183,5 +183,6 @@ python3 gnn/tuning.py \
     --n_layers 4 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
+    --prob_survival 1. &
 
 wait
