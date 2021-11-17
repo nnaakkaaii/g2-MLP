@@ -53,12 +53,19 @@ Reference : [Semi-Supervised Classification with Graph Convolutional Networks](h
 
 ## Usage
 
-### Train & View results on Visdom
+### train
 
-- PPI x GAT
-	```bash
-	$ ./scripts/ppi_gat.sh
-	```
+```bash
+$ ./scripts/ppi_gat.sh
+```
+
+### view tuning result on optuna-dashboard
+
+```bash
+$ optuna-dashboard sqlite:///db.sqlite3
+```
+
+
 
 ## Troubleshooting
 
@@ -94,6 +101,7 @@ $ pip install torch-geometric
 - [PyTorch Documentation](https://pytorch.org/docs/stable/index.html)
 - [PyTorch-Geometric Documentation](https://pytorch-geometric.readthedocs.io/en/latest/)
 - [DGCNN implementation by leftthomas](https://github.com/leftthomas/DGCNN)
+- [HGP-SL implementation by cszhangzhen](https://github.com/cszhangzhen/HGP-SL)
 
 ## Author
 

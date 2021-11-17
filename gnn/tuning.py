@@ -15,7 +15,7 @@ def objective(trial):
     conf.save_dir = os.path.join(conf.save_dir, conf.name, trial_id)
     conf.run_name = conf.save_dir + trial_id
 
-    conf.n_epochs = trial.suggest_int('n_epochs', 10, 100)
+    conf.n_epochs = trial.suggest_categorical('n_epochs', [20, 50, 100, 200])
 
     # network hyper parameters
     if conf.network_name == 'gmlp_node_classification':
@@ -28,7 +28,7 @@ def objective(trial):
         conf.ffn_dim = trial.suggest_categorical('ffn_dim', [64, 128, 256, 512, 1024])
         conf.n_layers = trial.suggest_int('n_layers', 2, 8)
         # conf.prob_survival = trial.suggest_categorical('prob_survival', [0.6, 0.8, 1.0])  # afbd8d67521466b227665efc0c7078ba339e4341
-    elif conf.network_name in ['gmlp_sagpool_graph_classification1', 'gmlp_sagpool_graph_classification2', 'gmlp_sagpool_graph_classification3', 'gmlp_sagpool_graph_classification4']:
+    elif conf.network_name == 'gmlp_hierarchical_sagpool_graph_classification':
         conf.hidden_dim = trial.suggest_categorical('hidden_dim', [16, 32, 64, 128, 256])
         conf.ffn_dim = trial.suggest_categorical('ffn_dim', [64, 128, 256, 512, 1024])
         conf.n_layers = trial.suggest_int('n_layers', 2, 5)
