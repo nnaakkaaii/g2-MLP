@@ -314,6 +314,6 @@ python3 gnn/tuning.py \
     --lr_decay_gamma 0.3 \
     --prob_survival 1. &
 
-sleep 180; nvidia-smi
+sleep 180 && nvidia-smi &
 
 wait

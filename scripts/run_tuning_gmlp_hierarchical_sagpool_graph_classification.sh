@@ -37,8 +37,7 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
     --batch_size 5096 \
@@ -64,8 +63,7 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
     --batch_size 5096 \
@@ -91,8 +89,7 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
     --batch_size 5096 \
@@ -118,8 +115,7 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
     --batch_size 5096 \
@@ -145,8 +141,7 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 
 # DD (1178 x 284.3)
 python3 gnn/tuning.py \
@@ -174,8 +169,7 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
     --batch_size 2048 \
@@ -201,8 +195,7 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
     --batch_size 2048 \
@@ -228,8 +221,7 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 
 # NCI1 (4110 x 29.9)
 python3 gnn/tuning.py \
@@ -257,8 +249,7 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
     --batch_size 5096 \
@@ -284,8 +275,7 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 python3 gnn/tuning.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
     --batch_size 5096 \
@@ -311,9 +301,8 @@ python3 gnn/tuning.py \
     --ffn_dim 512 \
     --n_layers 4 \
     --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 1. &
+    --lr_decay_gamma 0.3 &
 
-sleep 180; nvidia-smi
+sleep 180 && nvidia-smi &
 
 wait
