@@ -11,7 +11,7 @@ python3 gnn/train.py \
     --scheduler_name step \
     --n_epochs 1500 \
     --data_dir ./inputs/PPI/ \
-    --name gmlp_node_classification_ppi_tuned \
+    --name gmlp_ppi_tuned \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
