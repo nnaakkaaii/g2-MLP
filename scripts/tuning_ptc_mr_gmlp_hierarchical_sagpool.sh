@@ -11,7 +11,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 150 \
     --data_dir ./inputs/PTC_MR/ \
-    --name tuning_gmlp_hierarchical_sagpool_graph_classification_ptc_mr \
+    --name 1118_tuning_gmlp_hierarchical_sagpool_graph_classification_ptc_mr \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \

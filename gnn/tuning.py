@@ -34,6 +34,7 @@ def objective(trial):
         conf.n_layers = trial.suggest_int('n_layers', 2, 5)
         conf.pool_ratio = trial.suggest_uniform('pool_ratio', 0.1, 0.5)
         conf.n_hierarchies = trial.suggest_int('n_hierarchies', 2, 6)
+        conf.version = trial.suggest_categorical('version', [1, 2, 3, 4, 5, 6, 7])
     else:
         raise NotImplementedError
 
