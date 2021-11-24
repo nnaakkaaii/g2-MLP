@@ -48,9 +48,8 @@ def objective(trial):
 
     # scheduler hyper parameters
     if conf.scheduler_name == 'step':
-        pass
-        # conf.lr_decay_iters = trial.suggest_categorical('lr_decay_iters', [10, 20, 30, 40, 50])  # afbd8d67521466b227665efc0c7078ba339e4341
-        # conf.lr_decay_gamma = trial.suggest_uniform('lr_decay_gamma', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
+        conf.lr_decay_iters = trial.suggest_categorical('lr_decay_iters', [10, 20, 30, 40, 50])  # afbd8d67521466b227665efc0c7078ba339e4341
+        conf.lr_decay_gamma = trial.suggest_uniform('lr_decay_gamma', 0.0, 1.0)  # afbd8d67521466b227665efc0c7078ba339e4341
     else:
         raise NotImplementedError
 

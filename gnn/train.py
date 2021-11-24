@@ -50,16 +50,6 @@ class Logger:
         return
 
     def on_forward(self, state):
-        if state['train'] and hasattr(state['input'], 'train_mask'):
-            # on transductive task
-            mask = state['input'].train_mask
-            state['output'] = state['output'][mask]
-            state['label'] = state['label'][mask]
-        if not state['train'] and hasattr(state['input'], 'test_mask'):
-            # on transductive task
-            mask = state['input'].test_mask
-            state['output'] = state['output'][mask]
-            state['label'] = state['label'][mask]
         return
 
     def on_backward(self, state):

@@ -1,27 +1,9 @@
-python3 gnn/train.py \
-    --gpu_ids 0 \
-    --batch_size 64 \
-    --verbose \
-    --loss_name mce \
-    --network_name gmlp \
-    --dataset_name proteins \
-    --train_transform_name cls_token_indegree \
-    --val_transform_name cls_token_indegree \
-    --optimizer_name adam \
-    --scheduler_name step \
-    --n_epochs 150 \
-    --data_dir ./inputs/PROTEINS/ \
-    --name gmlp_proteins \
-    --save_freq 10 \
-    --save_dir ./checkpoints \
-    --mlflow_root_dir ./mlruns/ \
-    --run_name cls_zero_bidirectional \
-    --lr 2.5e-3 \
-    --beta1 0.9 \
-    --beta2 0.9 \
-    --hidden_dim 32 \
-    --ffn_dim 512 \
-    --n_layers 4 \
-    --lr_decay_iters 300 \
-    --lr_decay_gamma 0.3 \
-    --prob_survival 0.8
+python3 gnn/train.py --gpu_ids 0 --batch_size 2048 --verbose --loss_name mce --network_name gmlp_graph_classification --dataset_name proteins --train_transform_name indegree --val_transform_name indegree --optimizer_name adam --scheduler_name step --n_epochs 200 --data_dir ./inputs/PROTEINS/ --name 1123_2_tuned_gmlp_graph_classification_proteins --save_freq 10 --save_dir ./checkpoints --mlflow_root_dir ./mlruns/ --run_name tuned_1123_2_0_0 --lr 9.80e-3 --beta1 0.9 --beta2 0.9 --hidden_dim 64 --ffn_dim 128 --n_layers 7 --lr_decay_iters 30 --lr_decay_gamma 0.3 --prob_survival 1. \
+    && python3 gnn/train.py --gpu_ids 0 --batch_size 2048 --verbose --loss_name mce --network_name gmlp_graph_classification --dataset_name proteins --train_transform_name indegree --val_transform_name indegree --optimizer_name adam --scheduler_name step --n_epochs 200 --data_dir ./inputs/PROTEINS/ --name 1123_2_tuned_gmlp_graph_classification_proteins --save_freq 10 --save_dir ./checkpoints --mlflow_root_dir ./mlruns/ --run_name tuned_1123_2_0_1 --lr 8.59e-3 --beta1 0.9 --beta2 0.9 --hidden_dim 256 --ffn_dim 128 --n_layers 4 --lr_decay_iters 30 --lr_decay_gamma 0.3 --prob_survival 1. \
+    && python3 gnn/train.py --gpu_ids 0 --batch_size 2048 --verbose --loss_name mce --network_name gmlp_graph_classification --dataset_name proteins --train_transform_name indegree --val_transform_name indegree --optimizer_name adam --scheduler_name step --n_epochs 200 --data_dir ./inputs/PROTEINS/ --name 1123_2_tuned_gmlp_graph_classification_proteins --save_freq 10 --save_dir ./checkpoints --mlflow_root_dir ./mlruns/ --run_name tuned_1123_2_0_2 --lr 8.30e-3 --beta1 0.9 --beta2 0.9 --hidden_dim 32 --ffn_dim 128 --n_layers 4 --lr_decay_iters 30 --lr_decay_gamma 0.3 --prob_survival 1. \
+    && python3 gnn/train.py --gpu_ids 0 --batch_size 2048 --verbose --loss_name mce --network_name gmlp_graph_classification --dataset_name proteins --train_transform_name indegree --val_transform_name indegree --optimizer_name adam --scheduler_name step --n_epochs 200 --data_dir ./inputs/PROTEINS/ --name 1123_2_tuned_gmlp_graph_classification_proteins --save_freq 10 --save_dir ./checkpoints --mlflow_root_dir ./mlruns/ --run_name tuned_1123_2_0_3 --lr 8.68e-3 --beta1 0.9 --beta2 0.9 --hidden_dim 32 --ffn_dim 128 --n_layers 8 --lr_decay_iters 30 --lr_decay_gamma 0.3 --prob_survival 1. \
+    && python3 gnn/train.py --gpu_ids 0 --batch_size 2048 --verbose --loss_name mce --network_name gmlp_graph_classification --dataset_name proteins --train_transform_name indegree --val_transform_name indegree --optimizer_name adam --scheduler_name step --n_epochs 200 --data_dir ./inputs/PROTEINS/ --name 1123_2_tuned_gmlp_graph_classification_proteins --save_freq 10 --save_dir ./checkpoints --mlflow_root_dir ./mlruns/ --run_name tuned_1123_2_0_4 --lr 7.03e-3 --beta1 0.9 --beta2 0.9 --hidden_dim 64 --ffn_dim 128 --n_layers 8 --lr_decay_iters 30 --lr_decay_gamma 0.3 --prob_survival 1. \
+    && python3 gnn/train.py --gpu_ids 0 --batch_size 2048 --verbose --loss_name mce --network_name gmlp_graph_classification --dataset_name proteins --train_transform_name indegree --val_transform_name indegree --optimizer_name adam --scheduler_name step --n_epochs 200 --data_dir ./inputs/PROTEINS/ --name 1123_2_tuned_gmlp_graph_classification_proteins --save_freq 10 --save_dir ./checkpoints --mlflow_root_dir ./mlruns/ --run_name tuned_1123_2_0_5 --lr 8.45e-3 --beta1 0.9 --beta2 0.9 --hidden_dim 256 --ffn_dim 128 --n_layers 4 --lr_decay_iters 30 --lr_decay_gamma 0.3 --prob_survival 1. \
+    && python3 gnn/train.py --gpu_ids 0 --batch_size 2048 --verbose --loss_name mce --network_name gmlp_graph_classification --dataset_name proteins --train_transform_name indegree --val_transform_name indegree --optimizer_name adam --scheduler_name step --n_epochs 200 --data_dir ./inputs/PROTEINS/ --name 1123_2_tuned_gmlp_graph_classification_proteins --save_freq 10 --save_dir ./checkpoints --mlflow_root_dir ./mlruns/ --run_name tuned_1123_2_0_6 --lr 8.68e-3 --beta1 0.9 --beta2 0.9 --hidden_dim 128 --ffn_dim 128 --n_layers 8 --lr_decay_iters 30 --lr_decay_gamma 0.3 --prob_survival 1. \
+    && python3 gnn/train.py --gpu_ids 0 --batch_size 2048 --verbose --loss_name mce --network_name gmlp_graph_classification --dataset_name proteins --train_transform_name indegree --val_transform_name indegree --optimizer_name adam --scheduler_name step --n_epochs 200 --data_dir ./inputs/PROTEINS/ --name 1123_2_tuned_gmlp_graph_classification_proteins --save_freq 10 --save_dir ./checkpoints --mlflow_root_dir ./mlruns/ --run_name tuned_1123_2_0_7 --lr 1.54e-4 --beta1 0.9 --beta2 0.9 --hidden_dim 32 --ffn_dim 64 --n_layers 7 --lr_decay_iters 30 --lr_decay_gamma 0.3 --prob_survival 1. \
+    && python3 gnn/train.py --gpu_ids 0 --batch_size 2048 --verbose --loss_name mce --network_name gmlp_graph_classification --dataset_name proteins --train_transform_name indegree --val_transform_name indegree --optimizer_name adam --scheduler_name step --n_epochs 200 --data_dir ./inputs/PROTEINS/ --name 1123_2_tuned_gmlp_graph_classification_proteins --save_freq 10 --save_dir ./checkpoints --mlflow_root_dir ./mlruns/ --run_name tuned_1123_2_0_8 --lr 6.74e-3 --beta1 0.9 --beta2 0.9 --hidden_dim 16 --ffn_dim 128 --n_layers 3 --lr_decay_iters 30 --lr_decay_gamma 0.3 --prob_survival 1. \
