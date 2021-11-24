@@ -15,7 +15,7 @@ def objective(trial):
     conf.save_dir = os.path.join(conf.save_dir, conf.name, trial_id)
     conf.run_name = conf.save_dir + trial_id
 
-    conf.n_epochs = trial.suggest_categorical('n_epochs', [20, 50, 100, 200])
+    conf.n_epochs = trial.suggest_categorical('n_epochs', [50, 100, 200, 300, 400, 500])
 
     # network hyper parameters
     if conf.network_name == 'gmlp_node_classification':
