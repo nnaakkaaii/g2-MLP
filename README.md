@@ -1,30 +1,111 @@
-# Inductive Graph Neural Networks
+# g2-MLP
 
 ## Results
 
 ### PPI (iductive node classification)
 
-| | train accuracy | test accuracy | eclipsed time | run_at |
-| ---- | ---- | ---- | ---- | ---- |
-| GAT | 92.96% (±0.24) | 94.17% (±2.20) | |
-| GCN | 80.81% (±0.13) | 80.74% (±0.69) | h | |
+| Model | micro-F1 | details |
+| ---- | ---- | ---- |
+| GAT | 94.17% (±2.20) | |
+| GCN | 80.74% (±0.69) | |
+| g2-MLP (16 layers, pb 0.8, 1000 epochs) | 99.53% (±0.01) | 99.52<br>99.53<br>99.51<br>99.54<br>99.53 |
+| g2-MLP (20 layers, pb 0.8, 1500 epochs) | 99.54% (±0.01) | 99.55<br>99.54<br>99.56<br>99.52<br>99.54 |
+| g2-MLP (24 layers, pb 0.8, 1500 epochs) | 99.53% (±0.01) | 99.53<br>99.52<br>99.54<br>99.52<br>99.54 |
+| g2-MLP (20 layers, pb 0.6, 1500 epochs) | 99.49% (±0.02) | 99.48<br>99.52<br>99.51<br>99.48<br>99.48 |
+| g2-MLP (20 layers, pb 1.0, 1500 epochs) | 99.41% (±0.02) | 99.44<br>99.39<br>99.38<br>99.42<br>99.40 |
 
-### MUTAG (inductive graph classification)
+<details>
+<summary>ハイパラ詳細</summary>
+<div>
 
-| | train accuracy | test accuracy | eclipsed time | run_at |
-| ---- | ---- | ---- | ---- | ---- |
-| GAT | 84.65% (±1.89) | 81.11% (±7.11) | 0.2h | |
-| GCN | 84.24% (±1.74) | 83.89% (±8.03) | 0.2h | |
+| parameters | value |
+| ---- | ---- |
+| batch size | 64 |
+| lr | 2.5e-3 |
+| beta | (0.9, 0.9) |
+| lr_decay_gamma | 0.3 |
+| lr_decay_iters | 300 |
+| fnn hidden dim | 2048 |
+| hidden dim | 128 |
+
+</div>
+</details>
+
+
+### NCI1 (inductive graph classification)
+
+| Model | Accuracy | details |
+| ---- | ---- | ---- |
+| SAGPool | 74.18% |
+| GIN-0 | 82.7% |
+| PSCN | 78.59% |
+| GK | 62.28 |
+| g2-MLP (4 layers, pb 1.0, 100 epochs) | 82.38% (±0.76) | 82.48<br>83.21<br>83.21<br>81.51<br>81.51 |
+
+<details>
+<summary>ハイパラ詳細</summary>
+<div>
+
+| parameters | value |
+| ---- | ---- |
+| batch size | 256 |
+| lr | 2.5e-3 |
+| beta | (0.9, 0.9) |
+| fnn hidden dim | 512 |
+| hidden dim | 32 |
+
+</div>
+</details>
+
+
+### PTC_MR (inductive graph classification)
+
+| Model | Accuracy | details |
+| ---- | ---- | ---- |
+| U2GNN | 69.93% | |
+| GAT | 66.70% | |
+| GIN-0 | 64.6% | |
+| PSCN | 62.29% | |
+| GK | 57.26% | |
+| g2-MLP (4 layers, 50 epochs) | 68.00% (±2.14) | 71.43<br>68.57<br>65.71<br>68.57<br>65.71 |
+
+<details>
+<summary>ハイパラ詳細</summary>
+<div>
+
+| parameters | value |
+| ---- | ---- |
+| batch size | 2048 |
+| lr | 1.18e-4 |
+| beta | (0.9, 0.9) |
+| fnn hidden dim | 1024 |
+| hidden dim | 128 |
+
+</div>
+</details>
+
+
+### PROTEINS (inductive graph classification)
+
+| Model | Accuracy | details |
+| ---- | ---- | ---- |
+| U2GNN | 78.53% | |
+| SAGPool | 71.86% | |
+| GCN | 75.65% | |
+| GAT | 74.70% | |
+| GIN-0 | 76.2% | |
+| PSCN | 75.89% | |
+| GK | 71.67% | |
 
 ## Dataset
 
-| Dataset | PPI |
-| ---- | ---- |
-| Graphs | 24 |
-| Average Nodes Per Graph | 2373 |
-| Average Edges Per Graph | 34113 |
-| Features of Nodes | 50 |
-| Classes | 121 (multilabel) |
+| Dataset | PPI | NCI1 | PTC_MR | PROTEINS |
+| ---- | ---- | ---- | ---- | ---- |
+| Graphs | 24 | 4110 | 344 | 1113 |
+| Average Nodes Per Graph | 2373 | 29.87 | 14.29 | 39.06 |
+| Average Edges Per Graph | 34113 | 32.30 |14.69 | 72.82 |
+| Features of Nodes | 50 | | | |
+| Classes | 121 (multilabel) | 2 | 2 | 2 |
 
 ## Model
 
@@ -69,7 +150,8 @@ $ optuna-dashboard sqlite:///db.sqlite3
 
 ## Troubleshooting
 
-### `libcudart.so.9.0: cannot open shared object file: No such file or directory`
+<details><summary> `libcudart.so.9.0: cannot open shared object file: No such file or directory` </summary>
+<div>
 
 - pytorch-geometricのバージョンをドキュメントに従って揃える
 	- https://pytorch-geometric.readthedocs.io/en/latest/notes/installation.html
@@ -78,8 +160,12 @@ $ optuna-dashboard sqlite:///db.sqlite3
 - 環境変数の設定
 	- https://stackoverflow.com/questions/58127401/libcudart-so-9-0-cannot-open-shared-object-file-no-such-file-or-directory
 
+</div>
+</details>
 
-### `libtorch_cuda_cpp.so: cannot open shared object file: No such file or directory`
+
+<details><summary> `libtorch_cuda_cpp.so: cannot open shared object file: No such file or directory` </summary>
+<div>
 
 - pytorchのバージョンがあっていない
 - torch==1.9.1をインストール後、案内に従って残りのライブラリをインストール
@@ -95,6 +181,9 @@ $ pip install torch-scatter -f https://data.pyg.org/whl/torch-${TORCH}+${CUDA}.h
 $ pip install torch-sparse -f https://data.pyg.org/whl/torch-${TORCH}+${CUDA}.html
 $ pip install torch-geometric
 ```
+
+</div>
+</details>
 
 ## References
 
