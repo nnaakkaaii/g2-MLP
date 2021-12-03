@@ -3,8 +3,8 @@ from math import ceil
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch_geometric.nn.pool import SAGPooling
 from torch_geometric.nn import global_max_pool, global_mean_pool
+from torch_geometric.nn.pool import SAGPooling
 
 from .modules.gmlp_block import gMLPBlock
 
