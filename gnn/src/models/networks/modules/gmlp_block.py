@@ -1,8 +1,8 @@
 import torch.nn as nn
 
-from .residual import Residual
-from .gmlp_layer import gMLPLayer
 from ..utils.dropout_layers import dropout_layers
+from .gmlp_layer import gMLPLayer
+from .residual import Residual
 
 
 class gMLPBlock(nn.Module):

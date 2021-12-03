@@ -5,8 +5,8 @@ from copy import deepcopy
 import numpy as np
 import optuna
 from src.options.train_option import TrainOption
-from train import train
 from src.utils.fix_seed import fix_seed
+from train import train
 
 
 def objective(trial):
