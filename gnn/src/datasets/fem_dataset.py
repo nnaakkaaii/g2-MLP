@@ -22,10 +22,12 @@ def dataset_modify_commandline_options(parser: argparse.ArgumentParser) -> argpa
 
 
 def download_gdrive_file(id: str, save_path: str) -> None:
-    session = requests.session()
-    res = session.get(f'https://drive.google.com/uc?export=download&id={id}')
-    cookie = [v for k, v in res.cookies.items() if '_warning_' in k][0]
-    res = session.get(f'https://drive.google.com/uc?export=download&confirm={cookie}&id={id}', allow_redirects=True)
+    # 以下は、ファイル容量が大きいときに有効 (今回は不要)
+    # session = requests.session()
+    # res = session.get(f'https://drive.google.com/uc?export=download&id={id}')
+    # cookie = [v for k, v in res.cookies.items() if '_warning_' in k][0]
+    # res = session.get(f'https://drive.google.com/uc?export=download&confirm={cookie}&id={id}', allow_redirects=True)
+    res = requests.get(f'https://drive.google.com/uc?export=download&id={id}')
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     with open(save_path, 'wb') as f:
         f.write(res.content)
