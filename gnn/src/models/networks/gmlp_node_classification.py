@@ -42,7 +42,7 @@ class gMLPNodeClassification(nn.Module):
         x, edge_index = data.x, data.edge_index
 
         x = self.embedding(x)
-        x = self.conv(x, edge_index)
-        x, _ = self.classifier(x)
+        x, _ = self.conv(x, edge_index)
+        x = self.classifier(x)
 
         return x
