@@ -30,28 +30,28 @@ class MLPNodeClassification(nn.Module):
         self.prob_survival = prob_survival
 
         assert n_layers >= 2
+        self.emgbedding = nn.Linear(num_features, hidden_dim)
         self.layers = nn.ModuleList()
-        self.layers += [nn.Linear(num_features, hidden_dim)]
         for _ in range(n_layers - 2):
             self.layers += [Residual(MLPBlock(hidden_dim, ffn_dim))]
-        
-        self.layer = nn.Linear(hidden_dim, num_classes)
+        self.classifier = nn.Linear(hidden_dim, num_classes)
 
         self.reset_parameters()
 
     def reset_parameters(self):
+        self.emgbedding.reset_parameters()
         for layer in self.layers:
             layer.reset_parameters()
-        self.layer.reset_parameters()
+        self.classifier.reset_parameters()
 
     def forward(self, data):
         x = data.x
 
+        x = self.emgbedding(x)
         prob_survival = self.prob_survival if self.training else 1
         for layer in dropout_layers(self.layers, prob_survival):
             x = layer(x)
-
-        x = self.layer(x)
+        x = self.classifier(x)
 
         return x
 
