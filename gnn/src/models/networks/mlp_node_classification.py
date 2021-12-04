@@ -35,10 +35,7 @@ class MLPNodeClassification(nn.Module):
         for _ in range(n_layers - 2):
             self.layers += [Residual(MLPBlock(hidden_dim, ffn_dim))]
         
-        self.layer = [
-            nn.LayerNorm(hidden_dim),
-            nn.Linear(hidden_dim, num_classes),
-        ]
+        self.layer = nn.Linear(hidden_dim, num_classes)
 
         self.reset_parameters()
 
