@@ -35,7 +35,7 @@ class MLPNodeClassification(nn.Module):
         for _ in range(n_layers - 2):
             self.layers += [Residual(MLPBlock(hidden_dim, ffn_dim))]
         
-        self.layers += [
+        self.layer = [
             nn.LayerNorm(hidden_dim),
             nn.Linear(hidden_dim, num_classes),
         ]
@@ -45,6 +45,7 @@ class MLPNodeClassification(nn.Module):
     def reset_parameters(self):
         for layer in self.layers:
             layer.reset_parameters()
+        self.layer.reset_parameters()
 
     def forward(self, data):
         x = data.x
@@ -52,6 +53,8 @@ class MLPNodeClassification(nn.Module):
         prob_survival = self.prob_survival if self.training else 1
         for layer in dropout_layers(self.layers, prob_survival):
             x = layer(x)
+
+        x = self.layer(x)
 
         return x
 
