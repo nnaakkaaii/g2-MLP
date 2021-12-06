@@ -92,3 +92,40 @@ class Engine:
             state['epoch'] += 1
         self.hook('on_end_training', state)
         return state
+
+    def inference(self, network, test_loader):
+        state = {
+            'network': network,
+            'test_loader': test_loader,
+            'iteration': 0,
+            'train': False,
+            'input': None,
+            'label': None,
+            'output': None,
+            'loss': None,
+        }
+
+        self.hook('on_start_test', state)
+        state['network'].eval()
+        state['train'] = False
+        for sample in state['test_loader']:
+            self.hook('on_start_test_iteration', state)
+            state['input'] = sample
+            state['label'] = None
+            self.hook('on_sample', state)
+
+            def closure():
+                output = state['network'](state['input'])
+                state['output'] = output
+                self.hook('on_forward', state)
+                # to free memory in save_for_backward
+                state['output'] = None
+                state['loss'] = None
+
+            with torch.no_grad():
+                closure()
+
+            self.hook('on_end_test_iteration', state)
+            state['iteration'] += 1
+        self.hook('on_end_test', state)
+        return state

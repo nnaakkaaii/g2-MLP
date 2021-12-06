@@ -4,7 +4,6 @@ import os
 import torch
 
 from ..datasets import dataset_options, datasets
-from ..models.losses import loss_options, losses
 from ..models.networks import network_options, networks
 
 
@@ -28,13 +27,12 @@ class BaseOption:
         parser.add_argument('--name', type=str, required=True, help='実験の固有名')
         parser.add_argument('--mlflow_root_dir', type=str, default=os.path.join('mlruns'))
         parser.add_argument('--run_name', type=str, default='test')
-        parser.add_argument('--save_freq', type=int, default=5, help='モデルの出力の保存頻度')
         parser.add_argument('--save_dir', type=str, default=os.path.join('checkpoints'), help='モデルの出力の保存先ルートディレクトリ')
+        parser.add_argument('--save_freq', type=int, default=5, help='モデルの出力の保存頻度')
 
         parser.add_argument('--gpu_ids', type=str, default='0', help='使用するGPUのIDをカンマ区切り')
         parser.add_argument('--verbose', action='store_true', help='詳細を表示するか')
 
-        parser.add_argument('--loss_name', type=str, required=True, choices=losses.keys())
         parser.add_argument('--network_name', type=str, required=True, choices=networks.keys())
         parser.add_argument('--dataset_name', type=str, required=True, choices=datasets.keys())
 
@@ -53,10 +51,6 @@ class BaseOption:
 
         parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         parser = self.initialize(parser)
-
-        opt, _ = parser.parse_known_args()  # extract arguments; modify following arguments dynamically
-        loss_modify_commandline_options = loss_options[opt.loss_name]
-        parser = loss_modify_commandline_options(parser)
 
         opt, _ = parser.parse_known_args()
         network_modify_commandline_options = network_options[opt.network_name]

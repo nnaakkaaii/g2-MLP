@@ -36,10 +36,10 @@
 
 | Model | micro-F1 | details |
 | ---- | ---- | ---- |
-| GAT (4 layers, 512 hidden_dim, 100 epochs) | 39.51% (±0.11) | 39.54<br>39.33<br>39.59<br>39.65<br>39.44 |
-| GCN (4 layers, 512 hidden_dim, 100 epochs) | 40.89% (±0.17) | 40.85<br>40.82<br>41.04<br>41.12<br>40.63 |
-| MLP (12 layers, pb 0.8, 1500 epochs) | 47.75% (±0.61) | 48.41<br>46.95<br>48.08<br>48.23<br>47.09 |
-| g2-MLP (12 layers, pb 0.8, 1500 epochs) | 69.95% (±0.96) | 70.04<br>70.57<br>68.5<br>69.37<br>71.29 |
+| GAT (4 layers, 512 hidden_dim, 100 epochs) | 39.56% (±0.04) | 39.55<br>39.53<br>39.63<br>39.55<br>39.52 |
+| GCN (4 layers, 512 hidden_dim, 100 epochs) | 40.60% (±0.17) | 40.69<br>40.72<br>40.70<br>40.27<br>40.62 |
+| MLP (12 layers, pb 0.8, 1500 epochs) | % (±) | <br><br><br><br> |
+| g2-MLP (12 layers, pb 0.8, 1500 epochs) | % (±) | <br><br><br><br> |
 
 <details>
 <summary>ハイパラ詳細</summary>
