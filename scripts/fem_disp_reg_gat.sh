@@ -5,8 +5,10 @@ python3 gnn/train.py \
     --loss_name mse \
     --network_name gat_node \
     --dataset_name fem_disp_reg \
-    --train_transform_name pos_as_attr \
-    --val_transform_name pos_as_attr \
+    --train_transform_name pos_as_attr_label_normalize \
+    --val_transform_name pos_as_attr_label_normalize \
+    --mean -0.0050 -0.0129 -9.1923e-06 \
+    --std 0.0153 0.0362 0.0002 \
     --optimizer_name adam \
     --scheduler_name step \
     --n_epochs 100 \

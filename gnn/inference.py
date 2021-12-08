@@ -8,15 +8,17 @@ from src.datasets import datasets
 from src.models.networks import networks
 from src.options.train_option import BaseOption
 from src.transforms import transforms
+from src.transforms.label_normalize_transform import create_transform
 from src.utils.engine import Engine
 
 
 class Logger:
-    def __init__(self, opt, device, result_dir=None):
+    def __init__(self, opt, device, result_dir=None, denormalize=None):
         self.device = device
         self.regression = opt.regression
         self.name = opt.name
         self.result_dir = result_dir if result_dir is not None else opt.save_dir
+        self.denormalize = denormalize
 
     def on_sample(self, state):
         if isinstance(state['input'], list):
@@ -57,6 +59,7 @@ class Logger:
                     y = state['label']
                 else:
                     y = state['output']
+                y = self.denormalize(y)
                 y = y.clone().cpu().detach().numpy().tolist()
                 with open(os.path.join(self.result_dir, title), 'w') as f:
                     csv.writer(f).writerows(y)
@@ -90,14 +93,17 @@ def inference(opt):
     save_dir = os.path.join(opt.save_dir, opt.name)
     device = torch.device('cuda:{}'.format(opt.gpu_ids[0])) if opt.gpu_ids else torch.device('cpu')
 
-    logger = Logger(opt, device, result_dir=save_dir)
-
-    engine = Engine()
-    engine.hooks.update(logger.hooks)
-
     with open(os.path.join(save_dir, 'options.json')) as f:
         for k, v in json.load(f).items():
             setattr(opt, k, v)
+
+    denormalize = None
+    if hasattr(opt, 'mean') and hasattr(opt, 'std'):
+        denormalize = create_transform(opt).denormalize
+    logger = Logger(opt, device, result_dir=save_dir, denormalize=denormalize)
+
+    engine = Engine()
+    engine.hooks.update(logger.hooks)
 
     test_transform = transforms[opt.val_transform_name](opt)
     test_dataset = datasets[opt.dataset_name](test_transform, False, opt)

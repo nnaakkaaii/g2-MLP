@@ -5,8 +5,10 @@ python3 gnn/train.py \
     --loss_name mse \
     --network_name gcn_node \
     --dataset_name fem_disp_reg \
-    --train_transform_name pos_as_attr \
-    --val_transform_name pos_as_attr \
+    --train_transform_name pos_as_attr_label_normalize \
+    --val_transform_name pos_as_attr_label_normalize \
+    --mean -0.0050 -0.0129 -9.1923e-06 \
+    --std 0.0153 0.0362 0.0002 \
     --optimizer_name adam \
     --scheduler_name step \
     --n_epochs 100 \
@@ -21,7 +23,6 @@ python3 gnn/train.py \
     --beta2 0.9 \
     --hidden_dim 512 \
     --n_layers 4 \
-    --n_heads 4 \
     --dropout_rate 0.1 \
     --lr_decay_iters 30 \
     --lr_decay_gamma 0.3 \
