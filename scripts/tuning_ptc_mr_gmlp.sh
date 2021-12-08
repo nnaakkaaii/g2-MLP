@@ -3,7 +3,7 @@ python3 gnn/tuning.py \
     --batch_size 64 \
     --verbose \
     --loss_name mce \
-    --network_name gmlp_graph_classification \
+    --network_name gmlp_graph \
     --dataset_name ptc_mr \
     --train_transform_name indegree \
     --val_transform_name indegree \
@@ -11,7 +11,7 @@ python3 gnn/tuning.py \
     --scheduler_name step \
     --n_epochs 150 \
     --data_dir ./inputs/PTC_MR/ \
-    --name tuning_gmlp_graph_classification_ptc_mr \
+    --name tuning_gmlp_graph_ptc_mr \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \

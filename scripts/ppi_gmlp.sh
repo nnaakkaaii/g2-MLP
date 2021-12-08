@@ -3,7 +3,7 @@ python3 gnn/train.py \
     --batch_size 4 \
     --verbose \
     --loss_name bce \
-    --network_name gmlp_node_classification \
+    --network_name gmlp_node \
     --dataset_name ppi \
     --train_transform_name indegree \
     --val_transform_name indegree \

@@ -6,7 +6,7 @@ from .utils.dropout_layers import dropout_layers
 
 
 def create_network(num_features, num_classes, opt):
-    return MLPNodeClassification(
+    return MLPNode(
         num_features=num_features,
         num_classes=num_classes,
         hidden_dim=opt.hidden_dim,
@@ -24,7 +24,7 @@ def network_modify_commandline_options(parser):
     return parser
 
 
-class MLPNodeClassification(nn.Module):
+class MLPNode(nn.Module):
     def __init__(self, num_features, num_classes, hidden_dim, ffn_dim, n_layers, prob_survival):
         super().__init__()
         self.prob_survival = prob_survival

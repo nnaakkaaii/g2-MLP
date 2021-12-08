@@ -43,6 +43,3 @@ class Indegree:
             new_data.x = deg
 
         return new_data
-
-    def __repr__(self):
-        return f'{self.__class__.__name__}(norm={self.norm}, max_value={self.max_value})'

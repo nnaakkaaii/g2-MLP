@@ -17,15 +17,15 @@ python3 gnn/train.py \
     --batch_size 1024 \
     --verbose \
     --loss_name mce \
-    --network_name mlp_node_classification \
-    --dataset_name fem \
-    --train_transform_name pos_as_attr_all \
-    --val_transform_name pos_as_attr_all \
+    --network_name gmlp_node \
+    --dataset_name fem_stress_cls \
+    --train_transform_name pos_as_attr \
+    --val_transform_name pos_as_attr \
     --optimizer_name adam \
     --scheduler_name step \
     --n_epochs 1500 \
-    --data_dir ./inputs/FEM/ \
-    --name mlp_node_classification_fem_pos_as_attr \
+    --data_dir ./inputs/FEM_STRESS_CLS/ \
+    --name gmlp_node_fem_stress_cls \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
@@ -38,6 +38,16 @@ python3 gnn/train.py \
     --n_layers 20 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 0.8 &
+    --prob_survival 0.8
 
-wait
+python3 gnn/inference.py \
+    --gpu_ids 0,1,2,3,4,5,6,7 \
+    --batch_size 1024 \
+    --verbose \
+    --network_name gmlp_node \
+    --dataset_name fem_stress_cls \
+    --name gmlp_node_fem_stress_cls \
+    --save_freq 10 \
+    --save_dir ./checkpoints \
+    --mlflow_root_dir ./mlruns/ \
+    --run_name layer_20_1500

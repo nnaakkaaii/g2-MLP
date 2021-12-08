@@ -3,36 +3,24 @@ from typing import Any, Callable, Dict
 
 from torch_geometric.transforms import Center, Compose, NormalizeScale
 
-from . import indegree_transform, pos2attr_transform, stress_transform, pos_as_attr_transform
+from . import (disp_as_label_transform, indegree_transform,
+               pos_as_attr_transform, stress_as_label_transform,
+               stress_cls_transform)
 
+# disp_as_label, stress_as_label, stress_cls は pre_transform としてしか使わない
 transforms: Dict[str, Callable[[argparse.Namespace], Any]] = {
     'indegree': indegree_transform.create_transform,
-    'pos2attr': pos2attr_transform.create_transform,
-    'pos2attr_all': lambda opt: Compose([
-        Center(),
-        NormalizeScale(),
-        pos2attr_transform.create_transform(opt),
-        indegree_transform.create_transform(opt),
-    ]),
-    'pos_as_attr': pos_as_attr_transform.create_transform,
-    'pos_as_attr_all': lambda opt: Compose([
+    'pos_as_attr': lambda opt: Compose([  # clsのtransformに用いる. posをnode attrにするのみ
         Center(),
         NormalizeScale(),
         pos_as_attr_transform.create_transform(opt),
         indegree_transform.create_transform(opt),
     ]),
-    'stress': stress_transform.create_transform,
 }
 
 transform_options: Dict[str, Callable[[argparse.ArgumentParser], argparse.ArgumentParser]] = {
     'indegree': indegree_transform.transform_modify_commandline_option,
-    'pos2attr': pos2attr_transform.transform_modify_commandline_option,
-    'pos2attr_all': lambda parser: pos2attr_transform.transform_modify_commandline_option(
+    'pos_as_attr': lambda parser: pos_as_attr_transform.transform_modify_commandline_option(  # clsのtransformに用いる. posをnode attrにするのみ
         indegree_transform.transform_modify_commandline_option(parser)
     ),
-    'pos_as_attr': pos_as_attr_transform.transform_modify_commandline_option,
-    'pos_as_attr_all': lambda parser: pos_as_attr_transform.transform_modify_commandline_option(
-        indegree_transform.transform_modify_commandline_option(parser)
-    ),
-    'stress': stress_transform.transform_modify_commandline_option,
 }

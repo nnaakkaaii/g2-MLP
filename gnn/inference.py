@@ -1,19 +1,20 @@
-import os
 import json
+import os
+import csv
 
-import torch
 import matplotlib.pyplot as plt
+import torch
 from src.datasets import datasets
 from src.models.networks import networks
-from src.transforms import transforms
 from src.options.train_option import BaseOption
-from torch_geometric.loader import DataListLoader, DataLoader
+from src.transforms import transforms
 from src.utils.engine import Engine
 
 
 class Logger:
     def __init__(self, opt, device, result_dir=None):
         self.device = device
+        self.regression = opt.regression
         self.name = opt.name
         self.result_dir = result_dir if result_dir is not None else opt.save_dir
 
@@ -31,22 +32,35 @@ class Logger:
         iteration = state['iteration']
 
         data = state['input'].clone().cpu().detach()
-        fig = plt.figure()
-        for phase in ('label', 'pred'):
-            title = f'{self.name}_iter{iteration}_{phase}.png'
-            if phase == 'label':
-                y = state['label']
-            else:
-                y = torch.argmax(state['output'], dim=1)
-            y = y.clone().cpu().detach()
-            sc = plt.scatter(data.pos[:, 0], data.pos[:, 1], c=y)
-            plt.colorbar(sc)
-            plt.title(title)
-            plt.xlabel('x axis')
-            plt.ylabel('y axis')
-            plt.grid()
-            fig.savefig(os.path.join(self.result_dir, title))
-            plt.close()
+
+        if not self.regression:
+            fig = plt.figure()
+            for phase in ('label', 'pred'):
+                title = f'{self.name}_iter{iteration}_{phase}.png'
+                if phase == 'label':
+                    y = state['label']
+                else:
+                    y = torch.argmax(state['output'], dim=1)
+                y = y.clone().cpu().detach()
+                sc = plt.scatter(data.pos[:, 0], data.pos[:, 1], c=y)
+                plt.colorbar(sc)
+                plt.title(title)
+                plt.xlabel('x axis')
+                plt.ylabel('y axis')
+                plt.grid()
+                fig.savefig(os.path.join(self.result_dir, title))
+                plt.close()
+        else:
+            for phase in ('label', 'pred'):
+                title = f'{self.name}_iter{iteration}_{phase}.csv'
+                if phase == 'label':
+                    y = state['label']
+                else:
+                    y = state['output']
+                y = y.clone().cpu().detach().numpy().tolist()
+                with open(os.path.join(self.result_dir, title), 'w') as f:
+                    csv.writer(f).writerows(y)
+
 
     def on_start_test(self, state):
         pass

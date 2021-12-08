@@ -29,6 +29,7 @@ class Logger:
         }
         # 以下では静的データのみインスタンス変数化する. 動的データはstateで保管する.
         self.opt = opt  # 保存用
+        self.regression = opt.regression
         self.device = device
         self.result_dir = result_dir if result_dir is not None else opt.save_dir
         self.name = opt.name
@@ -54,12 +55,16 @@ class Logger:
 
     def on_backward(self, state):
         state['loss_averager'].add(state['loss'].detach().cpu().item())
-        if state['output'].dim() == state['label'].dim() == 2:
+        if self.regression:
+            # regressionの場合はoutputとlabelの両方flattenに
+            state['output'] = state['output'].view(-1)
+            state['label'] = state['label'].view(-1)
+        elif state['output'].dim() == state['label'].dim() == 2:
             # MCEと同じ形式に揃える
             state['output'] = state['output'].view(-1)
             state['output'] = torch.stack([(state['output'] < 0).long(), (state['output'] > 0).long()], dim=1)
             state['label'] = state['label'].view(-1)
-        state['accuracy_averager'].add(state['output'].detach().cpu(), state['label'])
+        state['accuracy_averager'].add(state['output'].detach().cpu(), state['label'].detach().cpu())
         return
 
     def on_update(self, state):
@@ -75,7 +80,10 @@ class Logger:
         mlflow.log_params(vars(self.opt))
         # setup logger
         state['loss_averager'] = tnt.meter.AverageValueMeter()
-        state['accuracy_averager'] = tnt.meter.ClassErrorMeter(accuracy=True)
+        if not self.regression:
+            state['accuracy_averager'] = tnt.meter.ClassErrorMeter(accuracy=True)
+        else:
+            state['accuracy_averager'] = tnt.meter.MSEMeter()
         # 各epoch終了ごとの結果を保存する
         state['history'] = {
             'train_loss': [],
@@ -101,7 +109,10 @@ class Logger:
 
     def on_end_train_epoch(self, state):
         current_loss = state['loss_averager'].value()[0]
-        current_accuracy = state['accuracy_averager'].value()[0]
+        if not self.regression:
+            current_accuracy = state['accuracy_averager'].value()[0]
+        else:
+            current_accuracy = float(state['accuracy_averager'].value())
         state['history']['train_loss'].append(current_loss)
         state['history']['train_accuracy'].append(current_accuracy)
         return
@@ -119,7 +130,10 @@ class Logger:
 
     def on_end_val_epoch(self, state):
         current_loss = state['loss_averager'].value()[0]
-        current_accuracy = state['accuracy_averager'].value()[0]
+        if not self.regression:
+            current_accuracy = state['accuracy_averager'].value()[0]
+        else:
+            current_accuracy = float(state['accuracy_averager'].value())
         state['history']['val_loss'].append(current_loss)
         state['history']['val_accuracy'].append(current_accuracy)
         return

@@ -27,6 +27,3 @@ class Stress:
         y = torch.bucketize(y, torch.tensor([self.base ** i for i in range(self.exponent)]))
         data.y = y
         return data
-
-    def __repr__(self):
-        return f'{self.__class__.__name__}(xy={self.xy}, base={self.base}, exponent={self.exponent})'

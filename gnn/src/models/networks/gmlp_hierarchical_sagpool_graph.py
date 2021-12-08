@@ -11,13 +11,13 @@ from .modules.gmlp_block import gMLPBlock
 
 def create_network(num_features, num_classes, opt):
     networks = {
-        1: gMLPHierarchicalSAGPoolGraphClassification1,
-        2: gMLPHierarchicalSAGPoolGraphClassification2,
-        3: gMLPHierarchicalSAGPoolGraphClassification3,
-        4: gMLPHierarchicalSAGPoolGraphClassification4,
-        5: gMLPHierarchicalSAGPoolGraphClassification5,
-        6: gMLPHierarchicalSAGPoolGraphClassification6,
-        7: gMLPHierarchicalSAGPoolGraphClassification7,
+        1: gMLPHierarchicalSAGPoolGraph1,
+        2: gMLPHierarchicalSAGPoolGraph2,
+        3: gMLPHierarchicalSAGPoolGraph3,
+        4: gMLPHierarchicalSAGPoolGraph4,
+        5: gMLPHierarchicalSAGPoolGraph5,
+        6: gMLPHierarchicalSAGPoolGraph6,
+        7: gMLPHierarchicalSAGPoolGraph7,
     }
     return networks[opt.version](
         num_features=num_features,
@@ -42,7 +42,7 @@ def network_modify_commandline_options(parser):
     return parser
 
 
-class _gMLPHierarchicalSAGPoolGraphClassification(nn.Module):
+class _gMLPHierarchicalSAGPoolGraph(nn.Module):
     def __init__(self, num_classifier_dim, num_features, num_classes, hidden_dim, ffn_dim, n_layers, n_hierarchies, dropout_rate, pool_ratio):
         super().__init__()
         assert n_layers >= 2
@@ -104,7 +104,7 @@ class _gMLPHierarchicalSAGPoolGraphClassification(nn.Module):
         return self.linear3(x)
 
 
-class gMLPHierarchicalSAGPoolGraphClassification1(_gMLPHierarchicalSAGPoolGraphClassification):
+class gMLPHierarchicalSAGPoolGraph1(_gMLPHierarchicalSAGPoolGraph):
     """
     conv_outs -> [cat] -> [read_out] -> layer_readout
     layer_readouts -> [cat] -> [gelu] -> classifier
@@ -121,7 +121,7 @@ class gMLPHierarchicalSAGPoolGraphClassification1(_gMLPHierarchicalSAGPoolGraphC
         return F.gelu(x)
 
 
-class gMLPHierarchicalSAGPoolGraphClassification2(_gMLPHierarchicalSAGPoolGraphClassification):
+class gMLPHierarchicalSAGPoolGraph2(_gMLPHierarchicalSAGPoolGraph):
     """
     conv_outs -> [cat] -> [read_out] -> layer_readout
     layer_readouts -> [gelu] -> [sum] -> classifier
@@ -138,7 +138,7 @@ class gMLPHierarchicalSAGPoolGraphClassification2(_gMLPHierarchicalSAGPoolGraphC
         return x
 
 
-class gMLPHierarchicalSAGPoolGraphClassification3(_gMLPHierarchicalSAGPoolGraphClassification):
+class gMLPHierarchicalSAGPoolGraph3(_gMLPHierarchicalSAGPoolGraph):
     """
     conv_outs -> [-1] -> [read_out] -> layer_readout
     layer_readouts -> [cat] -> [gelu] -> classifier
@@ -155,7 +155,7 @@ class gMLPHierarchicalSAGPoolGraphClassification3(_gMLPHierarchicalSAGPoolGraphC
         return F.gelu(x)
 
 
-class gMLPHierarchicalSAGPoolGraphClassification4(_gMLPHierarchicalSAGPoolGraphClassification):
+class gMLPHierarchicalSAGPoolGraph4(_gMLPHierarchicalSAGPoolGraph):
     """
     conv_outs -> [-1] -> [read_out] -> layer_readout
     layer_readouts -> [gelu] -> [sum] -> classifier
@@ -172,7 +172,7 @@ class gMLPHierarchicalSAGPoolGraphClassification4(_gMLPHierarchicalSAGPoolGraphC
         return x
 
 
-class gMLPHierarchicalSAGPoolGraphClassification5(_gMLPHierarchicalSAGPoolGraphClassification):
+class gMLPHierarchicalSAGPoolGraph5(_gMLPHierarchicalSAGPoolGraph):
     """
     conv_outs -> [read_out] -> [gelu] -> [sum] -> layer_readout
     layer_readouts -> [cat] -> classifier
@@ -188,7 +188,7 @@ class gMLPHierarchicalSAGPoolGraphClassification5(_gMLPHierarchicalSAGPoolGraphC
         return x
 
 
-class gMLPHierarchicalSAGPoolGraphClassification6(_gMLPHierarchicalSAGPoolGraphClassification):
+class gMLPHierarchicalSAGPoolGraph6(_gMLPHierarchicalSAGPoolGraph):
     """
     conv_outs -> [read_out] -> [gelu] -> [sum] -> layer_readout
     layer_readouts -> [sum] -> classifier
@@ -204,7 +204,7 @@ class gMLPHierarchicalSAGPoolGraphClassification6(_gMLPHierarchicalSAGPoolGraphC
         return x
 
 
-class gMLPHierarchicalSAGPoolGraphClassification7(_gMLPHierarchicalSAGPoolGraphClassification):
+class gMLPHierarchicalSAGPoolGraph7(_gMLPHierarchicalSAGPoolGraph):
     """
     conv_outs -> [-1] -> [read_out] -> layer_readout
     layer_readouts -> [-1] -> [gelu] -> classifier

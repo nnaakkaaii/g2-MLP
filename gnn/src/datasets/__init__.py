@@ -4,7 +4,8 @@ from typing import Any, Callable, Dict
 from torch_geometric.data.in_memory_dataset import InMemoryDataset
 
 from . import (citeseer_dataset, collab_dataset, cora_dataset, dd_dataset,
-               enzymes_dataset, fem_dataset, frankenstein_dataset,
+               enzymes_dataset, fem_disp_reg_dataset, fem_stress_cls_dataset,
+               fem_stress_reg_dataset, frankenstein_dataset,
                imdb_binary_dataset, imdb_multi_dataset, mutag_dataset,
                nci1_dataset, nci109_dataset, ppi_dataset, proteins_dataset,
                ptc_mr_dataset, pubmed_dataset, reddit_dataset)
@@ -15,7 +16,9 @@ datasets: Dict[str, Callable[[Any, bool, argparse.Namespace], InMemoryDataset]] 
     'cora': cora_dataset.create_dataset,
     'dd': dd_dataset.create_dataset,
     'enzymes': enzymes_dataset.create_dataset,
-    'fem': fem_dataset.create_dataset,
+    'fem_stress_cls': fem_stress_cls_dataset.create_dataset,
+    'fem_stress_reg': fem_stress_reg_dataset.create_dataset,
+    'fem_disp_reg': fem_disp_reg_dataset.create_dataset,
     'frankenstein': frankenstein_dataset.create_dataset,
     'imdb_binary': imdb_binary_dataset.create_dataset,
     'imdb_multi': imdb_multi_dataset.create_dataset,
@@ -35,7 +38,9 @@ dataset_options: Dict[str, Callable[[argparse.ArgumentParser], argparse.Argument
     'cora': cora_dataset.dataset_modify_commandline_options,
     'dd': dd_dataset.dataset_modify_commandline_options,
     'enzymes': enzymes_dataset.dataset_modify_commandline_options,
-    'fem': fem_dataset.dataset_modify_commandline_options,
+    'fem_stress_cls': fem_stress_cls_dataset.dataset_modify_commandline_options,
+    'fem_stress_reg': fem_stress_reg_dataset.dataset_modify_commandline_options,
+    'fem_disp_reg': fem_disp_reg_dataset.dataset_modify_commandline_options,
     'frankenstein': frankenstein_dataset.dataset_modify_commandline_options,
     'imdb_binary': imdb_binary_dataset.dataset_modify_commandline_options,
     'imdb_multi': imdb_multi_dataset.dataset_modify_commandline_options,

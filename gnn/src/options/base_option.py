@@ -37,6 +37,7 @@ class BaseOption:
         parser.add_argument('--dataset_name', type=str, required=True, choices=datasets.keys())
 
         parser.add_argument('--batch_size', type=int, default=32, help='バッチサイズ')
+        parser.add_argument('--regression', action='store_true', help='if task is regression')
 
         self.initialized = True
         return parser

@@ -3,7 +3,7 @@ python3 gnn/train.py \
     --batch_size 64 \
     --verbose \
     --loss_name mce \
-    --network_name gmlp_hierarchical_sagpool_graph_classification \
+    --network_name gmlp_hierarchical_sagpool_graph \
     --dataset_name ptc_mr \
     --train_transform_name indegree \
     --val_transform_name indegree \

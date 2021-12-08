@@ -1,24 +1,10 @@
-import argparse
 import os
 from itertools import product
-from typing import Any
 
 import numpy as np
 import requests
 import torch
 from torch_geometric.data import Data, InMemoryDataset, extract_zip
-
-from src.transforms.stress_transform import create_transform
-
-
-def create_dataset(transform: Any, is_train: bool, opt: argparse.Namespace) -> InMemoryDataset:
-    dataset = FemDataset(opt.data_dir, split='train' if is_train else 'test', transform=transform, pre_transform=create_transform(opt))
-    return dataset
-
-
-def dataset_modify_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
-    parser.add_argument('--data_dir', type=str, default=os.path.join('inputs', 'FEM'), help='FEMデータを保存する場所')
-    return parser
 
 
 def download_gdrive_file(id: str, save_path: str) -> None:

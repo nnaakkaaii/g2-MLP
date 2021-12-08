@@ -16,7 +16,7 @@ python3 gnn/train.py \
     --batch_size 256 \
     --verbose \
     --loss_name mce \
-    --network_name gmlp_graph_classification \
+    --network_name gmlp_graph \
     --dataset_name nci1 \
     --train_transform_name indegree \
     --val_transform_name indegree \

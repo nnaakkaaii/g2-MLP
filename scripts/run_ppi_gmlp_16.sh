@@ -17,7 +17,7 @@ python3 gnn/train.py \
     --batch_size 64 \
     --verbose \
     --loss_name bce \
-    --network_name gmlp_node_classification \
+    --network_name gmlp_node \
     --dataset_name ppi \
     --train_transform_name indegree \
     --val_transform_name indegree \
@@ -25,7 +25,7 @@ python3 gnn/train.py \
     --scheduler_name step \
     --n_epochs 1500 \
     --data_dir ./inputs/PPI/ \
-    --name gmlp_node_classification_ppi_tuned \
+    --name gmlp_node_ppi_tuned \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \

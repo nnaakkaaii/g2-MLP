@@ -1,5 +1,5 @@
-import os
 import argparse
+import os
 
 from ..models.losses import loss_options, losses
 from ..models.optimizers import optimizer_options, optimizers

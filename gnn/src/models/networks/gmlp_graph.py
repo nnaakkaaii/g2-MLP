@@ -7,7 +7,7 @@ from .modules.gmlp_block import gMLPBlock
 
 
 def create_network(num_features, num_classes, opt):
-    return gMLPGraphClassification(
+    return gMLPGraph(
         num_features=num_features,
         num_classes=num_classes,
         hidden_dim=opt.hidden_dim,
@@ -27,7 +27,7 @@ def network_modify_commandline_options(parser):
     return parser
 
 
-class gMLPGraphClassification(nn.Module):
+class gMLPGraph(nn.Module):
     def __init__(self, num_features, num_classes, hidden_dim, ffn_dim, n_layers, prob_survival, dropout_rate):
         super().__init__()
         assert n_layers >= 2
