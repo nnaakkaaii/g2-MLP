@@ -38,8 +38,8 @@
 | ---- | ---- | ---- |
 | GAT (4 layers, 512 hidden_dim, 100 epochs) | 39.56% (±0.04) | 39.55<br>39.53<br>39.63<br>39.55<br>39.52 |
 | GCN (4 layers, 512 hidden_dim, 100 epochs) | 40.60% (±0.17) | 40.69<br>40.72<br>40.70<br>40.27<br>40.62 |
-| MLP (12 layers, pb 0.8, 1500 epochs) | % (±) | <br><br><br><br> |
-| g2-MLP (12 layers, pb 0.8, 1500 epochs) | % (±) | <br><br><br><br> |
+| MLP (12 layers, pb 0.8, 1500 epochs) | 43.42% (±0.30) | 43.73<br>42.96<br>43.69<br>43.53<br>43.19 |
+| g2-MLP (12 layers, pb 0.8, 1500 epochs) | 70.49% (±0.75) | 69.68<br>71.04<br>71.68<br>69.88<br>70.18 |
 
 <details>
 <summary>ハイパラ詳細</summary>
