@@ -49,7 +49,8 @@ python3 gnn/inference.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name layer_20_1500
+    --run_name layer_20_1500 \
+    --regression
 
 
 python3 gnn/inference.py \
@@ -62,4 +63,5 @@ python3 gnn/inference.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name layer_20_1500
+    --run_name layer_20_1500 \
+    --regression
