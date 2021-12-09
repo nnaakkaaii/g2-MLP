@@ -25,20 +25,20 @@ python3 gnn/train.py \
     --std 0.0153 0.0362 0.0002 \
     --optimizer_name adam \
     --scheduler_name step \
-    --n_epochs 500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/FEM_DISP_REG/ \
     --name mlp_node_fem_disp_reg \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name layer_20_500 \
+    --run_name layer_20_1000 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
     --hidden_dim 128 \
     --ffn_dim 2084 \
     --n_layers 20 \
-    --lr_decay_iters 100 \
+    --lr_decay_iters 200 \
     --lr_decay_gamma 0.3 \
     --prob_survival 0.8 \
     --regression
@@ -53,4 +53,4 @@ python3 gnn/inference.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name layer_20_500
+    --run_name layer_20_1000
