@@ -40,7 +40,8 @@ python3 gnn/train.py \
     --n_layers 20 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \
-    --prob_survival 0.8
+    --prob_survival 0.8 \
+    --regression
 
 python3 gnn/inference.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
