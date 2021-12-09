@@ -2,7 +2,7 @@
 
 #PJM -L rscgrp=regular-a
 #PJM -L node=1
-#PJM -L elapse=48:00:00
+#PJM -L elapse=04:00:00
 #PJM -g gs84
 #PJM -j
 
