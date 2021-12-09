@@ -11,6 +11,7 @@ module load pytorch/1.8.1
 
 source /work/02/gs84/s84000/inductive_node_classification_models/.venv/bin/activate
 
+pip3 install matplotlib
 
 python3 gnn/inference.py \
     --gpu_ids 0,1,2,3,4,5,6,7 \
