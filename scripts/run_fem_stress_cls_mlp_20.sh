@@ -23,20 +23,20 @@ python3 gnn/train.py \
     --val_transform_name pos_as_attr \
     --optimizer_name adam \
     --scheduler_name step \
-    --n_epochs 1500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/FEM_STRESS_CLS/ \
     --name mlp_node_fem_stress_cls \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name layer_20_1500 \
+    --run_name layer_20_1000 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
     --hidden_dim 128 \
     --ffn_dim 2084 \
     --n_layers 20 \
-    --lr_decay_iters 300 \
+    --lr_decay_iters 200 \
     --lr_decay_gamma 0.3 \
     --prob_survival 0.8
 
@@ -50,4 +50,4 @@ python3 gnn/inference.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name layer_20_1500
+    --run_name layer_20_1000
