@@ -34,6 +34,7 @@ python3 gnn/train.py \
     --beta1 0.9 \
     --beta2 0.9 \
     --hidden_dim 128 \
+    --ffn_dim 2084 \
     --n_layers 20 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 \

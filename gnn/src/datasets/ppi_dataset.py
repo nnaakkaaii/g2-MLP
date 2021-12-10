@@ -20,7 +20,7 @@ class PPIDataset(PPI):
     def __init__(self, root: str, split: str, transform: Any = None, pre_transform: Any = None, pre_filter: Any = None) -> None:
         if split == 'train':
             # 学習時はtrainとvalidationを合わせて学習を行う
-            super().__init__(root, split='train', transform=transform, pre_transform=pre_transform, pre_filter=pre_filter)
+            super().__init__(root, split='train', transform=None, pre_transform=None, pre_filter=None)
             train_dataset = PPI(root, split='train', transform=transform, pre_transform=pre_transform, pre_filter=pre_filter)
             val_dataset = PPI(root, split='val', transform=transform, pre_transform=pre_transform, pre_filter=pre_filter)
             self.data, self.slices = InMemoryDataset.collate(list(train_dataset) + list(val_dataset))
