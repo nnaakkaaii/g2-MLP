@@ -17,12 +17,12 @@ python3 gnn/train.py \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name layer_4_512_100 \
+    --run_name layer_2_512_100 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
     --hidden_dim 512 \
-    --n_layers 4 \
+    --n_layers 2 \
     --dropout_rate 0.1 \
     --lr_decay_iters 30 \
     --lr_decay_gamma 0.3 \
@@ -36,7 +36,7 @@ python3 gnn/inference.py \
     --dataset_name fem_disp_reg \
     --name gcn_node_fem_disp_reg \
     --mlflow_root_dir ./mlruns/ \
-    --run_name layer_4_512_100 \
+    --run_name layer_2_512_100 \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --regression
