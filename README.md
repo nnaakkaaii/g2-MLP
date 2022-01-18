@@ -4,15 +4,19 @@
 
 ### PPI (iductive node classification)
 
-| Model | micro-F1 | details |
-| ---- | ---- | ---- |
-| GAT | 94.17% (±2.20) | |
-| GCN | 80.74% (±0.69) | |
-| g2-MLP (16 layers, pb 0.8, 1000 epochs) | 99.53% (±0.01) | 99.52<br>99.53<br>99.51<br>99.54<br>99.53 |
-| g2-MLP (20 layers, pb 0.8, 1500 epochs) | 99.54% (±0.01) | 99.55<br>99.54<br>99.56<br>99.52<br>99.54 |
-| g2-MLP (24 layers, pb 0.8, 1500 epochs) | 99.53% (±0.01) | 99.53<br>99.52<br>99.54<br>99.52<br>99.54 |
-| g2-MLP (20 layers, pb 0.6, 1500 epochs) | 99.49% (±0.02) | 99.48<br>99.52<br>99.51<br>99.48<br>99.48 |
-| g2-MLP (20 layers, pb 1.0, 1500 epochs) | 99.41% (±0.02) | 99.44<br>99.39<br>99.38<br>99.42<br>99.40 |
+| Model | micro-F1 |
+| ---- | ---- |
+| GAT | 94.17% (±2.20) |
+| GCN | 80.74% (±0.69) |
+| MLP (20 layers, pb 0.8, 1500 epochs) | 83.126% (±0.036) |
+| g2-MLP (4 layers, pb 0.8, 1500 epochs) | 99.531% (±0.018) |
+| g2-MLP (8 layers, pb 0.8, 1500 epochs) | 99.663% (±0.009) |
+| g2-MLP (12 layers, pb 0.8, 1500 epochs) | 99.689% (±0.007) |
+| g2-MLP (16 layers, pb 0.8, 1500 epochs) | 99.699% (±0.013) |
+| g2-MLP (20 layers, pb 0.8, 1500 epochs) | 99.705% (±0.014) |
+| g2-MLP (24 layers, pb 0.8, 1500 epochs) | 99.700% (±0.006) |
+| g2-MLP (20 layers, pb 0.6, 1500 epochs) | 99.690% (±0.013) |
+| g2-MLP (20 layers, pb 1.0, 1500 epochs) | 99.598% (±0.012) |
 
 <details>
 <summary>ハイパラ詳細</summary>
@@ -202,6 +206,7 @@
 | GIN-0 | 76.2% | |
 | PSCN | 75.89% | |
 | GK | 71.67% | |
+| g2-MLP | 74.11% (±1.41) | |
 
 ## Dataset
 
