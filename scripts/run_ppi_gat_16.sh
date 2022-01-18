@@ -22,13 +22,13 @@ python3 gnn/train.py \
     --val_transform_name indegree \
     --optimizer_name adam \
     --scheduler_name step \
-    --n_epochs 500 \
+    --n_epochs 1000 \
     --data_dir ./inputs/PPI/ \
     --name gat_node_ppi_final \
     --save_freq 10 \
     --save_dir ./checkpoints \
     --mlflow_root_dir ./mlruns/ \
-    --run_name layer_16_500 \
+    --run_name layer_16_1000 \
     --lr 2.5e-3 \
     --beta1 0.9 \
     --beta2 0.9 \
@@ -36,7 +36,7 @@ python3 gnn/train.py \
     --n_layers 16 \
     --n_heads 4 \
     --dropout_rate 0.1 \
-    --lr_decay_iters 100 \
+    --lr_decay_iters 200 \
     --lr_decay_gamma 0.3 &
 
 wait
