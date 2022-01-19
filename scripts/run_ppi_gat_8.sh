@@ -34,7 +34,7 @@ python3 gnn/train.py \
     --beta2 0.9 \
     --hidden_dim 512 \
     --n_layers 8 \
-    --n_heads 4 \
+    --n_heads 1 \
     --dropout_rate 0.1 \
     --lr_decay_iters 300 \
     --lr_decay_gamma 0.3 &
