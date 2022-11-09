@@ -1,5 +1,15 @@
 # g2-MLP
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/a-proposal-of-multi-layer-perceptron-with/node-classification-on-ppi)](https://paperswithcode.com/sota/node-classification-on-ppi?p=a-proposal-of-multi-layer-perceptron-with)
+
+This is an implementation of g2-MLP.
+
+## paper details
+
+[A Proposal of Multi-Layer Perceptron with Graph Gating Unit for Graph Representation Learning and its Application to Surrogate Model for FEM](https://www.jstage.jst.go.jp/article/pjsai/JSAI2022/0/JSAI2022_1G4OS22a03/_article/-char/ja/)
+
+GNNs are the neural networks for the representation learning of graph-structured data, most of which are constructed by stacking graph convolutional layers. As stacking n-layers of ones is equivalent to propagating n-hop of neighbor nodes' information, GNNs require enough large number of layers to learn large graphs. However, it tends to degrade the model performance due to the problem called over-smoothing. In this paper, by presenting a novel GNN model, based on stacking feedforward neural networks with gating structures using GCNs, I tried to solve the over-smoothing problem and thereby overcome the difficulty of GNNs learning large graphs. The experimental results showed that the proposed method monotonically improved the prediction accuracy up to 20 layers without over-smoothing, whereas the conventional method caused it at 4 to 8 layers. In two experiments on large graphs, the PPI dataset, a benchmark for inductive node classification, and the application to the surrogate model for finite element methods, the proposed method achieved the highest accuracy of the existing methods compared, especially with a state-of-the-art accuracy of 99.71% on the PPI dataset.
+
 ## Results
 
 ### PPI (iductive node classification)
@@ -19,7 +29,7 @@
 | g2-MLP (20 layers, pb 1.0, 1500 epochs) | 99.598% (±0.012) |
 
 <details>
-<summary>ハイパラ詳細</summary>
+<summary>hyper parameters</summary>
 <div>
 
 | parameters | value |
@@ -46,7 +56,7 @@
 | g2-MLP (12 layers, pb 0.8, 1500 epochs) | 70.49% (±0.75) | 69.68<br>71.04<br>71.68<br>69.88<br>70.18 |
 
 <details>
-<summary>ハイパラ詳細</summary>
+<summary>hyper parameters</summary>
 <div>
 
 | parameters | value |
@@ -63,14 +73,16 @@
 </details>
 
 <details>
-<summary>データセット詳細</summary>
+<summary>About FEM dataset</summary>
 <div>
 
-次のようなフィレット構造を対象とする。
+The fillet structure like the follows
 
 ![fillet](./docs/fillet.png)
 
-次のようなパターンに対して、 229 個のデータを用意した。
+We prepared 229 datasets in the following conditions.
+
+TODO : translate
 
 - 各長方形の高さをそれぞれ 10 ~ 100 (10刻み) でランダムに変更
 - フィレット径を 5 ~ 45 (5刻み) でランダムに変更
@@ -308,4 +320,3 @@ $ pip install torch-geometric
 Yu, Nakai. The University of Tokyo.
 
 Contact : nakai-yu623@g.ecc.u-tokyo.ac.jp
-
